@@ -202,5 +202,30 @@ namespace LevelEditro
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = true;
         }
+
+        private void loadMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TileMap.LoadMap(new FileStream(Application.StartupPath + @"\MAP" + cboMapNumber
+                    .Items[cboMapNumber.SelectedIndex] + ".MAP",FileMode.Open));
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.Print("Unable to Load Map File");
+                throw;
+            }
+        }
+
+        private void saveMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TileMap.SaveMap(new FileStream(Application.StartupPath + @"\MAP" +
+                cboMapNumber.Items[cboMapNumber.SelectedIndex] + ".MAP", FileMode.Create));
+        }
+
+        private void clearMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TileMap.ClearMap();
+        }
     }
 }
