@@ -31,7 +31,12 @@
     <ProjectReference Include="..\TileEngine\TileEngine.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Maps\" />
+    <None Update="Content\Maps\MAP000.MAP">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Tileset.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy  &quot;$(OutDir)\Content&quot; &quot;$(SolutionDir)\LevelEditro\bin\Debug\Content&quot; /y" />

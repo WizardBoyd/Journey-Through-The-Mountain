@@ -23,7 +23,7 @@ namespace TileEngine
         public const int MapWidth = 160;
         public const int MapHeight = 20;
         public const int MapLayers = 3;
-        private const int skyTile = 2;
+        private const int skyTile = 0;
 
         static private MapSquare[,] mapCells =
             new MapSquare[MapWidth, MapHeight];
@@ -247,7 +247,7 @@ namespace TileEngine
                 for (int y = 0; y < MapHeight; y++)
                     for (int z = 0; z < MapLayers; z++)
                     {
-                        mapCells[x, y] = new MapSquare(2, 0, 0, "", true);
+                        mapCells[x, y] = new MapSquare(0, 0, 0, "", true);
                     }
         }
         #endregion
@@ -330,6 +330,8 @@ namespace TileEngine
             }
         }
         #endregion
+
+
 
     }
 }

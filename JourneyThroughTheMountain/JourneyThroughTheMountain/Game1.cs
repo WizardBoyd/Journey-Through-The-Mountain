@@ -8,73 +8,211 @@ namespace JourneyThroughTheMountain
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        Player player;
+        SpriteFont pericles8;
+        Vector2 scorePosition = new Vector2(20, 580);
+        enum GameState { TitleScreen, Playing, PlayerDead, GameOver };
+        GameState gameState = GameState.TitleScreen;
 
-        private Player player;
+        Vector2 gameOverPosition = new Vector2(350, 300);
+        Vector2 livesPosition = new Vector2(600, 580);
 
-        SpriteFont test;
+        Texture2D titleScreen;
+
+        float deathTimer = 0.0f;
+        float deathDelay = 5.0f;
+
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
 
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 600;
-            _graphics.ApplyChanges();
-
+            this.graphics.PreferredBackBufferWidth = 800;
+            this.graphics.PreferredBackBufferHeight = 600;
+            this.graphics.ApplyChanges();
             base.Initialize();
         }
 
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Camera.WorldRectangle = new Rectangle(0, 0, 160 * 32, 12 * 32); //This is the amount of tile 160 tiles wide, 12 tiles down
+            TileMap.Initialize(
+                Content.Load<Texture2D>(@"PlatformTiles"));
+            TileMap.spriteFont =
+                Content.Load<SpriteFont>(@"Pericles7");
+
+            pericles8 = Content.Load<SpriteFont>(@"Pericles7");
+
+            titleScreen = Content.Load<Texture2D>(@"Splash Screen");
+
+            Camera.WorldRectangle = new Rectangle(0, 0, 160 * 48, 12 * 48);
             Camera.Position = Vector2.Zero;
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 600;
 
-            test = Content.Load<SpriteFont>(@"Pericles7");
             player = new Player(Content);
-            player.WorldLocation = new Vector2(350, 300);
-
-            
-            // TODO: use this.Content to load your game content here
+            LevelManager.Initialize(Content, player);
         }
 
+        private void StartNewGame()
+        {
+            player.Revive();
+            player.LivesRemaining = 3;
+            player.WorldLocation = Vector2.Zero;
+            LevelManager.LoadLevel(0);
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            // Allows the game to exit
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back ==
+                ButtonState.Pressed)
+                this.Exit();
 
-            // TODO: Add your update logic here
-            //MouseState ms = Mouse.GetState();
-            player.Update(gameTime);
+            KeyboardState keyState = Keyboard.GetState();
+            GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-           
+            if (gameState == GameState.TitleScreen)
+            {
+                if (keyState.IsKeyDown(Keys.Space) ||
+                    gamepadState.Buttons.A == ButtonState.Pressed)
+                {
+                    StartNewGame();
+                    gameState = GameState.Playing;
+                }
+            }
+
+            if (gameState == GameState.Playing)
+            {
+                player.Update(gameTime);
+                LevelManager.Update(gameTime);
+                if (player.Dead)
+                {
+                    if (player.LivesRemaining > 0)
+                    {
+                        gameState = GameState.PlayerDead;
+                        deathTimer = 0.0f;
+                    }
+                    else
+                    {
+                        gameState = GameState.GameOver;
+                        deathTimer = 0.0f;
+                    }
+                }
+            }
+
+            if (gameState == GameState.PlayerDead)
+            {
+                player.Update(gameTime);
+                LevelManager.Update(gameTime);
+                deathTimer += elapsed;
+                if (deathTimer > deathDelay)
+                {
+                    player.WorldLocation = Vector2.Zero;
+                    LevelManager.ReloadLevel();
+                    player.Revive();
+                    gameState = GameState.Playing;
+                }
+            }
+
+            if (gameState == GameState.GameOver)
+            {
+                deathTimer += elapsed;
+                if (deathTimer > deathDelay)
+                {
+                    gameState = GameState.TitleScreen;
+                }
+            }
 
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin(
+                SpriteSortMode.BackToFront,
+                BlendState.AlphaBlend);
 
-            _spriteBatch.Begin(SpriteSortMode.Immediate);
-            _spriteBatch.DrawString(test, player.WorldLocation.ToString(), new Vector2(0, 0), Color.Black);
-            player.Draw(_spriteBatch);
-            _spriteBatch.End();
+            if (gameState == GameState.TitleScreen)
+            {
+                spriteBatch.Draw(titleScreen, Vector2.Zero, Color.White);
+            }
+
+            if ((gameState == GameState.Playing) ||
+                (gameState == GameState.PlayerDead) ||
+                (gameState == GameState.GameOver))
+            {
+                TileMap.Draw(spriteBatch);
+                player.Draw(spriteBatch);
+                LevelManager.Draw(spriteBatch);
+                spriteBatch.DrawString(
+                    pericles8,
+                    "Score: " + player.Score.ToString(),
+                    scorePosition,
+                    Color.White);
+                spriteBatch.DrawString(
+                    pericles8,
+                    "Lives Remaining: " + player.LivesRemaining.ToString(),
+                    livesPosition,
+                    Color.White);
+            }
+
+            if (gameState == GameState.PlayerDead)
+            {
+            }
+
+            if (gameState == GameState.GameOver)
+            {
+                spriteBatch.DrawString(
+                    pericles8,
+                    "G A M E  O V E R !",
+                    gameOverPosition,
+                    Color.White);
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
     }
 }

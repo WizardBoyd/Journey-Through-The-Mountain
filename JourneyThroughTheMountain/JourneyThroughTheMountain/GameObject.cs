@@ -17,7 +17,7 @@ namespace JourneyThroughTheMountain
         protected int frameHeight;
 
         protected bool enabled;
-        protected bool fliped = false;
+        protected bool flipped = false;
         protected bool onGround;
 
         protected Rectangle collisionRectangle;
@@ -26,11 +26,12 @@ namespace JourneyThroughTheMountain
         protected bool codeBasedBlocks = true;
 
         protected float drawDepth = 0.85f;
-        protected Dictionary<string, AnimationStrip> animations = new Dictionary<string, AnimationStrip>();
+        protected Dictionary<string, AnimationStrip> animations =
+            new Dictionary<string, AnimationStrip>();
         protected string currentAnimation;
         #endregion
 
-        #region properties
+        #region Properties
         public bool Enabled
         {
             get { return enabled; }
@@ -43,22 +44,25 @@ namespace JourneyThroughTheMountain
             set { worldLocation = value; }
         }
 
-        public Rectangle worldRectangle
+        public Vector2 WorldCenter
         {
             get
             {
-                return new Rectangle((int)worldLocation.X,
-                    (int)worldLocation.Y,
-                    frameWidth,
-                    frameHeight);
+                return new Vector2(
+                  (int)worldLocation.X + (int)(frameWidth / 2),
+                  (int)worldLocation.Y + (int)(frameHeight / 2));
             }
         }
 
-        public Vector2 WorldCenter
+        public Rectangle WorldRectangle
         {
-            get {
-                return new Vector2((int)worldLocation.X + (int)(frameWidth / 2),
-              (int)worldLocation.Y + (int)(frameHeight / 2));
+            get
+            {
+                return new Rectangle(
+                    (int)worldLocation.X,
+                    (int)worldLocation.Y,
+                    frameWidth,
+                    frameHeight);
             }
         }
 
@@ -66,18 +70,18 @@ namespace JourneyThroughTheMountain
         {
             get
             {
-                return new Rectangle((int)worldLocation.X + collisionRectangle.X,
-                    (int)worldRectangle.Y + collisionRectangle.Y, collisionRectangle.Width, collisionRectangle.Height);
+                return new Rectangle(
+                    (int)worldLocation.X + collisionRectangle.X,
+                    (int)WorldRectangle.Y + collisionRectangle.Y,
+                    collisionRectangle.Width,
+                    collisionRectangle.Height);
             }
-            set
-            {
-                collisionRectangle = value;
-            }
+            set { collisionRectangle = value; }
         }
-        #endregion
+        #endregion 
 
         #region Helper Methods
-        private void UpdateAnimation(GameTime gametime)
+        private void updateAnimation(GameTime gameTime)
         {
             if (animations.ContainsKey(currentAnimation))
             {
@@ -87,10 +91,111 @@ namespace JourneyThroughTheMountain
                 }
                 else
                 {
-                    animations[currentAnimation].Update(gametime);
+                    animations[currentAnimation].Update(gameTime);
                 }
             }
         }
+        #endregion
+
+        #region Map-Based Collision Detection Methods
+        private Vector2 horizontalCollisionTest(Vector2 moveAmount)
+        {
+            if (moveAmount.X == 0)
+                return moveAmount;
+
+            Rectangle afterMoveRect = CollisionRectangle;
+            afterMoveRect.Offset((int)moveAmount.X, 0);
+            Vector2 corner1, corner2;
+
+            if (moveAmount.X < 0)
+            {
+                corner1 = new Vector2(afterMoveRect.Left,
+                                      afterMoveRect.Top + 1);
+                corner2 = new Vector2(afterMoveRect.Left,
+                                      afterMoveRect.Bottom - 1);
+            }
+            else
+            {
+                corner1 = new Vector2(afterMoveRect.Right,
+                                      afterMoveRect.Top + 1);
+                corner2 = new Vector2(afterMoveRect.Right,
+                                      afterMoveRect.Bottom - 1);
+            }
+
+            Vector2 mapCell1 = TileMap.GetCellByPixel(corner1);
+            Vector2 mapCell2 = TileMap.GetCellByPixel(corner2);
+
+            if (!TileMap.CellIsPassable(mapCell1) ||
+                !TileMap.CellIsPassable(mapCell2))
+            {
+                moveAmount.X = 0;
+                velocity.X = 0;
+            }
+
+            if (codeBasedBlocks)
+            {
+                if (TileMap.CellCodeValue(mapCell1) == "BLOCK" ||
+                    TileMap.CellCodeValue(mapCell2) == "BLOCK")
+                {
+                    moveAmount.X = 0;
+                    velocity.X = 0;
+                }
+            }
+
+            return moveAmount;
+        }
+
+        private Vector2 verticalCollisionTest(Vector2 moveAmount)
+        {
+            if (moveAmount.Y == 0)
+                return moveAmount;
+
+            Rectangle afterMoveRect = CollisionRectangle;
+            afterMoveRect.Offset((int)moveAmount.X, (int)moveAmount.Y);
+            Vector2 corner1, corner2;
+
+            if (moveAmount.Y < 0)
+            {
+                corner1 = new Vector2(afterMoveRect.Left + 1,
+                                      afterMoveRect.Top);
+                corner2 = new Vector2(afterMoveRect.Right - 1,
+                                      afterMoveRect.Top);
+            }
+            else
+            {
+                corner1 = new Vector2(afterMoveRect.Left + 1,
+                                      afterMoveRect.Bottom);
+                corner2 = new Vector2(afterMoveRect.Right - 1,
+                                      afterMoveRect.Bottom);
+            }
+
+            Vector2 mapCell1 = TileMap.GetCellByPixel(corner1);
+            Vector2 mapCell2 = TileMap.GetCellByPixel(corner2);
+
+            if (!TileMap.CellIsPassable(mapCell1) ||
+                !TileMap.CellIsPassable(mapCell2))
+            {
+                if (moveAmount.Y > 0)
+                    onGround = true;
+                moveAmount.Y = 0;
+                velocity.Y = 0;
+            }
+
+            if (codeBasedBlocks)
+            {
+                if (TileMap.CellCodeValue(mapCell1) == "BLOCK" ||
+                    TileMap.CellCodeValue(mapCell2) == "BLOCK")
+                {
+                    if (moveAmount.Y > 0)
+                        onGround = true;
+                    moveAmount.Y = 0;
+                    velocity.Y = 0;
+                }
+            }
+
+            return moveAmount;
+        }
+
         #endregion
 
         #region Public Methods
@@ -106,13 +211,11 @@ namespace JourneyThroughTheMountain
         public virtual void Update(GameTime gameTime)
         {
             if (!enabled)
-            {
                 return;
-            }
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            UpdateAnimation(gameTime);
+            updateAnimation(gameTime);
 
             if (velocity.Y != 0)
             {
@@ -126,133 +229,41 @@ namespace JourneyThroughTheMountain
 
             Vector2 newPosition = worldLocation + moveAmount;
 
-            newPosition = new Vector2(MathHelper.Clamp(newPosition.X, 0, Camera.WorldRectangle.Width - frameWidth),
+            newPosition = new Vector2(
+                MathHelper.Clamp(newPosition.X, 0,
+                  Camera.WorldRectangle.Width - frameWidth),
                 MathHelper.Clamp(newPosition.Y, 2 * (-TileMap.TileHeight),
-                Camera.WorldRectangle.Height - frameHeight));
+                  Camera.WorldRectangle.Height - frameHeight));
 
-            WorldLocation = newPosition;
+            worldLocation = newPosition;
         }
-
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (!enabled)
-            {
                 return;
-            }
 
             if (animations.ContainsKey(currentAnimation))
             {
+
                 SpriteEffects effect = SpriteEffects.None;
 
-                if (fliped)
+                if (flipped)
                 {
                     effect = SpriteEffects.FlipHorizontally;
                 }
 
-                spriteBatch.Draw(animations[currentAnimation].Texture,
-                    Camera.WorldToScreen(worldRectangle),//Camera.WorldToScreen(worldRectangle)
+                spriteBatch.Draw(
+                    animations[currentAnimation].Texture,
+                    Camera.WorldToScreen(WorldRectangle),
                     animations[currentAnimation].FrameRectangle,
                     Color.White, 0.0f, Vector2.Zero, effect, drawDepth);
             }
         }
+
         #endregion
 
-        #region Map-Based Collision Detection Methods
-        private Vector2 horizontalCollisionTest(Vector2 moveAmount)
-        {
-            if (moveAmount.X == 0)
-            {
-                return moveAmount;
-            }
 
-            Rectangle afterMoveRect = collisionRectangle;
-            afterMoveRect.Offset((int)moveAmount.X, 0);
-            Vector2 corner1, corner2;
-
-            if (moveAmount.X < 0)
-            {
-                corner1 = new Vector2(afterMoveRect.Left, afterMoveRect.Top + 1);
-                corner2 = new Vector2(afterMoveRect.Left,
-                    afterMoveRect.Bottom - 1);
-            }
-            else
-            {
-                corner1 = new Vector2(afterMoveRect.Right, afterMoveRect.Top + 1);
-                corner2 = new Vector2(afterMoveRect.Right, afterMoveRect.Bottom - 1);
-            }
-
-            Vector2 mapCell1 = TileMap.GetCellByPixel(corner1);
-            Vector2 mapcell2 = TileMap.GetCellByPixel(corner2);
-
-            if (!TileMap.CellIsPassable(mapCell1) || !TileMap.CellIsPassable(mapcell2))
-            {
-                moveAmount.X = 0;
-                velocity.X = 0;
-            }
-
-            if (codeBasedBlocks)
-            {
-                if (TileMap.CellCodeValue(mapCell1) == "BLOCK" || TileMap.CellCodeValue(mapcell2) == "BLOCK")
-                {
-                    moveAmount.X = 0;
-                    velocity.X = 0;
-                }
-            }
-
-            return moveAmount;
-        }
-
-        private Vector2 verticalCollisionTest(Vector2 moveAmount)
-        {
-            if (moveAmount.Y == 0)
-            {
-                return moveAmount;
-            }
-
-            Rectangle afterMoveRect = collisionRectangle;
-            afterMoveRect.Offset((int)moveAmount.X, (int)moveAmount.Y);
-            Vector2 corner1, corner2;
-
-            if (moveAmount.Y < 0)
-            {
-                corner1 = new Vector2(afterMoveRect.Left + 1, afterMoveRect.Top);
-                corner2 = new Vector2(afterMoveRect.Right - 1, afterMoveRect.Top);
-            }
-            else
-            {
-                corner1 = new Vector2(afterMoveRect.Left + 1, afterMoveRect.Bottom);
-                corner2 = new Vector2(afterMoveRect.Right - 1, afterMoveRect.Bottom);
-            }
-
-            Vector2 MapCell1 = TileMap.GetCellByPixel(corner1);
-            Vector2 MapCell2 = TileMap.GetCellByPixel(corner2);
-
-            if (!TileMap.CellIsPassable(MapCell1) || !TileMap.CellIsPassable(MapCell2))
-            {
-                if (moveAmount.Y > 0)
-                {
-                    onGround = true;
-                    
-                }
-                moveAmount.Y = 0;
-                velocity.Y = 0;
-            }
-            if (codeBasedBlocks)
-            {
-                if (TileMap.CellCodeValue(MapCell1) == "BLOCK" || TileMap.CellCodeValue(MapCell2) == "BLOCK")
-                {
-                    if (moveAmount.Y > 0)
-                    {
-                        onGround = true;
-                        moveAmount.Y = 0;
-                        velocity.Y = 0;
-                    }
-                }
-            }
-            return moveAmount;
-        }
-        #endregion
 
 
     }

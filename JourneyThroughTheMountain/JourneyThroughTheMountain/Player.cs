@@ -12,16 +12,31 @@ namespace JourneyThroughTheMountain
 {
     public class Player : GameObject
     {
-        private Vector2 fallspeed = new Vector2(0, 20);
+        private Vector2 fallSpeed = new Vector2(0, 20);
         private float moveScale = 180.0f;
         private bool dead = false;
+        private int score = 0;
+        private int livesRemaining = 3;
 
         public bool Dead
         {
             get { return dead; }
         }
 
-        #region Constuctors
+        public int Score
+        {
+            get { return score; }
+            set { score = value; }
+        }
+
+        public int LivesRemaining
+        {
+            get { return livesRemaining; }
+            set { livesRemaining = value; }
+        }
+
+
+        #region Constructor
         public Player(ContentManager content)
         {
             animations.Add("idle", new AnimationStrip(content.Load<Texture2D>(@"Idle_Run_Jump_SpriteSheet"), 32, "idle"));
@@ -44,12 +59,10 @@ namespace JourneyThroughTheMountain
             enabled = true;
             codeBasedBlocks = false;
             PlayAnimation("idle");
-
         }
         #endregion
 
         #region Public Methods
-
         public override void Update(GameTime gameTime)
         {
             if (!Dead)
@@ -60,33 +73,41 @@ namespace JourneyThroughTheMountain
                 GamePadState gamePad = GamePad.GetState(PlayerIndex.One);
                 KeyboardState keyState = Keyboard.GetState();
 
-                if (keyState.IsKeyDown(Keys.Left) || gamePad.ThumbSticks.Left.X < -0.3f)
+                if (keyState.IsKeyDown(Keys.Left) ||
+                    (gamePad.ThumbSticks.Left.X < -0.3f))
                 {
-                    fliped = false;
+                    flipped = false;
                     newAnimation = "run";
                     velocity = new Vector2(-moveScale, velocity.Y);
                 }
 
-                if (keyState.IsKeyDown(Keys.Right) || gamePad.ThumbSticks.Left.X > 0.3f)
+                if (keyState.IsKeyDown(Keys.Right) ||
+                    (gamePad.ThumbSticks.Left.X > 0.3f))
                 {
-                    fliped = true;
+                    flipped = true;
                     newAnimation = "run";
                     velocity = new Vector2(moveScale, velocity.Y);
                 }
 
-                if (keyState.IsKeyDown(Keys.Space)|| gamePad.Buttons.A == ButtonState.Pressed)
+                if (keyState.IsKeyDown(Keys.Space) ||
+                    (gamePad.Buttons.A == ButtonState.Pressed))
                 {
                     if (onGround)
                     {
-                        jump();
-                        newAnimation = "Jump";
+                        Jump();
+                        newAnimation = "jump";
                     }
                 }
 
-                if (currentAnimation == "Jump")
+                if (keyState.IsKeyDown(Keys.Up) ||
+                    gamePad.ThumbSticks.Left.Y > 0.3f)
                 {
-                    newAnimation = "Jump";
+                    checkLevelTransition();
                 }
+
+
+                if (currentAnimation == "jump")
+                    newAnimation = "jump";
 
                 if (newAnimation != currentAnimation)
                 {
@@ -94,21 +115,35 @@ namespace JourneyThroughTheMountain
                 }
             }
 
-            velocity += fallspeed;
+            velocity += fallSpeed;
 
-            RepositionCamera();
+            repositionCamera();
             base.Update(gameTime);
         }
 
-        public void jump()
+        public void Jump()
         {
             velocity.Y = -500;
+        }
+
+        public void Kill()
+        {
+            PlayAnimation("die");
+            LivesRemaining--;
+            velocity.X = 0;
+            dead = true;
+        }
+
+        public void Revive()
+        {
+            PlayAnimation("idle");
+            dead = false;
         }
 
         #endregion
 
         #region Helper Methods
-        private void RepositionCamera()
+        private void repositionCamera()
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
 
@@ -122,6 +157,31 @@ namespace JourneyThroughTheMountain
                 Camera.Move(new Vector2(screenLocX - 200, 0));
             }
         }
+
+        private void checkLevelTransition()
+        {
+            Vector2 centerCell = TileMap.GetCellByPixel(WorldCenter);
+            if (TileMap.CellCodeValue(centerCell).StartsWith("T_"))
+            {
+                string[] code = TileMap.CellCodeValue(centerCell).Split('_');
+
+                if (code.Length != 4)
+                    return;
+
+                LevelManager.LoadLevel(int.Parse(code[1]));
+
+                WorldLocation = new Vector2(
+                    int.Parse(code[2]) * TileMap.TileWidth,
+                    int.Parse(code[3]) * TileMap.TileHeight);
+
+                LevelManager.RespawnLocation = WorldLocation;
+
+                velocity = Vector2.Zero;
+            }
+        }
+
         #endregion
+
     }
 }
+

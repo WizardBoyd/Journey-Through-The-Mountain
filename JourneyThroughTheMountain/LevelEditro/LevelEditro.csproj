@@ -155,9 +155,61 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="bin\Debug\Content\Animations\Chest.xnb" />
+    <None Include="bin\Debug\Content\Animations\Coin.xnb" />
+    <None Include="bin\Debug\Content\Animations\Flag.xnb" />
+    <None Include="bin\Debug\Content\Animations\Key.xnb" />
+    <None Include="bin\Debug\Content\Animations\Snowflake.xnb" />
     <None Include="bin\Debug\Content\Artwork Adlet.xnb" />
+    <None Include="bin\Debug\Content\Backgrounds\4.xnb" />
     <None Include="bin\Debug\Content\CastleTilemap.xnb" />
     <None Include="bin\Debug\Content\Compass.xnb" />
+    <None Include="bin\Debug\Content\Objects\Boxes\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Boxes\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Boxes\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Boxes\4.xnb" />
+    <None Include="bin\Debug\Content\Objects\Boxes\5.xnb" />
+    <None Include="bin\Debug\Content\Objects\Boxes\6.xnb" />
+    <None Include="bin\Debug\Content\Objects\Bushes\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Bushes\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Bushes\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Bushes\4.xnb" />
+    <None Include="bin\Debug\Content\Objects\Bushes\5.xnb" />
+    <None Include="bin\Debug\Content\Objects\Fence\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Fence\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Fence\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Igloo\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Igloo\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Ladders\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Ladders\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Ladders\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Ladders\4.xnb" />
+    <None Include="bin\Debug\Content\Objects\Ladders\5.xnb" />
+    <None Include="bin\Debug\Content\Objects\Ladders\6.xnb" />
+    <None Include="bin\Debug\Content\Objects\Other\Flagpole.xnb" />
+    <None Include="bin\Debug\Content\Objects\Other\Statue.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\4.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\5.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\6.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\7.xnb" />
+    <None Include="bin\Debug\Content\Objects\Pointers\8.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\4.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\5.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\6.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\7.xnb" />
+    <None Include="bin\Debug\Content\Objects\Stones\8.xnb" />
+    <None Include="bin\Debug\Content\Objects\Trees\1.xnb" />
+    <None Include="bin\Debug\Content\Objects\Trees\2.xnb" />
+    <None Include="bin\Debug\Content\Objects\Trees\3.xnb" />
+    <None Include="bin\Debug\Content\Objects\Trees\4.xnb" />
+    <None Include="bin\Debug\Content\Objects\Trees\5.xnb" />
+    <None Include="bin\Debug\Content\Objects\Trees\6.xnb" />
     <None Include="bin\Debug\Content\Pericles7.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -165,6 +217,69 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="bin\Debug\Content\Splash screen.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tileset.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_01.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_02.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_03.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_04.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_05.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_06.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_07.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_08.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_09.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_10.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_11.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_12.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_13.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_14.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_15.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_16.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_17.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_18.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_19.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_20.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_21.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_22.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_23.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_24.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_25.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_26.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_27.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_28.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_29.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_30.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_31.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_32.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_33.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_34.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_35.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_36.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_37.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_38.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_39.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_40.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_41.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_42.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_43.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_44.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_45.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_46.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_47.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_48.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_49.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_50.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_51.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_52.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_53.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_54.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_55.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_56.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_57.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_58.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_59.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Ice\Tile_60.xnb" />
     <None Include="mgfxc.deps.json" />
     <None Include="mgfxc.runtimeconfig.dev.json" />
     <None Include="mgfxc.runtimeconfig.json" />
@@ -198,6 +313,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="RawContent\PlatformTiles.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="RawContent\Tileset.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SharpDX.D3DCompiler.dll" />

@@ -38,7 +38,7 @@ namespace LevelEditro
 
         private void LoadImageList()
         {
-            string filepath = Application.StartupPath + @"\RawContent\PlatformTiles.png";
+            string filepath = Application.StartupPath + @"\RawContent\Tileset.png";
 
             Bitmap tileSheet = new Bitmap(filepath);
 
@@ -64,6 +64,7 @@ namespace LevelEditro
                     listTiles.Items.Add(new ListViewItem(ItemName, tilecount++));
                 }
             }
+            FixScrollBarScales();
         }
 
         private void MapEditor_Load(object sender, EventArgs e)
@@ -227,5 +228,8 @@ namespace LevelEditro
         {
             TileMap.ClearMap();
         }
+
+        //TimerGameUpdate
+
     }
 }
