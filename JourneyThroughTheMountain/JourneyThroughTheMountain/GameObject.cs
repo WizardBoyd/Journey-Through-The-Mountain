@@ -151,7 +151,7 @@ namespace JourneyThroughTheMountain
                 }
 
                 spriteBatch.Draw(animations[currentAnimation].Texture,
-                    Camera.WorldToScreen(worldRectangle),
+                    Camera.WorldToScreen(worldRectangle),//Camera.WorldToScreen(worldRectangle)
                     animations[currentAnimation].FrameRectangle,
                     Color.White, 0.0f, Vector2.Zero, effect, drawDepth);
             }
@@ -233,9 +233,10 @@ namespace JourneyThroughTheMountain
                 if (moveAmount.Y > 0)
                 {
                     onGround = true;
-                    moveAmount.Y = 0;
-                    velocity.Y = 0;
+                    
                 }
+                moveAmount.Y = 0;
+                velocity.Y = 0;
             }
             if (codeBasedBlocks)
             {

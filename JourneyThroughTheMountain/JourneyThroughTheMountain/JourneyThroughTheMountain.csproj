@@ -30,6 +30,9 @@
   <ItemGroup>
     <ProjectReference Include="..\TileEngine\TileEngine.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Maps\" />
+  </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy  &quot;$(OutDir)\Content&quot; &quot;$(SolutionDir)\LevelEditro\bin\Debug\Content&quot; /y" />
   </Target>

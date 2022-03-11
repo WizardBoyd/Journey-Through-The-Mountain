@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using TileEngine;
+
 namespace JourneyThroughTheMountain
 {
     public class Game1 : Game
@@ -34,9 +36,16 @@ namespace JourneyThroughTheMountain
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-           test = Content.Load<SpriteFont>(@"Pericles7");
+            Camera.WorldRectangle = new Rectangle(0, 0, 160 * 32, 12 * 32); //This is the amount of tile 160 tiles wide, 12 tiles down
+            Camera.Position = Vector2.Zero;
+            Camera.ViewPortWidth = 800;
+            Camera.ViewPortHeight = 600;
+
+            test = Content.Load<SpriteFont>(@"Pericles7");
             player = new Player(Content);
             player.WorldLocation = new Vector2(350, 300);
+
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -61,7 +70,7 @@ namespace JourneyThroughTheMountain
             // TODO: Add your drawing code here
 
             _spriteBatch.Begin(SpriteSortMode.Immediate);
-            //_spriteBatch.DrawString(test, Mouse.GetState().X.ToString(), new Vector2(0, 0), Color.Black);
+            _spriteBatch.DrawString(test, player.WorldLocation.ToString(), new Vector2(0, 0), Color.Black);
             player.Draw(_spriteBatch);
             _spriteBatch.End();
 
