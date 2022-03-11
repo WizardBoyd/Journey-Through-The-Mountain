@@ -9,6 +9,8 @@ namespace JourneyThroughTheMountain
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private Player player;
+
         SpriteFont test;
         public Game1()
         {
@@ -21,6 +23,10 @@ namespace JourneyThroughTheMountain
         {
             // TODO: Add your initialization logic here
 
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 600;
+            _graphics.ApplyChanges();
+
             base.Initialize();
         }
 
@@ -29,6 +35,8 @@ namespace JourneyThroughTheMountain
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
            test = Content.Load<SpriteFont>(@"Pericles7");
+            player = new Player(Content);
+            player.WorldLocation = new Vector2(350, 300);
             // TODO: use this.Content to load your game content here
         }
 
@@ -38,7 +46,8 @@ namespace JourneyThroughTheMountain
                 Exit();
 
             // TODO: Add your update logic here
-            MouseState ms = Mouse.GetState();
+            //MouseState ms = Mouse.GetState();
+            player.Update(gameTime);
 
            
 
@@ -52,7 +61,8 @@ namespace JourneyThroughTheMountain
             // TODO: Add your drawing code here
 
             _spriteBatch.Begin(SpriteSortMode.Immediate);
-            _spriteBatch.DrawString(test, Mouse.GetState().X.ToString(), new Vector2(0, 0), Color.Black);
+            //_spriteBatch.DrawString(test, Mouse.GetState().X.ToString(), new Vector2(0, 0), Color.Black);
+            player.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);

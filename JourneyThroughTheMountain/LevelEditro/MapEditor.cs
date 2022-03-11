@@ -213,7 +213,7 @@ namespace LevelEditro
             catch (Exception)
             {
                 System.Diagnostics.Debug.Print("Unable to Load Map File");
-                throw;
+                
             }
         }
 

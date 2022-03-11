@@ -94,7 +94,7 @@ namespace JourneyThroughTheMountain
         #endregion
 
         #region Public Methods
-        private void PlayAnimation(string name)
+        public void PlayAnimation(string name)
         {
             if (!(name == null) && animations.ContainsKey(name))
             {
@@ -252,5 +252,7 @@ namespace JourneyThroughTheMountain
             return moveAmount;
         }
         #endregion
+
+
     }
 }
