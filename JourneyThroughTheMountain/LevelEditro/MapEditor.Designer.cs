@@ -55,6 +55,8 @@ namespace LevelEditro
             this.lblMapNumber = new System.Windows.Forms.Label();
             this.cboMapNumber = new System.Windows.Forms.ComboBox();
             this.LstDebugBox = new System.Windows.Forms.ListBox();
+            this.lstObjects = new System.Windows.Forms.ListView();
+            this.loadObjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditorWindow = new LevelEditro.EditorWindow();
             this.menuStrip1.SuspendLayout();
             this.groupBoxRightClick.SuspendLayout();
@@ -68,7 +70,7 @@ namespace LevelEditro
             this.layerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1069, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -87,33 +89,34 @@ namespace LevelEditro
             // loadMapToolStripMenuItem
             // 
             this.loadMapToolStripMenuItem.Name = "loadMapToolStripMenuItem";
-            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.loadMapToolStripMenuItem.Text = "Load Map";
             this.loadMapToolStripMenuItem.Click += new System.EventHandler(this.loadMapToolStripMenuItem_Click);
             // 
             // saveMapToolStripMenuItem
             // 
             this.saveMapToolStripMenuItem.Name = "saveMapToolStripMenuItem";
-            this.saveMapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveMapToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.saveMapToolStripMenuItem.Text = "Save Map";
             this.saveMapToolStripMenuItem.Click += new System.EventHandler(this.saveMapToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(124, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearMapToolStripMenuItem});
+            this.clearMapToolStripMenuItem,
+            this.loadObjectsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -121,7 +124,7 @@ namespace LevelEditro
             // clearMapToolStripMenuItem
             // 
             this.clearMapToolStripMenuItem.Name = "clearMapToolStripMenuItem";
-            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.clearMapToolStripMenuItem.Text = "Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
             // 
@@ -181,7 +184,7 @@ namespace LevelEditro
             this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.vScrollBar1.LargeChange = 32;
-            this.vScrollBar1.Location = new System.Drawing.Point(747, 38);
+            this.vScrollBar1.Location = new System.Drawing.Point(770, 41);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(17, 493);
             this.vScrollBar1.TabIndex = 3;
@@ -193,7 +196,7 @@ namespace LevelEditro
             this.hScrollBar1.LargeChange = 32;
             this.hScrollBar1.Location = new System.Drawing.Point(149, 534);
             this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(595, 17);
+            this.hScrollBar1.Size = new System.Drawing.Size(618, 17);
             this.hScrollBar1.TabIndex = 4;
             // 
             // groupBoxRightClick
@@ -289,6 +292,30 @@ namespace LevelEditro
             this.LstDebugBox.Size = new System.Drawing.Size(120, 95);
             this.LstDebugBox.TabIndex = 8;
             // 
+            // lstObjects
+            // 
+            this.lstObjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstObjects.HideSelection = false;
+            this.lstObjects.LargeImageList = this.imgListTiles;
+            this.lstObjects.Location = new System.Drawing.Point(836, 41);
+            this.lstObjects.MultiSelect = false;
+            this.lstObjects.Name = "lstObjects";
+            this.lstObjects.Size = new System.Drawing.Size(180, 510);
+            this.lstObjects.TabIndex = 10;
+            this.lstObjects.TileSize = new System.Drawing.Size(64, 64);
+            this.lstObjects.UseCompatibleStateImageBehavior = false;
+            this.lstObjects.View = System.Windows.Forms.View.Tile;
+            this.lstObjects.SelectedIndexChanged += new System.EventHandler(this.lstObjects_SelectedIndexChanged);
+            // 
+            // loadObjectsToolStripMenuItem
+            // 
+            this.loadObjectsToolStripMenuItem.Name = "loadObjectsToolStripMenuItem";
+            this.loadObjectsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.loadObjectsToolStripMenuItem.Text = "Load Objects";
+            this.loadObjectsToolStripMenuItem.Click += new System.EventHandler(this.loadObjectsToolStripMenuItem_Click);
+            // 
             // EditorWindow
             // 
             this.EditorWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -297,7 +324,7 @@ namespace LevelEditro
             this.EditorWindow.Location = new System.Drawing.Point(149, 38);
             this.EditorWindow.MouseHoverUpdatesOnly = false;
             this.EditorWindow.Name = "EditorWindow";
-            this.EditorWindow.Size = new System.Drawing.Size(595, 493);
+            this.EditorWindow.Size = new System.Drawing.Size(618, 493);
             this.EditorWindow.TabIndex = 9;
             this.EditorWindow.Text = "EditorWindow";
             // 
@@ -305,7 +332,8 @@ namespace LevelEditro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 571);
+            this.ClientSize = new System.Drawing.Size(1069, 571);
+            this.Controls.Add(this.lstObjects);
             this.Controls.Add(this.EditorWindow);
             this.Controls.Add(this.LstDebugBox);
             this.Controls.Add(this.cboMapNumber);
@@ -356,5 +384,7 @@ namespace LevelEditro
         private System.Windows.Forms.ComboBox cboMapNumber;
         private System.Windows.Forms.ListBox LstDebugBox;
         public EditorWindow EditorWindow;
+        private System.Windows.Forms.ListView lstObjects;
+        private System.Windows.Forms.ToolStripMenuItem loadObjectsToolStripMenuItem;
     }
 }

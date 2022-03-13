@@ -22,6 +22,8 @@ namespace LevelEditro
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
+            lstObjects.LargeImageList = new ImageList();
+            lstObjects.LargeImageList.ImageSize = new Size(64, 64);
 
         }
 
@@ -65,6 +67,33 @@ namespace LevelEditro
                 }
             }
             FixScrollBarScales();
+        }
+
+        private void LoadObject()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = true;
+            fileDialog.Filter = "Image files|*.png;*.jpeg;*.tiff";
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                int tilecount = 0;
+
+                foreach (string file in fileDialog.FileNames)
+                {
+                    try
+                    {
+                        Bitmap image = new Bitmap(file);
+                        lstObjects.LargeImageList.Images.Add(image);
+                        lstObjects.Items.Add(new ListViewItem("", tilecount));
+                        tilecount++;
+                    }
+                    catch (Exception)
+                    {
+                        LstDebugBox.Items.Add($"{file} Could not be loaded");
+                    }
+                }
+            }
         }
 
         private void MapEditor_Load(object sender, EventArgs e)
@@ -182,7 +211,7 @@ namespace LevelEditro
 
         private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //game.DrawLayer = 0;
+            EditorWindow.DrawLayer = 0;
             backgroundToolStripMenuItem.Checked = true;
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = false;
@@ -190,7 +219,7 @@ namespace LevelEditro
 
         private void interactiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //game.DrawLayer = 1;
+            EditorWindow.DrawLayer = 1;
             backgroundToolStripMenuItem.Checked = false;
             interactiveToolStripMenuItem.Checked = true;
             foregroundToolStripMenuItem.Checked = false;
@@ -198,7 +227,7 @@ namespace LevelEditro
 
         private void foregroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //game.DrawLayer = 2;
+            EditorWindow.DrawLayer = 2;
             backgroundToolStripMenuItem.Checked = false;
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = true;
@@ -227,6 +256,20 @@ namespace LevelEditro
         private void clearMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TileMap.ClearMap();
+        }
+
+        private void loadObjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadObject();
+        }
+
+        private void lstObjects_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listTiles.SelectedIndices.Count > 0)
+            {
+                EditorWindow.DrawTile = (int)lstObjects.SelectedIndices[0];
+                System.Diagnostics.Debug.WriteLine(listTiles.SelectedIndices[0]);
+            }
         }
 
         //TimerGameUpdate

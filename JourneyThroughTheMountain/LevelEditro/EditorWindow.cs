@@ -27,6 +27,7 @@ namespace LevelEditro
         System.Windows.Forms.HScrollBar hScroll;
         //System.Windows.Forms.ListBox DebugBox;
 
+
         public EditorWindow()
         {
             
@@ -83,6 +84,11 @@ namespace LevelEditro
 
             lastMouseState = Mouse.GetState();
 
+        }
+
+        public virtual void AddContent(string path)
+        {
+            TileMap.AddTileSheet(Editor.Content.Load<Texture2D>(path));
         }
 
         protected override void Update(GameTime gameTime)
