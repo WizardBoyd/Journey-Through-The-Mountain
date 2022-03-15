@@ -280,6 +280,9 @@
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_58.xnb" />
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_59.xnb" />
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_60.xnb" />
+    <None Include="bin\Debug\Content\Tiles\Tileset.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="mgfxc.deps.json" />
     <None Include="mgfxc.runtimeconfig.dev.json" />
     <None Include="mgfxc.runtimeconfig.json" />
@@ -312,6 +315,52 @@
     <Content Include="RawContent\CastleTilemap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="RawContent\Objects\Boxes\1.png" />
+    <Content Include="RawContent\Objects\Boxes\2.png" />
+    <Content Include="RawContent\Objects\Boxes\3.png" />
+    <Content Include="RawContent\Objects\Boxes\4.png" />
+    <Content Include="RawContent\Objects\Boxes\5.png" />
+    <Content Include="RawContent\Objects\Boxes\6.png" />
+    <Content Include="RawContent\Objects\Bushes\1.png" />
+    <Content Include="RawContent\Objects\Bushes\2.png" />
+    <Content Include="RawContent\Objects\Bushes\3.png" />
+    <Content Include="RawContent\Objects\Bushes\4.png" />
+    <Content Include="RawContent\Objects\Bushes\5.png" />
+    <Content Include="RawContent\Objects\Fence\1.png" />
+    <Content Include="RawContent\Objects\Fence\2.png" />
+    <Content Include="RawContent\Objects\Fence\3.png" />
+    <Content Include="RawContent\Objects\Igloo\1.png" />
+    <Content Include="RawContent\Objects\Igloo\2.png" />
+    <Content Include="RawContent\Objects\Ladders\1.png" />
+    <Content Include="RawContent\Objects\Ladders\2.png" />
+    <Content Include="RawContent\Objects\Ladders\3.png" />
+    <Content Include="RawContent\Objects\Ladders\4.png" />
+    <Content Include="RawContent\Objects\Ladders\5.png" />
+    <Content Include="RawContent\Objects\Ladders\6.png" />
+    <Content Include="RawContent\Objects\Other\Flagpole.png" />
+    <Content Include="RawContent\Objects\Other\Statue.png" />
+    <Content Include="RawContent\Objects\Pointers\1.png" />
+    <Content Include="RawContent\Objects\Pointers\2.png" />
+    <Content Include="RawContent\Objects\Pointers\3.png" />
+    <Content Include="RawContent\Objects\Pointers\4.png" />
+    <Content Include="RawContent\Objects\Pointers\5.png" />
+    <Content Include="RawContent\Objects\Pointers\6.png" />
+    <Content Include="RawContent\Objects\Pointers\7.png" />
+    <Content Include="RawContent\Objects\Pointers\8.png" />
+    <Content Include="RawContent\Objects\Stones\1.png" />
+    <Content Include="RawContent\Objects\Stones\2.png" />
+    <Content Include="RawContent\Objects\Stones\3.png" />
+    <Content Include="RawContent\Objects\Stones\4.png" />
+    <Content Include="RawContent\Objects\Stones\5.png" />
+    <Content Include="RawContent\Objects\Stones\6.png" />
+    <Content Include="RawContent\Objects\Stones\7.png" />
+    <Content Include="RawContent\Objects\Stones\8.png" />
+    <Content Include="RawContent\Objects\Trees\1.png" />
+    <Content Include="RawContent\Objects\Trees\2.png" />
+    <Content Include="RawContent\Objects\Trees\3.png" />
+    <Content Include="RawContent\Objects\Trees\4.png" />
+    <Content Include="RawContent\Objects\Trees\5.png" />
+    <Content Include="RawContent\Objects\Trees\6.png" />
     <Content Include="RawContent\PlatformTiles.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

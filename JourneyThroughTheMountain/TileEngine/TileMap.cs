@@ -287,21 +287,19 @@ namespace TileEngine
                 {
                     for (int z = 0; z < MapLayers; z++)
                     {
-                        foreach (Texture2D Tilesheet in tileSheets)
+
+                        if ((x >= 0) && (y >= 0) &&
+                         (x < MapWidth) && (y < MapHeight))
                         {
-                            if ((x >= 0) && (y >= 0) &&
-                           (x < MapWidth) && (y < MapHeight))
-                            {
-                                spriteBatch.Draw(
-                                  Tilesheet,
-                                  CellScreenRectangle(x, y),
-                                  TileSourceRectangle(mapCells[x, y].LayerTiles[z]),
-                                  Color.White,
-                                  0.0f,
-                                  Vector2.Zero,
-                                  SpriteEffects.None,
-                                  1f - ((float)z * 0.1f));
-                            }
+                            spriteBatch.Draw(
+                              tileSheets[0],
+                              CellScreenRectangle(x, y),
+                              TileSourceRectangle(mapCells[x, y].LayerTiles[z]),
+                              Color.White,
+                              0.0f,
+                              Vector2.Zero,
+                              SpriteEffects.None,
+                              1f - ((float)z * 0.1f));
                         }
                     }
 

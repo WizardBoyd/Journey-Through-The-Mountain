@@ -1436,7 +1436,7 @@
 /processorParam:TextureFormat=Color
 /build:Tiles/Ice/Tile_60.png
 
-#begin Tileset.png
+#begin Tiles/Tileset.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1446,5 +1446,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Tileset.png
+/build:Tiles/Tileset.png
 

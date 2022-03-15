@@ -22,8 +22,6 @@ namespace LevelEditro
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            lstObjects.LargeImageList = new ImageList();
-            lstObjects.LargeImageList.ImageSize = new Size(64, 64);
 
         }
 
@@ -66,35 +64,36 @@ namespace LevelEditro
                     listTiles.Items.Add(new ListViewItem(ItemName, tilecount++));
                 }
             }
+
             FixScrollBarScales();
         }
 
-        private void LoadObject()
-        {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Multiselect = true;
-            fileDialog.Filter = "Image files|*.png;*.jpeg;*.tiff";
+        //private void LoadObject()
+        //{
+        //    OpenFileDialog fileDialog = new OpenFileDialog();
+        //    fileDialog.Multiselect = true;
+        //    fileDialog.Filter = "Image files|*.png;*.jpeg;*.tiff";
 
-            if (fileDialog.ShowDialog() == DialogResult.OK)
-            {
-                int tilecount = 0;
+        //    if (fileDialog.ShowDialog() == DialogResult.OK)
+        //    {
+        //        int tilecount = 0;
 
-                foreach (string file in fileDialog.FileNames)
-                {
-                    try
-                    {
-                        Bitmap image = new Bitmap(file);
-                        lstObjects.LargeImageList.Images.Add(image);
-                        lstObjects.Items.Add(new ListViewItem("", tilecount));
-                        tilecount++;
-                    }
-                    catch (Exception)
-                    {
-                        LstDebugBox.Items.Add($"{file} Could not be loaded");
-                    }
-                }
-            }
-        }
+        //        foreach (string file in fileDialog.FileNames)
+        //        {
+        //            try
+        //            {
+        //                Bitmap image = new Bitmap(file);
+        //                lstObjects.LargeImageList.Images.Add(image);
+        //                lstObjects.Items.Add(new ListViewItem("", tilecount));
+        //                tilecount++;
+        //            }
+        //            catch (Exception)
+        //            {
+        //                LstDebugBox.Items.Add($"{file} Could not be loaded");
+        //            }
+        //        }
+        //    }
+        //}
 
         private void MapEditor_Load(object sender, EventArgs e)
         {
@@ -257,22 +256,5 @@ namespace LevelEditro
         {
             TileMap.ClearMap();
         }
-
-        private void loadObjectsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadObject();
-        }
-
-        private void lstObjects_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listTiles.SelectedIndices.Count > 0)
-            {
-                EditorWindow.DrawTile = (int)lstObjects.SelectedIndices[0];
-                System.Diagnostics.Debug.WriteLine(listTiles.SelectedIndices[0]);
-            }
-        }
-
-        //TimerGameUpdate
-
     }
 }

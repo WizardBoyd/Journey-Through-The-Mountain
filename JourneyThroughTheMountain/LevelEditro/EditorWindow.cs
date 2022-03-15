@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -79,8 +81,16 @@ namespace LevelEditro
             Camera.ViewPortHeight = this.Height;
             Camera.WorldRectangle = new Rectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.TileHeight * TileMap.MapHeight);
 
-            TileMap.Initialize(Editor.Content.Load<Texture2D>(@"Tiles/Ice/Tileset"));
+            TileMap.Initialize(Editor.Content.Load<Texture2D>(@"Tiles/Tileset"));
             TileMap.spriteFont = Editor.Font;
+
+            string[] XNBFiles = Directory.GetFiles(Application.StartupPath + @"\Content\Objects", "*.xnb", SearchOption.AllDirectories);
+
+            for (int dir = 0; dir < XNBFiles.Length; dir++)
+            {
+                XNBFiles[dir] = XNBFiles[dir].Replace(".xnb", "");
+                TileMap.AddTileSheet(Editor.Content.Load<Texture2D>(XNBFiles[dir])); //NEED TO FIX THE DRAWING ON TILE MAP
+            }
 
             lastMouseState = Mouse.GetState();
 
@@ -107,7 +117,7 @@ namespace LevelEditro
                 if (Camera.WorldRectangle.Contains(
                     (int)mouseLoc.X, (int)mouseLoc.Y))
                 {
-                    if (ms.LeftButton == ButtonState.Pressed)
+                    if (ms.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                     {
                         TileMap.SetTileAtCell(
                           TileMap.GetCellByPixelX((int)mouseLoc.X),
@@ -116,8 +126,8 @@ namespace LevelEditro
                           DrawTile);
                     }
 
-                    if ((ms.RightButton == ButtonState.Pressed) &&
-                        (lastMouseState.RightButton == ButtonState.Released))
+                    if ((ms.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) &&
+                        (lastMouseState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released))
                     {
                         if (EditingCode)
                         {
