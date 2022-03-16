@@ -39,19 +39,23 @@ namespace JourneyThroughTheMountain
         #region Constructor
         public Player(ContentManager content)
         {
-            animations.Add("idle", new AnimationStrip(content.Load<Texture2D>(@"Idle_Run_Jump_SpriteSheet"), 32, "idle"));
-            animations.Add("run", new AnimationStrip(content.Load<Texture2D>(@"Idle_Run_Jump_SpriteSheet"), 64, "run"));
-            animations.Add("Jump", new AnimationStrip(content.Load<Texture2D>(@"Idle_Run_Jump_SpriteSheet"), 32, "Jump"));
+            animations.Add("idle", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_idle"), 48, "idle"));
+
+            animations["idle"].LoopAnimation = true;
+
+            animations.Add("run", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_run"), 48, "run"));
+            animations["run"].LoopAnimation = true;
+            animations.Add("Jump", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_jump"), 48, "Jump"));
 
             animations["Jump"].LoopAnimation = false;
             animations["Jump"].FrameLength = 0.08f;
-            animations["Jump"].NextNaimation = "idle";
+            animations["Jump"].NextAnimation = "idle";
 
-            animations.Add("Die", new AnimationStrip(content.Load<Texture2D>(@"Idle_Run_Jump_SpriteSheet"), 32, "Die"));
+            animations.Add("Die", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_death"), 48, "Die"));
             animations["Die"].LoopAnimation = false;
 
-            frameWidth = 32;
-            frameHeight = 32;
+            frameWidth = 48;
+            frameHeight = 48;
             collisionRectangle = new Rectangle(9, 1, 30, 46);
 
             drawDepth = 0.825f;
@@ -76,7 +80,7 @@ namespace JourneyThroughTheMountain
                 if (keyState.IsKeyDown(Keys.Left) ||
                     (gamePad.ThumbSticks.Left.X < -0.3f))
                 {
-                    flipped = false;
+                    flipped = true;
                     newAnimation = "run";
                     velocity = new Vector2(-moveScale, velocity.Y);
                 }
@@ -84,7 +88,7 @@ namespace JourneyThroughTheMountain
                 if (keyState.IsKeyDown(Keys.Right) ||
                     (gamePad.ThumbSticks.Left.X > 0.3f))
                 {
-                    flipped = true;
+                    flipped = false;
                     newAnimation = "run";
                     velocity = new Vector2(moveScale, velocity.Y);
                 }
@@ -95,7 +99,7 @@ namespace JourneyThroughTheMountain
                     if (onGround)
                     {
                         Jump();
-                        newAnimation = "jump";
+                        newAnimation = "Jump";
                     }
                 }
 
@@ -106,8 +110,8 @@ namespace JourneyThroughTheMountain
                 }
 
 
-                if (currentAnimation == "jump")
-                    newAnimation = "jump";
+                if (currentAnimation == "Jump")
+                    newAnimation = "Jump";
 
                 if (newAnimation != currentAnimation)
                 {
@@ -128,7 +132,7 @@ namespace JourneyThroughTheMountain
 
         public void Kill()
         {
-            PlayAnimation("die");
+            PlayAnimation("Die");
             LivesRemaining--;
             velocity.X = 0;
             dead = true;

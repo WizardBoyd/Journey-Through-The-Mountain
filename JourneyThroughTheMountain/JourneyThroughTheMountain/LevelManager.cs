@@ -19,6 +19,7 @@ namespace JourneyThroughTheMountain
 
         private static List<Coin> coins = new List<Coin>();
         private static List<Enemy> enemies = new List<Enemy>();
+        private static List<Tree> Trees = new List<Tree>();
         #endregion
 
         #region Properties
@@ -86,7 +87,15 @@ namespace JourneyThroughTheMountain
                         enemies.Add(new Enemy(Content, x, y));
                     }
 
+                    if (TileMap.CellCodeValue(x,y) == "TREE")
+                    {
+                        Trees.Add(new Tree(Content, x, y));
+                    }
+
+                    
                 }
+
+               
             }
 
             currentLevel = levelNumber;
@@ -159,6 +168,11 @@ namespace JourneyThroughTheMountain
 
             foreach (Enemy enemy in enemies)
                 enemy.Draw(spriteBatch);
+
+            foreach (Tree tree in Trees)
+            {
+                tree.Draw(spriteBatch);
+            }
 
         }
 

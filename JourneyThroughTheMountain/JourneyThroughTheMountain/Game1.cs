@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System.Collections.Generic;
 using TileEngine;
 
 namespace JourneyThroughTheMountain
@@ -55,7 +55,7 @@ namespace JourneyThroughTheMountain
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             TileMap.Initialize(
-                Content.Load<Texture2D>(@"PlatformTiles"));
+                Content.Load<Texture2D>(@"Tiles/Tileset"));
             TileMap.spriteFont =
                 Content.Load<SpriteFont>(@"Pericles7");
 
@@ -70,6 +70,7 @@ namespace JourneyThroughTheMountain
 
             player = new Player(Content);
             LevelManager.Initialize(Content, player);
+           
         }
 
         private void StartNewGame()
@@ -212,6 +213,11 @@ namespace JourneyThroughTheMountain
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void DrawTree()
+        {
+
         }
 
     }

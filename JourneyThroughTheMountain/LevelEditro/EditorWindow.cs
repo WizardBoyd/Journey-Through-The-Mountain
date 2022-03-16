@@ -89,7 +89,7 @@ namespace LevelEditro
             for (int dir = 0; dir < XNBFiles.Length; dir++)
             {
                 XNBFiles[dir] = XNBFiles[dir].Replace(".xnb", "");
-                TileMap.AddTileSheet(Editor.Content.Load<Texture2D>(XNBFiles[dir])); //NEED TO FIX THE DRAWING ON TILE MAP
+                TileMap.AddTileSheet(Editor.Content.Load<Texture2D>(XNBFiles[dir])); 
             }
 
             lastMouseState = Mouse.GetState();

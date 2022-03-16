@@ -87,7 +87,7 @@ namespace JourneyThroughTheMountain
             {
                 if (animations[currentAnimation].FinishedPlaying)
                 {
-                    PlayAnimation(animations[currentAnimation].NextNaimation);
+                    PlayAnimation(animations[currentAnimation].NextAnimation);
                 }
                 else
                 {

@@ -8,28 +8,29 @@ namespace JourneyThroughTheMountain
 {
     public class AnimationStrip
     {
-        #region Declartions
+
+        #region Declarations
         private Texture2D texture;
-        private int framewidth;
+        private int frameWidth;
         private int frameHeight;
 
-        private float frametimer = 0f;
-        private float frameDelay = .05f;
+        private float frameTimer = 0f;
+        private float frameDelay = 0.1f;
 
         private int currentFrame;
 
-        private bool loopAniamtion = true;
+        private bool loopAnimation = true;
         private bool finishedPlaying = false;
 
         private string name;
-        private string nextAniamtion;
+        private string nextAnimation;
         #endregion
 
         #region Properties
         public int FrameWidth
         {
-            get { return framewidth; }
-            set { framewidth = value; }
+            get { return frameWidth; }
+            set { frameWidth = value; }
         }
 
         public int FrameHeight
@@ -50,16 +51,16 @@ namespace JourneyThroughTheMountain
             set { name = value; }
         }
 
-        public string NextNaimation
+        public string NextAnimation
         {
-            get { return nextAniamtion; }
-            set { nextAniamtion = value; }
+            get { return nextAnimation; }
+            set { nextAnimation = value; }
         }
 
         public bool LoopAnimation
         {
-            get { return loopAniamtion; }
-            set { loopAniamtion = value; }
+            get { return loopAnimation; }
+            set { loopAnimation = value; }
         }
 
         public bool FinishedPlaying
@@ -69,7 +70,7 @@ namespace JourneyThroughTheMountain
 
         public int FrameCount
         {
-            get { return texture.Width / framewidth; }
+            get { return texture.Width / frameWidth; }
         }
 
         public float FrameLength
@@ -82,21 +83,23 @@ namespace JourneyThroughTheMountain
         {
             get
             {
-                return new Rectangle(currentFrame * framewidth, 0, framewidth, frameHeight);
+                return new Rectangle(
+                    currentFrame * frameWidth,
+                    0,
+                    frameWidth,
+                    frameHeight);
             }
         }
         #endregion
 
         #region Constructor
-
         public AnimationStrip(Texture2D texture, int frameWidth, string name)
         {
             this.texture = texture;
-            this.framewidth = frameWidth;
+            this.frameWidth = frameWidth;
             this.frameHeight = texture.Height;
             this.name = name;
         }
-
         #endregion
 
         #region Public Methods
@@ -106,18 +109,18 @@ namespace JourneyThroughTheMountain
             finishedPlaying = false;
         }
 
-        public void Update(GameTime gametime)
+        public void Update(GameTime gameTime)
         {
-            float elapsed = (float)gametime.ElapsedGameTime.TotalSeconds;
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            frametimer += elapsed;
+            frameTimer += elapsed;
 
-            if (frametimer >= frameDelay) 
+            if (frameTimer >= frameDelay)
             {
                 currentFrame++;
                 if (currentFrame >= FrameCount)
                 {
-                    if (loopAniamtion)
+                    if (loopAnimation)
                     {
                         currentFrame = 0;
                     }
@@ -127,10 +130,13 @@ namespace JourneyThroughTheMountain
                         finishedPlaying = true;
                     }
                 }
+
+                frameTimer = 0f;
             }
-            frametimer = 0;
         }
         #endregion
+
+
 
 
     }
