@@ -14,6 +14,7 @@ namespace TileEngine
         private static Vector2 position = Vector2.Zero;
         private static Vector2 viewPortSize = Vector2.Zero;
         private static Rectangle worldRectangle = new Rectangle(0, 0, 0, 0);
+        public static bool Gameplay = false;
         #endregion
 
         #region Properties
@@ -22,13 +23,25 @@ namespace TileEngine
             get { return position; }
             set
             {
-                position = new Vector2(
-                    MathHelper.Clamp(value.X,
-                        worldRectangle.X, worldRectangle.Width -
-                        ViewPortWidth),
-                    MathHelper.Clamp(value.Y,
-                        worldRectangle.Y, worldRectangle.Height -
-                        ViewPortHeight));
+                if (!Gameplay)
+                {
+                    position = new Vector2(
+               MathHelper.Clamp(value.X,
+                   worldRectangle.X, worldRectangle.Width -
+                   ViewPortWidth),
+               MathHelper.Clamp(value.Y,
+                   worldRectangle.Y, worldRectangle.Height -
+                   ViewPortHeight));
+                }
+                else
+                {
+                    position = new Vector2(
+               MathHelper.Clamp(value.X,
+                   worldRectangle.X, worldRectangle.Width -
+                   ViewPortWidth),
+               value.Y);
+                }
+           
             }
         }
 

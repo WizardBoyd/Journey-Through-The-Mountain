@@ -22,6 +22,7 @@ namespace LevelEditro
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
+            EditorWindow.DrawLayer = 1;
 
         }
 
@@ -214,7 +215,7 @@ namespace LevelEditro
 
         private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditorWindow.DrawLayer = 0;
+            EditorWindow.DrawLayer = 1;
             backgroundToolStripMenuItem.Checked = true;
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = false;
@@ -222,7 +223,7 @@ namespace LevelEditro
 
         private void interactiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditorWindow.DrawLayer = 1;
+            EditorWindow.DrawLayer = 2;
             backgroundToolStripMenuItem.Checked = false;
             interactiveToolStripMenuItem.Checked = true;
             foregroundToolStripMenuItem.Checked = false;
@@ -230,7 +231,7 @@ namespace LevelEditro
 
         private void foregroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditorWindow.DrawLayer = 2;
+            EditorWindow.DrawLayer = 3;
             backgroundToolStripMenuItem.Checked = false;
             interactiveToolStripMenuItem.Checked = false;
             foregroundToolStripMenuItem.Checked = true;

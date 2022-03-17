@@ -20,8 +20,8 @@ namespace TileEngine
         #region Declarations
         public const int TileWidth = 32;
         public const int TileHeight = 32;
-        public const int MapWidth = 160;
-        public const int MapHeight = 20;
+        public const int MapWidth = 25;
+        public const int MapHeight = 50;
         public const int MapLayers = 3;
         private const int skyTile = 0;
 
@@ -49,6 +49,10 @@ namespace TileEngine
                     for (int z = 0; z < MapLayers; z++)
                     {
                         mapCells[x, y] = new MapSquare(skyTile, 0, 0, "", true);
+                        if (!CellIsPassable(x,y))
+                        {
+                            mapCells[x, y].CollisionRectnagle = CellScreenRectangle(x, y);
+                        }
                     }
                 }
             }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using TileEngine;
 
+
 namespace JourneyThroughTheMountain
 {
     public class Game1 : Game
@@ -20,6 +21,7 @@ namespace JourneyThroughTheMountain
         Vector2 livesPosition = new Vector2(600, 580);
 
         Texture2D titleScreen;
+        Texture2D GameBackground;
 
         float deathTimer = 0.0f;
         float deathDelay = 5.0f;
@@ -63,10 +65,13 @@ namespace JourneyThroughTheMountain
 
             titleScreen = Content.Load<Texture2D>(@"Splash Screen");
 
+            GameBackground = Content.Load<Texture2D>(@"Backgrounds/Cavern");
+
             Camera.WorldRectangle = new Rectangle(0, 0, 160 * 48, 12 * 48);
             Camera.Position = Vector2.Zero;
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 600;
+            Camera.Gameplay = true;
 
             player = new Player(Content);
             LevelManager.Initialize(Content, player);
@@ -182,6 +187,7 @@ namespace JourneyThroughTheMountain
                 (gameState == GameState.PlayerDead) ||
                 (gameState == GameState.GameOver))
             {
+                
                 TileMap.Draw(spriteBatch);
                 player.Draw(spriteBatch);
                 LevelManager.Draw(spriteBatch);
@@ -196,6 +202,7 @@ namespace JourneyThroughTheMountain
                     livesPosition,
                     Color.White);
             }
+            spriteBatch.Draw(GameBackground, Camera.WorldToScreen(Camera.ViewPort), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);//Edited
 
             if (gameState == GameState.PlayerDead)
             {

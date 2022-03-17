@@ -103,8 +103,7 @@ namespace JourneyThroughTheMountain
                     }
                 }
 
-                if (keyState.IsKeyDown(Keys.Up) ||
-                    gamePad.ThumbSticks.Left.Y > 0.3f)
+                if (!onGround)
                 {
                     checkLevelTransition();
                 }
@@ -150,6 +149,7 @@ namespace JourneyThroughTheMountain
         private void repositionCamera()
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
+            int screenLocY = (int)Camera.WorldToScreen(worldLocation).Y;
 
             if (screenLocX > 500)
             {
@@ -159,6 +159,16 @@ namespace JourneyThroughTheMountain
             if (screenLocX < 200)
             {
                 Camera.Move(new Vector2(screenLocX - 200, 0));
+            }
+
+            if (screenLocY > 500)
+            {
+                Camera.Move(new Vector2(0, screenLocY - 500));
+            }
+
+            if (screenLocY < 200)
+            {
+                Camera.Move(new Vector2(0, screenLocY - 200));
             }
         }
 

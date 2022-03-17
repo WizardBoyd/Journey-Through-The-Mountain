@@ -20,6 +20,7 @@ namespace JourneyThroughTheMountain
         private static List<Coin> coins = new List<Coin>();
         private static List<Enemy> enemies = new List<Enemy>();
         private static List<Tree> Trees = new List<Tree>();
+        private static List<MapSquare> Tiles = new List<MapSquare>();
         #endregion
 
         #region Properties
@@ -92,6 +93,11 @@ namespace JourneyThroughTheMountain
                         Trees.Add(new Tree(Content, x, y));
                     }
 
+                    if (!TileMap.CellIsPassable(x,y))
+                    {
+                        Tiles.Add(TileMap.GetMapSquareAtCell(x, y));
+                    }
+
                     
                 }
 
@@ -127,6 +133,14 @@ namespace JourneyThroughTheMountain
                         player.Score += 10;
                     }
                 }
+
+                //for (int x = Tiles.Count - 1; x >= 0; x++)
+                //{
+                //    if (player.CollisionRectangle.Intersects(Tiles[x].CollisionRectnagle) && player.GetVelocity().Y <= 0.5f)
+                //    {
+                //        player.Score += 1;
+                //    }
+                //}
 
                 for (int x = enemies.Count - 1; x >= 0; x--)
                 {

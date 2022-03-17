@@ -10,6 +10,18 @@ namespace JourneyThroughTheMountain
 {
     public class GameObject
     {
+
+        #region Sub-classes
+        public class GameObjectEventArgs : EventArgs
+        {
+            public int HealthValue;
+            public GameObjectEventArgs(int health)
+            {
+                HealthValue = health;
+            }
+        }
+        #endregion
+
         #region Declarations
         protected Vector2 worldLocation;
         protected Vector2 velocity;
@@ -29,6 +41,16 @@ namespace JourneyThroughTheMountain
         protected Dictionary<string, AnimationStrip> animations =
             new Dictionary<string, AnimationStrip>();
         protected string currentAnimation;
+        protected int health;
+        protected List<BoundingBox> _boundingboxes = new List<BoundingBox>();
+        #endregion
+
+        #region Events
+
+        public event EventHandler<GameObjectEventArgs> HealthChanged;
+
+        public event EventHandler CollidedWithSomething;
+
         #endregion
 
         #region Properties
@@ -38,10 +60,35 @@ namespace JourneyThroughTheMountain
             set { enabled = value; }
         }
 
+        public List<BoundingBox> BoundingBoxes
+        {
+            get
+            {
+                return _boundingboxes;
+            }
+        }
+
         public Vector2 WorldLocation
         {
             get { return worldLocation; }
-            set { worldLocation = value; }
+            set {
+
+                var DeltaX = value.X - worldLocation.X;
+                var DeltaY = value.Y - worldLocation.Y;
+                worldLocation = value;
+                foreach (var bb in _boundingboxes)
+                {
+                    bb.Position = new Vector2(bb.Position.X + DeltaX, bb.Position.Y + DeltaY);
+                }
+                
+                
+                }
+        }
+
+        public int Health
+        {
+            get { return health; }
+            set { health = value; }
         }
 
         public Vector2 WorldCenter
@@ -208,6 +255,11 @@ namespace JourneyThroughTheMountain
             }
         }
 
+        public Vector2 GetVelocity()
+        {
+            return velocity;
+        }
+
         public virtual void Update(GameTime gameTime)
         {
             if (!enabled)
@@ -232,8 +284,9 @@ namespace JourneyThroughTheMountain
             newPosition = new Vector2(
                 MathHelper.Clamp(newPosition.X, 0,
                   Camera.WorldRectangle.Width - frameWidth),
-                MathHelper.Clamp(newPosition.Y, 2 * (-TileMap.TileHeight),
-                  Camera.WorldRectangle.Height - frameHeight));
+               newPosition.Y);
+            // MathHelper.Clamp(newPosition.Y, 2 * (-TileMap.TileHeight),
+            //Camera.WorldRectangle.Height - frameHeight)
 
             worldLocation = newPosition;
         }

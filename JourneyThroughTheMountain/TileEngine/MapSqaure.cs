@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace TileEngine
         public int[] LayerTiles = new int[3];
         public string CodeValue = "";
         public bool Passable = true;
+        public Rectangle CollisionRectnagle;
         #endregion
 
         #region Constructor
