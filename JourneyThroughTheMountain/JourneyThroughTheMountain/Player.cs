@@ -17,10 +17,28 @@ namespace JourneyThroughTheMountain
         private bool dead = false;
         private int score = 0;
         private int livesRemaining = 3;
+        public Rectangle triggercollision;
 
         public bool Dead
         {
             get { return dead; }
+        }
+
+        public Rectangle TriggerCollision
+        {
+            get
+            {
+                return new Rectangle(
+                 (int)worldLocation.X + triggercollision.X,
+                 (int)WorldRectangle.Y + triggercollision.Y,
+                 triggercollision.Width,
+                 triggercollision.Height);
+            }
+
+            set
+            {
+                triggercollision = value;
+            }
         }
 
         public int Score
@@ -57,9 +75,11 @@ namespace JourneyThroughTheMountain
             frameWidth = 48;
             frameHeight = 48;
             collisionRectangle = new Rectangle(9, 1, 30, 46);
+            TriggerCollision = collisionRectangle;
+            triggercollision.Inflate(2.5f, 2.5f);
 
             drawDepth = 0.825f;
-
+            
             enabled = true;
             codeBasedBlocks = false;
             PlayAnimation("idle");
@@ -141,6 +161,12 @@ namespace JourneyThroughTheMountain
         {
             PlayAnimation("idle");
             dead = false;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Game1.BoundingBox, TriggerCollision, Color.Red);
+            base.Draw(spriteBatch);
         }
 
         #endregion

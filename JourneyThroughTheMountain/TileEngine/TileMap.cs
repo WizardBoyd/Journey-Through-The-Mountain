@@ -337,7 +337,7 @@ namespace TileEngine
                     spriteBatch.Draw(
                                   TileSheet,
                                   GetMapSquareAtCell(x,y).CollisionRectnagle,
-                                  TileSourceRectangle(1),
+                                  CellWorldRectangle(x,y),
                                   new Color(255, 255, 0, 80),
                                   0.0f,
                                   Vector2.Zero,
