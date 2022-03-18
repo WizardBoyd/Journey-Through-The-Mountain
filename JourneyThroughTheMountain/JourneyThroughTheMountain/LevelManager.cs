@@ -95,6 +95,7 @@ namespace JourneyThroughTheMountain
 
                     if (!TileMap.CellIsPassable(x,y))
                     {
+                        TileMap.GetMapSquareAtCell(x, y).CollisionRectnagle = TileMap.CellWorldRectangle(x, y);
                         Tiles.Add(TileMap.GetMapSquareAtCell(x, y));
                     }
 
@@ -134,13 +135,13 @@ namespace JourneyThroughTheMountain
                     }
                 }
 
-                //for (int x = Tiles.Count - 1; x >= 0; x++)
-                //{
-                //    if (player.CollisionRectangle.Intersects(Tiles[x].CollisionRectnagle) && player.GetVelocity().Y <= 0.5f)
-                //    {
-                //        player.Score += 1;
-                //    }
-                //}
+                for (int x = Tiles.Count - 1; x >= 0; x--)
+                {
+                    if (player.CollisionRectangle.Intersects(Tiles[x].CollisionRectnagle) && player.GetVelocity().Y >= 0.5f)
+                    {
+                        player.Score += 1;//Some Reason this is moveing the sprites when i move
+                    }
+                }
 
                 for (int x = enemies.Count - 1; x >= 0; x--)
                 {

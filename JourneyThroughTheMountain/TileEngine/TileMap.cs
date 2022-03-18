@@ -28,7 +28,7 @@ namespace TileEngine
         static private MapSquare[,] mapCells =
             new MapSquare[MapWidth, MapHeight];
 
-        public static bool EditorMode = false;
+        public static bool EditorMode = true;
 
         public static SpriteFont spriteFont;
         //static private Texture2D tileSheet;
@@ -49,10 +49,6 @@ namespace TileEngine
                     for (int z = 0; z < MapLayers; z++)
                     {
                         mapCells[x, y] = new MapSquare(skyTile, 0, 0, "", true);
-                        if (!CellIsPassable(x,y))
-                        {
-                            mapCells[x, y].CollisionRectnagle = CellScreenRectangle(x, y);
-                        }
                     }
                 }
             }
@@ -338,6 +334,15 @@ namespace TileEngine
                                     Vector2.Zero,
                                     SpriteEffects.None,
                                     0.0f);
+                    spriteBatch.Draw(
+                                  TileSheet,
+                                  GetMapSquareAtCell(x,y).CollisionRectnagle,
+                                  TileSourceRectangle(1),
+                                  new Color(255, 255, 0, 80),
+                                  0.0f,
+                                  Vector2.Zero,
+                                  SpriteEffects.None,
+                                  0.0f);
                 }
 
                 if (mapCells[x, y].CodeValue != "")
