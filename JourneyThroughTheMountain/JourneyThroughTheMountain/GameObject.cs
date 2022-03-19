@@ -43,6 +43,7 @@ namespace JourneyThroughTheMountain
         protected string currentAnimation;
         protected int health;
         protected List<BoundingBox> _boundingboxes = new List<BoundingBox>();
+        protected List<BoundingBox> _triggerboxes = new List<BoundingBox>();
         #endregion
 
         #region Events
@@ -64,8 +65,46 @@ namespace JourneyThroughTheMountain
         {
             get
             {
-                return _boundingboxes;
+
+                List<BoundingBox> result = new List<BoundingBox>();
+
+                foreach (BoundingBox bb in _boundingboxes)
+                {
+                    result.Add(new BoundingBox(new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)WorldRectangle.Y + (int)bb.Position.Y),
+                        bb.Width, bb.Height));
+                }
+
+                //foreach (BoundingBox bb in _boundingboxes)
+                //{
+                //    bb.Position = new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)WorldRectangle.Y + (int)bb.Position.Y);
+                //}
+                return result;
             }
+
+            set { _boundingboxes = value; }
+        }
+
+        public List<BoundingBox> TriggerBoxes
+        {
+            get
+            {
+                //foreach (BoundingBox bb in _triggerboxes)
+                //{
+                //    bb.Position = new Vector2((int)worldLocation.X + bb.Position.X, (int)WorldRectangle.Y + bb.Position.Y);
+                //}
+
+                List<BoundingBox> result = new List<BoundingBox>();
+
+                foreach (BoundingBox bb in _boundingboxes)
+                {
+                    result.Add(new BoundingBox(new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)WorldRectangle.Y + (int)bb.Position.Y),
+                        bb.Width, bb.Height));
+                }
+
+                return result;
+            }
+
+            set { _triggerboxes = value; }
         }
 
         public Vector2 WorldLocation
@@ -73,13 +112,13 @@ namespace JourneyThroughTheMountain
             get { return worldLocation; }
             set {
 
-                var DeltaX = value.X - worldLocation.X;
-                var DeltaY = value.Y - worldLocation.Y;
+                //var DeltaX = value.X - worldLocation.X;
+                //var DeltaY = value.Y - worldLocation.Y;
                 worldLocation = value;
-                foreach (var bb in _boundingboxes)
-                {
-                    bb.Position = new Vector2(bb.Position.X + DeltaX, bb.Position.Y + DeltaY);
-                }
+                //foreach (var bb in _boundingboxes)
+                //{
+                //    bb.Position = new Vector2(bb.Position.X + DeltaX, bb.Position.Y + DeltaY);
+                //}
                 
                 
                 }
@@ -113,18 +152,20 @@ namespace JourneyThroughTheMountain
             }
         }
 
-        public Rectangle CollisionRectangle
-        {
-            get
-            {
-                return new Rectangle(
-                    (int)worldLocation.X + collisionRectangle.X,
-                    (int)WorldRectangle.Y + collisionRectangle.Y,
-                    collisionRectangle.Width,
-                    collisionRectangle.Height);
-            }
-            set { collisionRectangle = value; }
-        }
+        //public Rectangle CollisionRectangle
+        //{
+        //    get
+        //    {
+        //        return new Rectangle(
+        //            (int)worldLocation.X + collisionRectangle.X,
+        //            (int)WorldRectangle.Y + collisionRectangle.Y,
+        //            collisionRectangle.Width,
+        //            collisionRectangle.Height);
+        //    }
+        //    set { collisionRectangle = value; }
+        //}
+
+
         #endregion 
 
         #region Helper Methods
@@ -150,7 +191,7 @@ namespace JourneyThroughTheMountain
             if (moveAmount.X == 0)
                 return moveAmount;
 
-            Rectangle afterMoveRect = CollisionRectangle;
+            Rectangle afterMoveRect = new Rectangle((int)BoundingBoxes[0].Position.X, (int)BoundingBoxes[0].Position.Y, (int)BoundingBoxes[0].Width, (int)BoundingBoxes[0].Height);
             afterMoveRect.Offset((int)moveAmount.X, 0);
             Vector2 corner1, corner2;
 
@@ -197,7 +238,7 @@ namespace JourneyThroughTheMountain
             if (moveAmount.Y == 0)
                 return moveAmount;
 
-            Rectangle afterMoveRect = CollisionRectangle;
+            Rectangle afterMoveRect = new Rectangle((int)BoundingBoxes[0].Position.X, (int)BoundingBoxes[0].Position.Y, (int)BoundingBoxes[0].Width, (int)BoundingBoxes[0].Height);
             afterMoveRect.Offset((int)moveAmount.X, (int)moveAmount.Y);
             Vector2 corner1, corner2;
 
@@ -277,7 +318,7 @@ namespace JourneyThroughTheMountain
             Vector2 moveAmount = velocity * elapsed;
 
             moveAmount = horizontalCollisionTest(moveAmount);
-            moveAmount = verticalCollisionTest(moveAmount);
+            moveAmount = verticalCollisionTest(moveAmount); 
 
             Vector2 newPosition = worldLocation + moveAmount;
 

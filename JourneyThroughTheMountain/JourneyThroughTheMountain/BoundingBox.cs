@@ -7,7 +7,9 @@ namespace JourneyThroughTheMountain
 {
     public class BoundingBox
     {
-        public Vector2 Position { get; set; }
+        //private Vector2 _position;
+        public Vector2 Position;
+
 
         public float Width { get; set; }
 
@@ -39,6 +41,23 @@ namespace JourneyThroughTheMountain
                 return false;
             }
         }
+
+        public bool CollidesWith(Vector2 p)
+        {
+            if (p.X < Position.X + Width &&
+                p.X > Position.X &&
+                p.Y < Position.Y + Height &&
+                p.Y > Position.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //Segment Line needs to be done as well eventually
 
     }
 }

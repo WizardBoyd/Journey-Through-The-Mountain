@@ -15,6 +15,7 @@ namespace JourneyThroughTheMountain
         SpriteFont pericles8;
         Vector2 scorePosition = new Vector2(20, 580);
         public static Texture2D BoundingBox;
+        public static Texture2D TileBox;
         enum GameState { TitleScreen, Playing, PlayerDead, GameOver };
         GameState gameState = GameState.TitleScreen;
 
@@ -78,6 +79,9 @@ namespace JourneyThroughTheMountain
             Color[] colordata = new Color[1];
             colordata[0] = Color.Red;
             BoundingBox.SetData<Color>(colordata);
+            //colordata[0] = Color.Blue;
+            //TileBox = BoundingBox;
+            //TileBox.SetData<Color>(colordata);
 
             player = new Player(Content);
             LevelManager.Initialize(Content, player);

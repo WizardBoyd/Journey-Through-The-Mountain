@@ -29,7 +29,7 @@ namespace JourneyThroughTheMountain
             PlayAnimation("idle");
             drawDepth = 0.875f;
 
-            CollisionRectangle = new Rectangle(9, 24, 30, 24);
+            //CollisionRectangle = new Rectangle(9, 24, 30, 24);
             enabled = true;
         }
         #endregion

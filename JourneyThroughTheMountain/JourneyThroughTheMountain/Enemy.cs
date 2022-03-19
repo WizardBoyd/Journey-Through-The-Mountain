@@ -45,7 +45,7 @@ namespace JourneyThroughTheMountain
 
             frameWidth = 48;
             frameHeight = 48;
-            CollisionRectangle = new Rectangle(9, 1, 30, 46);
+            //CollisionRectangle = new Rectangle(9, 1, 30, 46);
 
             worldLocation = new Vector2(
                 cellX * TileMap.TileWidth,

@@ -12,34 +12,37 @@ namespace JourneyThroughTheMountain
 {
     public class Player : GameObject
     {
-        private Vector2 fallSpeed = new Vector2(0, 20);
+        public Vector2 fallSpeed = new Vector2(0, 20);
         private float moveScale = 180.0f;
+        private float FallTreshold = 6f;
+        private float LastFallSpeed;
+        public bool TakeDamageOnLand;
         private bool dead = false;
         private int score = 0;
         private int livesRemaining = 3;
-        public Rectangle triggercollision;
+        //public Rectangle triggercollision;
 
         public bool Dead
         {
             get { return dead; }
         }
 
-        public Rectangle TriggerCollision
-        {
-            get
-            {
-                return new Rectangle(
-                 (int)worldLocation.X + triggercollision.X,
-                 (int)WorldRectangle.Y + triggercollision.Y,
-                 triggercollision.Width,
-                 triggercollision.Height);
-            }
+        //public Rectangle TriggerCollision
+        //{
+        //    get
+        //    {
+        //        return new Rectangle(
+        //         (int)worldLocation.X + triggercollision.X,
+        //         (int)WorldRectangle.Y + triggercollision.Y,
+        //         triggercollision.Width,
+        //         triggercollision.Height);
+        //    }
 
-            set
-            {
-                triggercollision = value;
-            }
-        }
+        //    set
+        //    {
+        //        triggercollision = value;
+        //    }
+        //}
 
         public int Score
         {
@@ -74,9 +77,9 @@ namespace JourneyThroughTheMountain
 
             frameWidth = 48;
             frameHeight = 48;
-            collisionRectangle = new Rectangle(9, 1, 30, 46);
-            TriggerCollision = collisionRectangle;
-            triggercollision.Inflate(2.5f, 2.5f);
+            //CollisionRectangle = new Rectangle(0, 0, 30, 46);
+            _boundingboxes.Add(new BoundingBox(new Vector2(0,0), 30, 46));
+            _triggerboxes.Add( new BoundingBox(new Vector2(0, 0), _boundingboxes[0].Width + 1, _boundingboxes[0].Height + 1));
 
             drawDepth = 0.825f;
             
@@ -126,6 +129,16 @@ namespace JourneyThroughTheMountain
                 if (!onGround)
                 {
                     checkLevelTransition();
+                    if ((LastFallSpeed - velocity.Y)/gameTime.ElapsedGameTime.TotalSeconds > FallTreshold)
+                    {
+                        TakeDamageOnLand = true;
+                    }
+
+                    LastFallSpeed = velocity.Y;
+                }
+                else
+                {
+                    TakeDamageOnLand = false;
                 }
 
 
@@ -165,7 +178,8 @@ namespace JourneyThroughTheMountain
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Game1.BoundingBox, TriggerCollision, Color.Red);
+            spriteBatch.Draw(Game1.BoundingBox, Camera.WorldToScreen(new Rectangle((int)TriggerBoxes[0].Position.X, (int)TriggerBoxes[0].Position.Y,
+                (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
             base.Draw(spriteBatch);
         }
 

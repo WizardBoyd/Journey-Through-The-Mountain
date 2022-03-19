@@ -20,7 +20,7 @@ namespace JourneyThroughTheMountain
         private static List<Coin> coins = new List<Coin>();
         private static List<Enemy> enemies = new List<Enemy>();
         private static List<Tree> Trees = new List<Tree>();
-        private static List<MapSquare> Tiles = new List<MapSquare>();
+        private static List<GameTile> Tiles = new List<GameTile>();
         #endregion
 
         #region Properties
@@ -67,6 +67,7 @@ namespace JourneyThroughTheMountain
             coins.Clear();
             enemies.Clear();
 
+
             for (int x = 0; x < TileMap.MapWidth; x++)
             {
                 for (int y = 0; y < TileMap.MapHeight; y++)
@@ -76,6 +77,7 @@ namespace JourneyThroughTheMountain
                         player.WorldLocation = new Vector2(
                             x * TileMap.TileWidth,
                             y * TileMap.TileHeight);
+
                     }
 
                     if (TileMap.CellCodeValue(x, y) == "GEM")
@@ -95,8 +97,7 @@ namespace JourneyThroughTheMountain
 
                     if (!TileMap.CellIsPassable(x,y))
                     {
-                        TileMap.GetMapSquareAtCell(x, y).CollisionRectnagle = TileMap.CellWorldRectangle(x, y);
-                        Tiles.Add(TileMap.GetMapSquareAtCell(x, y));
+                        Tiles.Add(new GameTile(TileMap.CellWorldRectangle(x, y))); 
                     }
 
                     
@@ -124,62 +125,56 @@ namespace JourneyThroughTheMountain
             {
                 checkCurrentCellCode();
 
-                for (int x = coins.Count - 1; x >= 0; x--)
-                {
-                    coins[x].Update(gameTime);
-                    if (player.CollisionRectangle.Intersects(
-                        coins[x].CollisionRectangle))
-                    {
-                        coins.RemoveAt(x);
-                        player.Score += 10;
-                    }
-                }
+                //for (int x = coins.Count - 1; x >= 0; x--)
+                //{
+                //    coins[x].Update(gameTime);
+                //    if (player.CollisionRectangle.Intersects(
+                //        coins[x].CollisionRectangle))
+                //    {
+                //        coins.RemoveAt(x);
+                //        player.Score += 10;
+                //    }
+                //}
 
-                for (int x = Tiles.Count - 1; x >= 0; x--)
-                {
-                    if (player.CollisionRectangle.Intersects(Tiles[x].CollisionRectnagle) && player.GetVelocity().Y >= 0.5f)
-                    {
-                        player.Score += 1;//Some Reason this is moveing the sprites when i move
-                    }
-                }
+                //for (int x = Tiles.Count - 1; x >= 0; x--)
+                //{
+                //    if (player.CollisionRectangle.Intersects(Tiles[x].CollisionRectnagle) && player.GetVelocity().Y >= 0.5f)
+                //    {
+                //        player.Score += 1;//Some Reason this is moveing the sprites when i move
+                //    }
+                //}
 
-                for (int x = Tiles.Count - 1; x >= 0; x--)
-                {
-                    if (player.TriggerCollision.Intersects(Tiles[x].CollisionRectnagle) && player.GetVelocity().Y <= 0.5f)
-                    {
-                        player.Score += 1;
-                    }
-                }
+                //for (int x = enemies.Count - 1; x >= 0; x--)
+                //{
+                //    enemies[x].Update(gameTime);
+                //    if (!enemies[x].Dead)
+                //    {
+                //        if (player.CollisionRectangle.Intersects(
+                //            enemies[x].CollisionRectangle))
+                //        {
+                //            if (player.WorldCenter.Y < enemies[x].WorldLocation.Y)
+                //            {
+                //                player.Jump();
+                //                player.Score += 5;
+                //                enemies[x].PlayAnimation("die");
+                //                enemies[x].Dead = true; ;
+                //            }
+                //            else
+                //            {
+                //                player.Kill();
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (!enemies[x].Enabled)
+                //        {
+                //            enemies.RemoveAt(x);
+                //        }
+                //    }
+                //}
 
-                for (int x = enemies.Count - 1; x >= 0; x--)
-                {
-                    enemies[x].Update(gameTime);
-                    if (!enemies[x].Dead)
-                    {
-                        if (player.CollisionRectangle.Intersects(
-                            enemies[x].CollisionRectangle))
-                        {
-                            if (player.WorldCenter.Y < enemies[x].WorldLocation.Y)
-                            {
-                                player.Jump();
-                                player.Score += 5;
-                                enemies[x].PlayAnimation("die");
-                                enemies[x].Dead = true; ;
-                            }
-                            else
-                            {
-                                player.Kill();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!enemies[x].Enabled)
-                        {
-                            enemies.RemoveAt(x);
-                        }
-                    }
-                }
+                DetectCollisions();
 
             }
         }
@@ -197,6 +192,26 @@ namespace JourneyThroughTheMountain
                 tree.Draw(spriteBatch);
             }
 
+            foreach (GameTile tile in Tiles)
+            {
+                tile.Draw(spriteBatch);
+            }
+
+        }
+
+        private static void DetectCollisions()
+        {
+            AABBCollisionDetector<GameTile, Player> Tile_Player_CollisionDetector = new AABBCollisionDetector<GameTile, Player>(Tiles);
+
+            Tile_Player_CollisionDetector.DetectTriggers(player, (Tile, P) =>
+            {
+                if (P.TakeDamageOnLand)
+                {
+                    //Have the player take Damage
+                    //MAKE A LINE SEGMENT FOR WHEN YOU ARE IN THE AIR AND MONITER IT THEN OR SOMETHING LIKE THAT
+                    
+                }
+            });
         }
 
         #endregion
