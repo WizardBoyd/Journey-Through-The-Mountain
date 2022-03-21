@@ -23,6 +23,8 @@ namespace JourneyThroughTheMountain
         private float Damage_Scale = 0.2f;
         //public Rectangle triggercollision;
 
+        
+
         public bool Dead
         {
             get { return dead; }
@@ -195,7 +197,10 @@ namespace JourneyThroughTheMountain
             switch (Event)
             {
                 case GameplayEvents.PlayerFallDamage m:
-                    TakeDamage(m.Damage);
+                    if (m.Damage > 0)
+                    {
+                        TakeDamage(m.Damage);
+                    }
                     break;
             }
             
@@ -204,11 +209,14 @@ namespace JourneyThroughTheMountain
         public void TakeDamage(IGameObjectWithDamage o)
         {
             Health -= o.Damage;
+            animations[currentAnimation].Tint = Color.Red;
+            
         }
 
         public void TakeDamage(int Amount)
         {
             Health -= Amount;
+            animations[currentAnimation].Tint = Color.Red;
         }
 
         #endregion

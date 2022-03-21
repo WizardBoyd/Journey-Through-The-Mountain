@@ -362,7 +362,7 @@ namespace JourneyThroughTheMountain
                     animations[currentAnimation].Texture,
                     Camera.WorldToScreen(WorldRectangle),
                     animations[currentAnimation].FrameRectangle,
-                    Color.White, 0.0f, Vector2.Zero, effect, drawDepth);
+                    animations[currentAnimation].Tint, 0.0f, Vector2.Zero, effect, drawDepth);
 
                 //debug create renderboundingbox to test player
                 

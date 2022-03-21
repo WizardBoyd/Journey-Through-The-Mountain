@@ -24,6 +24,7 @@ namespace JourneyThroughTheMountain
 
         private string name;
         private string nextAnimation;
+        public Color Tint;
         #endregion
 
         #region Properties
@@ -99,6 +100,8 @@ namespace JourneyThroughTheMountain
             this.frameWidth = frameWidth;
             this.frameHeight = texture.Height;
             this.name = name;
+            Tint = Color.White;
+            
         }
         #endregion
 
@@ -122,11 +125,13 @@ namespace JourneyThroughTheMountain
                 {
                     if (loopAnimation)
                     {
+                        Tint = Color.White;
                         currentFrame = 0;
                     }
                     else
                     {
                         currentFrame = FrameCount - 1;
+                        Tint = Color.White;
                         finishedPlaying = true;
                     }
                 }
