@@ -24,7 +24,7 @@ namespace JourneyThroughTheMountain
         /// </summary>
         /// <param name="activeObject"></param>
         /// <param name="collisionHandler"></param>
-        public void DetectCollisions(A activeObject, Action<P, A> collisionHandler)
+        public bool DetectCollisions(A activeObject, Action<P, A> collisionHandler)
         {
             foreach (var passiveObject in _passiveObjects)
             {
@@ -33,6 +33,7 @@ namespace JourneyThroughTheMountain
                     collisionHandler(passiveObject, activeObject);
                 }
             }
+            return false;
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace JourneyThroughTheMountain
         /// </summary>
         /// <param name="activeObjects"></param>
         /// <param name="collisionHandler"></param>
-        public void DetectCollisions(IEnumerable<A> activeObjects, Action<P, A> collisionHandler)
+        public bool DetectCollisions(IEnumerable<A> activeObjects, Action<P, A> collisionHandler)
         {
             foreach (var passiveObject in _passiveObjects)
             {
@@ -58,6 +59,7 @@ namespace JourneyThroughTheMountain
                     }
                 }
             }
+            return false;
         }
 
         private bool DetectCollision(P passiveObject, A activeObject)
@@ -75,7 +77,7 @@ namespace JourneyThroughTheMountain
 
             return false;
         }
-        public void DetectTriggers(IEnumerable<A> activeObjects, Action<P, A> TriggerHandler)
+        public bool DetectTriggers(IEnumerable<A> activeObjects, Action<P, A> TriggerHandler)
         {
             foreach (var passiveObject in _passiveObjects)
             {
@@ -90,9 +92,11 @@ namespace JourneyThroughTheMountain
                     if (DetectTrigger(passiveObject, activeObject))
                     {
                         TriggerHandler(passiveObject, activeObject);
+                        return true;
                     }
                 }
             }
+            return false;
         }
 
         private bool DetectTrigger(P passiveObject, A activeObject)
@@ -111,15 +115,17 @@ namespace JourneyThroughTheMountain
             return false;
         }
 
-        public void DetectTriggers(A activeObject, Action<P, A> collisionHandler)
+        public bool DetectTriggers(A activeObject, Action<P, A> collisionHandler)
         {
             foreach (var passiveObject in _passiveObjects)
             {
                 if (DetectTrigger(passiveObject, activeObject))
                 {
                     collisionHandler(passiveObject, activeObject);
+                    return true;
                 }
             }
+            return false;
         }
 
     }

@@ -83,6 +83,11 @@ namespace JourneyThroughTheMountain
             //TileBox = BoundingBox;
             //TileBox.SetData<Color>(colordata);
 
+            TileEngine.TileMap.border = new Texture2D(GraphicsDevice, 1, 1);
+            Color[] colordat = new Color[1];
+            colordat[0] = Color.GreenYellow;
+            TileEngine.TileMap.border.SetData<Color>(colordat);
+
             player = new Player(Content);
             LevelManager.Initialize(Content, player);
            

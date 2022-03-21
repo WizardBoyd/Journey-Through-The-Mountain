@@ -30,13 +30,15 @@ namespace JourneyThroughTheMountain
 
         protected bool enabled;
         protected bool flipped = false;
-        protected bool onGround;
+        public bool onGround;
 
         protected Rectangle collisionRectangle;
         protected int collideWidth;
         protected int collideHeight;
         protected bool codeBasedBlocks = true;
 
+        protected float _angle;
+        protected Vector2 _direction;
         protected float drawDepth = 0.85f;
         protected Dictionary<string, AnimationStrip> animations =
             new Dictionary<string, AnimationStrip>();
@@ -70,6 +72,7 @@ namespace JourneyThroughTheMountain
 
                 foreach (BoundingBox bb in _boundingboxes)
                 {
+                    
                     result.Add(new BoundingBox(new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)WorldRectangle.Y + (int)bb.Position.Y),
                         bb.Width, bb.Height));
                 }
@@ -95,7 +98,7 @@ namespace JourneyThroughTheMountain
 
                 List<BoundingBox> result = new List<BoundingBox>();
 
-                foreach (BoundingBox bb in _boundingboxes)
+                foreach (BoundingBox bb in _triggerboxes)
                 {
                     result.Add(new BoundingBox(new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)WorldRectangle.Y + (int)bb.Position.Y),
                         bb.Width, bb.Height));
@@ -182,6 +185,14 @@ namespace JourneyThroughTheMountain
                     animations[currentAnimation].Update(gameTime);
                 }
             }
+        }
+
+        protected Vector2 CalculateDirection(float angleOffset = 0.0f)
+        {
+            _direction = new Vector2((float)Math.Cos(_angle - angleOffset), (float)Math.Sin(_angle - angleOffset));
+            _direction.Normalize();
+
+            return _direction;
         }
         #endregion
 
@@ -357,6 +368,8 @@ namespace JourneyThroughTheMountain
                 
             }
         }
+
+        public virtual void OnNotify(BaseGameStateEvent Event) { }
 
         #endregion
 

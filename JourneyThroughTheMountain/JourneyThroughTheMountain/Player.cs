@@ -10,17 +10,19 @@ using TileEngine;
 
 namespace JourneyThroughTheMountain
 {
-    public class Player : GameObject
+    public class Player : GameObject, IGameObjectWithHealth, IGameObjectWithDamage
     {
         public Vector2 fallSpeed = new Vector2(0, 20);
         private float moveScale = 180.0f;
-        private float FallTreshold = 6f;
+        public float FallTreshold = 6f;
         private float LastFallSpeed;
         public bool TakeDamageOnLand;
         private bool dead = false;
         private int score = 0;
         private int livesRemaining = 3;
+        private int Damage_Scale = 1;
         //public Rectangle triggercollision;
+
 
         public bool Dead
         {
@@ -56,6 +58,8 @@ namespace JourneyThroughTheMountain
             set { livesRemaining = value; }
         }
 
+        public int Damage { get; set; }
+
 
         #region Constructor
         public Player(ContentManager content)
@@ -79,7 +83,7 @@ namespace JourneyThroughTheMountain
             frameHeight = 48;
             //CollisionRectangle = new Rectangle(0, 0, 30, 46);
             _boundingboxes.Add(new BoundingBox(new Vector2(0,0), 30, 46));
-            _triggerboxes.Add( new BoundingBox(new Vector2(0, 0), _boundingboxes[0].Width + 1, _boundingboxes[0].Height + 1));
+            _triggerboxes.Add( new BoundingBox(new Vector2(0, 0), (int)_boundingboxes[0].Width + 1, (int)_boundingboxes[0].Height + 10));
 
             drawDepth = 0.825f;
             
@@ -180,7 +184,32 @@ namespace JourneyThroughTheMountain
         {
             spriteBatch.Draw(Game1.BoundingBox, Camera.WorldToScreen(new Rectangle((int)TriggerBoxes[0].Position.X, (int)TriggerBoxes[0].Position.Y,
                 (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
+
+            //TileMap.DrawRectangle(spriteBatch, new Rectangle(1,1,32,32), 100);
+            System.Diagnostics.Debug.WriteLine(WorldLocation);
+            System.Diagnostics.Debug.WriteLine(Camera.Position);
             base.Draw(spriteBatch);
+        }
+
+        public override void OnNotify(BaseGameStateEvent Event)
+        {
+            switch (Event)
+            {
+                case GameplayEvents.PlayerFallDamage m:
+                    TakeDamage(m.Damage);
+                    break;
+            }
+            
+        }
+
+        public void TakeDamage(IGameObjectWithDamage o)
+        {
+            Health -= o.Damage;
+        }
+
+        public void TakeDamage(int Amount)
+        {
+            Health -= Amount;
         }
 
         #endregion
@@ -224,14 +253,26 @@ namespace JourneyThroughTheMountain
 
                 LevelManager.LoadLevel(int.Parse(code[1]));
 
-                WorldLocation = new Vector2(
-                    int.Parse(code[2]) * TileMap.TileWidth,
-                    int.Parse(code[3]) * TileMap.TileHeight);
+                //WorldLocation = new Vector2(
+                //    int.Parse(code[2]) * TileMap.TileWidth,
+                //    int.Parse(code[3]) * TileMap.TileHeight);
 
-                LevelManager.RespawnLocation = WorldLocation;
+                LevelManager.RespawnLocation = WorldLocation; // SEE THIS JUST KEEP EYE ON IT
 
                 velocity = Vector2.Zero;
             }
+        }
+
+        public int CalculateFallDamage(GameTime time)
+        {
+            double a = (LastFallSpeed - velocity.Y) / time.ElapsedGameTime.TotalSeconds;
+
+             if( a > FallTreshold)
+            {
+                return (int)a * Damage_Scale;
+            }
+
+            return 0;
         }
 
         #endregion

@@ -31,6 +31,7 @@ namespace TileEngine
         public static bool EditorMode = true;
 
         public static SpriteFont spriteFont;
+        public static Texture2D border;
         //static private Texture2D tileSheet;
         static private List<Texture2D> tileSheets;
         #endregion
@@ -311,6 +312,15 @@ namespace TileEngine
                 }
         }
 
+        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rec, int linewidth)
+        {
+            //spriteBatch.Draw(border, rec, Color.Blue);
+            spriteBatch.Draw(border, new Rectangle(rec.X, rec.Y, linewidth, rec.Height + linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
+            spriteBatch.Draw(border, new Rectangle(rec.X, rec.Y, rec.Width + linewidth, linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
+            spriteBatch.Draw(border, new Rectangle(rec.X + rec.Width, rec.Y, linewidth, rec.Height + linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
+            spriteBatch.Draw(border, new Rectangle(rec.X, rec.Y + rec.Height, rec.Width + linewidth, linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
+        }
+
         public static void DrawEditModeItems(
             SpriteBatch spriteBatch,
             int x,
@@ -322,6 +332,8 @@ namespace TileEngine
                 if ((x < 0) || (x >= MapWidth) ||
              (y < 0) || (y >= MapHeight))
                     return;
+
+
 
                 if (!CellIsPassable(x, y))
                 {
@@ -344,6 +356,8 @@ namespace TileEngine
                                   SpriteEffects.None,
                                   0.0f);
                 }
+
+                DrawRectangle(spriteBatch, CellScreenRectangle(x, y), 5);
 
                 if (mapCells[x, y].CodeValue != "")
                 {

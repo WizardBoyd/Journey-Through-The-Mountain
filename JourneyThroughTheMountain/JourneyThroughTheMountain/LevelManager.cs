@@ -174,7 +174,7 @@ namespace JourneyThroughTheMountain
                 //    }
                 //}
 
-                DetectCollisions();
+                DetectCollisions(gameTime);
 
             }
         }
@@ -199,19 +199,21 @@ namespace JourneyThroughTheMountain
 
         }
 
-        private static void DetectCollisions()
+        private static void DetectCollisions(GameTime time)
         {
             AABBCollisionDetector<GameTile, Player> Tile_Player_CollisionDetector = new AABBCollisionDetector<GameTile, Player>(Tiles);
 
-            Tile_Player_CollisionDetector.DetectTriggers(player, (Tile, P) =>
+            if(!player.onGround)
             {
-                if (P.TakeDamageOnLand)
+                Tile_Player_CollisionDetector.DetectTriggers(player, (Tile, P) =>
                 {
-                    //Have the player take Damage
-                    //MAKE A LINE SEGMENT FOR WHEN YOU ARE IN THE AIR AND MONITER IT THEN OR SOMETHING LIKE THAT
-                    
-                }
-            });
+                    GameTile something = Tile;
+                    var LandEvent = new GameplayEvents.PlayerFallDamage(P.CalculateFallDamage(time));
+                    P.OnNotify(LandEvent);
+                });
+            }
+
+
         }
 
         #endregion
