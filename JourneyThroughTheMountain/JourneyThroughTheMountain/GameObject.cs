@@ -63,7 +63,7 @@ namespace JourneyThroughTheMountain
             set { enabled = value; }
         }
 
-        public List<BoundingBox> BoundingBoxes
+        public virtual List<BoundingBox> BoundingBoxes
         {
             get
             {
@@ -87,7 +87,7 @@ namespace JourneyThroughTheMountain
             set { _boundingboxes = value; }
         }
 
-        public List<BoundingBox> TriggerBoxes
+        public virtual List<BoundingBox> TriggerBoxes
         {
             get
             {
@@ -100,7 +100,7 @@ namespace JourneyThroughTheMountain
 
                 foreach (BoundingBox bb in _triggerboxes)
                 {
-                    result.Add(new BoundingBox(new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)WorldRectangle.Y + (int)bb.Position.Y),
+                    result.Add(new BoundingBox(new Vector2((int)worldLocation.X + (int)bb.Position.X, (int)worldLocation.Y + (int)bb.Position.Y - 5),
                         bb.Width, bb.Height));
                 }
 

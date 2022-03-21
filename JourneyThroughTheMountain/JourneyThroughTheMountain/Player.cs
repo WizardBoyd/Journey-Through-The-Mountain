@@ -14,15 +14,14 @@ namespace JourneyThroughTheMountain
     {
         public Vector2 fallSpeed = new Vector2(0, 20);
         private float moveScale = 180.0f;
-        public float FallTreshold = 6f;
+        public float FallTreshold = 10.5f;
         private float LastFallSpeed;
         public bool TakeDamageOnLand;
         private bool dead = false;
         private int score = 0;
         private int livesRemaining = 3;
-        private int Damage_Scale = 1;
+        private float Damage_Scale = 0.2f;
         //public Rectangle triggercollision;
-
 
         public bool Dead
         {
@@ -86,7 +85,7 @@ namespace JourneyThroughTheMountain
             _triggerboxes.Add( new BoundingBox(new Vector2(0, 0), (int)_boundingboxes[0].Width + 1, (int)_boundingboxes[0].Height + 10));
 
             drawDepth = 0.825f;
-            
+            Health = 10;
             enabled = true;
             codeBasedBlocks = false;
             PlayAnimation("idle");
@@ -159,6 +158,8 @@ namespace JourneyThroughTheMountain
 
             repositionCamera();
             base.Update(gameTime);
+            //System.Diagnostics.Debug.WriteLine($"{WorldLocation.X}, {WorldLocation.Y}");
+            //System.Diagnostics.Debug.WriteLine($"{BoundingBoxes[0].Position.X}");
         }
 
         public void Jump()
@@ -182,12 +183,10 @@ namespace JourneyThroughTheMountain
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Game1.BoundingBox, Camera.WorldToScreen(new Rectangle((int)TriggerBoxes[0].Position.X, (int)TriggerBoxes[0].Position.Y,
-                (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
+            //spriteBatch.Draw(Game1.BoundingBox, Camera.WorldToScreen(new Rectangle((int)TriggerBoxes[0].Position.X, (int)TriggerBoxes[0].Position.Y,
+            //    (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
 
             //TileMap.DrawRectangle(spriteBatch, new Rectangle(1,1,32,32), 100);
-            System.Diagnostics.Debug.WriteLine(WorldLocation);
-            System.Diagnostics.Debug.WriteLine(Camera.Position);
             base.Draw(spriteBatch);
         }
 
@@ -265,11 +264,11 @@ namespace JourneyThroughTheMountain
 
         public int CalculateFallDamage(GameTime time)
         {
-            double a = (LastFallSpeed - velocity.Y) / time.ElapsedGameTime.TotalSeconds;
+            double a = (LastFallSpeed - velocity.Y) * time.ElapsedGameTime.TotalSeconds;
 
              if( a > FallTreshold)
             {
-                return (int)a * Damage_Scale;
+                return (int)(a * Damage_Scale);
             }
 
             return 0;

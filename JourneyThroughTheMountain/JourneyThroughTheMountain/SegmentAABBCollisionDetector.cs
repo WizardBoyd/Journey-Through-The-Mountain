@@ -9,6 +9,7 @@ namespace JourneyThroughTheMountain
     public class SegmentAABBCollisionDetector<A> where A: GameObject
     {
         private A _passiveObject;
+        private List<A> _PassiveObjects;
 
         public SegmentAABBCollisionDetector(A passiveObject)
         {
@@ -22,6 +23,7 @@ namespace JourneyThroughTheMountain
                 collisionHandler(_passiveObject);
             }
         }
+
 
         public void DetectCollisions(List<Segment> segments, Action<A> collisionHandler)
         {

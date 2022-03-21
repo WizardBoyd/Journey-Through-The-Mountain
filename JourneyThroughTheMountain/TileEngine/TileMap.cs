@@ -28,20 +28,16 @@ namespace TileEngine
         static private MapSquare[,] mapCells =
             new MapSquare[MapWidth, MapHeight];
 
-        public static bool EditorMode = true;
+        public static bool EditorMode = false;
 
         public static SpriteFont spriteFont;
-        public static Texture2D border;
-        //static private Texture2D tileSheet;
-        static private List<Texture2D> tileSheets;
+        static private Texture2D tileSheet;
         #endregion
 
         #region Initialization
         static public void Initialize(Texture2D tileTexture)
         {
-            //tileSheet = tileTexture;
-            tileSheets = new List<Texture2D>();
-            tileSheets.Add(tileTexture);
+            tileSheet = tileTexture;
 
             for (int x = 0; x < MapWidth; x++)
             {
@@ -54,28 +50,12 @@ namespace TileEngine
                 }
             }
         }
-
-        public static void AddTileSheet(Texture2D tilesheet)
-        {
-            if (!tileSheets.Contains(tilesheet))
-            {
-                tileSheets.Add(tilesheet);
-            }
-        }
-
-        public static void RemoveTileSheet(Texture2D tilesheet)
-        {
-            if (tileSheets.Contains(tilesheet))
-            {
-                tileSheets.Remove(tilesheet);
-            }
-        }
         #endregion
 
         #region Tile and Tile Sheet Handling
         public static int TilesPerRow
         {
-            get { return tileSheets[0].Width / TileWidth; }
+            get { return tileSheet.Width / TileWidth; }
         }
 
         public static Rectangle TileSourceRectangle(int tileIndex)
@@ -99,11 +79,28 @@ namespace TileEngine
             return pixelY / TileHeight;
         }
 
+        static public int GetPixelByCellY(int CellY)
+        {
+            return CellY * TileHeight;
+        }
+
+        static public int GetPixelByCellX(int CellX)
+        {
+            return CellX * TileWidth;
+        }
+
         static public Vector2 GetCellByPixel(Vector2 pixelLocation)
         {
             return new Vector2(
                 GetCellByPixelX((int)pixelLocation.X),
                 GetCellByPixelY((int)pixelLocation.Y));
+        }
+
+        static public Vector2 GetPixelByCell(Vector2 cellLocation)
+        {
+            return new Vector2(
+                GetPixelByCellX((int)cellLocation.X),
+                GetPixelByCellY((int)cellLocation.Y));
         }
 
         static public Vector2 GetCellCenter(int cellX, int cellY)
@@ -120,7 +117,7 @@ namespace TileEngine
                 (int)cell.Y);
         }
 
-        static public Rectangle CellWorldRectangle(int cellX, int cellY)
+        static public Rectangle CellWorldRectangle(int cellX, int cellY)//GETS THE RECTANGLE IN WORLD IN PIXELS
         {
             return new Rectangle(
                 cellX * TileWidth,
@@ -136,7 +133,22 @@ namespace TileEngine
                 (int)cell.Y);
         }
 
-        static public Rectangle CellScreenRectangle(int cellX, int cellY)
+        /// <summary>
+        /// Should take the cell numbers and convert it into a rectangle for pixel world
+        /// </summary>
+        /// <param name="CellX"></param>
+        /// <param name="CellY"></param>
+        /// <returns></returns>
+        static public Rectangle PixelWorldRectangle(int CellX, int CellY)
+        {
+            return new Rectangle(
+                (int)(CellX / TileWidth),
+                (int)(CellY / TileHeight),
+                TileWidth,
+                TileHeight);
+        }
+
+        static public Rectangle CellScreenRectangle(int cellX, int cellY)//TAKES IN CELL NUMBERS
         {
             return Camera.WorldToScreen(CellWorldRectangle(cellX, cellY));
         }
@@ -279,7 +291,7 @@ namespace TileEngine
             int endX = GetCellByPixelX((int)Camera.Position.X +
                   Camera.ViewPortWidth);
 
-            int startY = GetCellByPixelY((int)Camera.Position.Y);
+            int startY = GetCellByPixelY((int)Camera.Position.Y);//THE START's GET THE WHOLE BOX TO RENDER AKA TOP BOTTOM RIGHT AND LEFT
             int endY = GetCellByPixelY((int)Camera.Position.Y +
                       Camera.ViewPortHeight);
 
@@ -288,12 +300,11 @@ namespace TileEngine
                 {
                     for (int z = 0; z < MapLayers; z++)
                     {
-
                         if ((x >= 0) && (y >= 0) &&
-                         (x < MapWidth) && (y < MapHeight))
+                            (x < MapWidth) && (y < MapHeight))
                         {
                             spriteBatch.Draw(
-                              tileSheets[0],
+                              tileSheet,
                               CellScreenRectangle(x, y),
                               TileSourceRectangle(mapCells[x, y].LayerTiles[z]),
                               Color.White,
@@ -312,72 +323,47 @@ namespace TileEngine
                 }
         }
 
-        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rec, int linewidth)
-        {
-            //spriteBatch.Draw(border, rec, Color.Blue);
-            spriteBatch.Draw(border, new Rectangle(rec.X, rec.Y, linewidth, rec.Height + linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
-            spriteBatch.Draw(border, new Rectangle(rec.X, rec.Y, rec.Width + linewidth, linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
-            spriteBatch.Draw(border, new Rectangle(rec.X + rec.Width, rec.Y, linewidth, rec.Height + linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
-            spriteBatch.Draw(border, new Rectangle(rec.X, rec.Y + rec.Height, rec.Width + linewidth, linewidth), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.25f);
-        }
-
         public static void DrawEditModeItems(
             SpriteBatch spriteBatch,
             int x,
             int y)
         {
+            if ((x < 0) || (x >= MapWidth) ||
+                (y < 0) || (y >= MapHeight))
+                return;
 
-            foreach (Texture2D TileSheet in tileSheets)
+            if (!CellIsPassable(x, y))
             {
-                if ((x < 0) || (x >= MapWidth) ||
-             (y < 0) || (y >= MapHeight))
-                    return;
+                spriteBatch.Draw(
+                                tileSheet,
+                                CellScreenRectangle(x, y),
+                                TileSourceRectangle(1),
+                                new Color(255, 0, 0, 80),
+                                0.0f,
+                                Vector2.Zero,
+                                SpriteEffects.None,
+                                0.0f);
+            }
 
+            if (mapCells[x, y].CodeValue != "")
+            {
+                Rectangle screenRect = CellScreenRectangle(x, y);
 
-
-                if (!CellIsPassable(x, y))
-                {
-                    spriteBatch.Draw(
-                                    TileSheet,
-                                    CellScreenRectangle(x, y),
-                                    TileSourceRectangle(1),
-                                    new Color(255, 0, 0, 80),
-                                    0.0f,
-                                    Vector2.Zero,
-                                    SpriteEffects.None,
-                                    0.0f);
-                    spriteBatch.Draw(
-                                  TileSheet,
-                                  CellScreenRectangle(x,y),
-                                  TileSourceRectangle(1),
-                                  new Color(255, 255, 0, 80),
-                                  0.0f,
-                                  Vector2.Zero,
-                                  SpriteEffects.None,
-                                  0.0f);
-                }
-
-                DrawRectangle(spriteBatch, CellScreenRectangle(x, y), 5);
-
-                if (mapCells[x, y].CodeValue != "")
-                {
-                    Rectangle screenRect = CellScreenRectangle(x, y);
-
-                    spriteBatch.DrawString(
-                        spriteFont,
-                        mapCells[x, y].CodeValue,
-                        new Vector2(screenRect.X, screenRect.Y),
-                        Color.White,
-                        0.0f,
-                        Vector2.Zero,
-                        1.0f,
-                        SpriteEffects.None,
-                        0.0f);
-                }
-
+                spriteBatch.DrawString(
+                    spriteFont,
+                    mapCells[x, y].CodeValue,
+                    new Vector2(screenRect.X, screenRect.Y),
+                    Color.White,
+                    0.0f,
+                    Vector2.Zero,
+                    1.0f,
+                    SpriteEffects.None,
+                    0.0f);
             }
         }
         #endregion
+
+
 
 
 

@@ -70,6 +70,7 @@ namespace LevelEditro
 
             Editor.spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             TileMap.Draw(Editor.spriteBatch);
+            Editor.spriteBatch.DrawString(Editor.Font, $"{lastMouseState.X}, {lastMouseState.Y}", new Vector2(lastMouseState.X, lastMouseState.Y), Color.White);
             Editor.spriteBatch.End();
 
             
@@ -84,22 +85,11 @@ namespace LevelEditro
             TileMap.Initialize(Editor.Content.Load<Texture2D>(@"Tiles/Tileset"));
             TileMap.spriteFont = Editor.Font;
 
-            string[] XNBFiles = Directory.GetFiles(Application.StartupPath + @"\Content\Objects", "*.xnb", SearchOption.AllDirectories);
-
-            for (int dir = 0; dir < XNBFiles.Length; dir++)
-            {
-                XNBFiles[dir] = XNBFiles[dir].Replace(".xnb", "");
-                TileMap.AddTileSheet(Editor.Content.Load<Texture2D>(XNBFiles[dir])); 
-            }
 
             lastMouseState = Mouse.GetState();
 
         }
 
-        public virtual void AddContent(string path)
-        {
-            TileMap.AddTileSheet(Editor.Content.Load<Texture2D>(path));
-        }
 
         protected override void Update(GameTime gameTime)
         {

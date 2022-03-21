@@ -12,7 +12,7 @@ namespace JourneyThroughTheMountain
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Player player;
-        SpriteFont pericles8;
+        public static SpriteFont pericles8;
         Vector2 scorePosition = new Vector2(20, 580);
         public static Texture2D BoundingBox;
         public static Texture2D TileBox;
@@ -82,11 +82,6 @@ namespace JourneyThroughTheMountain
             //colordata[0] = Color.Blue;
             //TileBox = BoundingBox;
             //TileBox.SetData<Color>(colordata);
-
-            TileEngine.TileMap.border = new Texture2D(GraphicsDevice, 1, 1);
-            Color[] colordat = new Color[1];
-            colordat[0] = Color.GreenYellow;
-            TileEngine.TileMap.border.SetData<Color>(colordat);
 
             player = new Player(Content);
             LevelManager.Initialize(Content, player);
@@ -213,7 +208,7 @@ namespace JourneyThroughTheMountain
                     Color.White);
                 spriteBatch.DrawString(
                     pericles8,
-                    "Lives Remaining: " + player.LivesRemaining.ToString(),
+                    "Lives Remaining: " + player.Health.ToString(),
                     livesPosition,
                     Color.White);
             }

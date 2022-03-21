@@ -67,8 +67,9 @@ namespace JourneyThroughTheMountain
             coins.Clear();
             enemies.Clear();
 
+          
 
-            for (int x = 0; x < TileMap.MapWidth; x++)
+            for (int x = 0; x < TileMap.MapWidth; x++)//THESE ARE IN CELLS NOT PIXELS
             {
                 for (int y = 0; y < TileMap.MapHeight; y++)
                 {
@@ -79,6 +80,8 @@ namespace JourneyThroughTheMountain
                             y * TileMap.TileHeight);
 
                     }
+
+                  
 
                     if (TileMap.CellCodeValue(x, y) == "GEM")
                     {
@@ -97,7 +100,8 @@ namespace JourneyThroughTheMountain
 
                     if (!TileMap.CellIsPassable(x,y))
                     {
-                        Tiles.Add(new GameTile(TileMap.CellWorldRectangle(x, y))); 
+                        Tiles.Add(new GameTile(TileMap.CellWorldRectangle(x, y)));
+                        
                     }
 
                     
@@ -202,6 +206,7 @@ namespace JourneyThroughTheMountain
         private static void DetectCollisions(GameTime time)
         {
             AABBCollisionDetector<GameTile, Player> Tile_Player_CollisionDetector = new AABBCollisionDetector<GameTile, Player>(Tiles);
+            SegmentAABBCollisionDetector<Player> Player_Land_On_Tile_Collision = new SegmentAABBCollisionDetector<Player>(player);
 
             if(!player.onGround)
             {
@@ -211,6 +216,17 @@ namespace JourneyThroughTheMountain
                     var LandEvent = new GameplayEvents.PlayerFallDamage(P.CalculateFallDamage(time));
                     P.OnNotify(LandEvent);
                 });
+
+                //List<Segment> segs = new List<Segment>();
+                //foreach (GameTile Tile in Tiles)
+                //{
+                //    segs.Add(Tile.GroundCollisionSegment);
+                //}
+                //Player_Land_On_Tile_Collision.DetectCollisions(segs, (P) =>
+                //{
+                //    var LandEvent = new GameplayEvents.PlayerFallDamage(P.CalculateFallDamage(time));
+                //    P.OnNotify(LandEvent);
+                //});
             }
 
 
