@@ -57,7 +57,15 @@ namespace DialougeEditor
 
         private void createBasicNodeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialougeEditorWindow.Controls.Add(new Dialouge.DialogueNode()); // Add Dailouge Node during runtime
+            Dialouge.DialogueNode Node = new Dialouge.DialogueNode();
+            Node.Parent = DialougeEditorWindow;
+            
+            DialougeEditorWindow.Controls.Add(Node);
+            Node.Location = DialougeEditorWindow.PointToClient(Cursor.Position);
+            Node.BringToFront();
+            Node.Enabled = true;
+            
+            ControlMover.Init(Node, DialougeEditorWindow, ControlMover.Direction.Any);
         }
 
         private void DialougeEditor_Load(object sender, EventArgs e)
