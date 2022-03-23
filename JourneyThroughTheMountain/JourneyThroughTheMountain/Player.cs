@@ -23,6 +23,10 @@ namespace JourneyThroughTheMountain
         private float Damage_Scale = 0.2f;
         //public Rectangle triggercollision;
 
+        public class PlayerInventory
+        {
+
+        }
         
 
         public bool Dead

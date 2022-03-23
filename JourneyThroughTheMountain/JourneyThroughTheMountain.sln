@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileEngine", "TileEngine\Ti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{1EF9F52B-DA1B-4DDB-B079-80542B7B0EF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DialougeEditor", "DialougeEditor\DialougeEditor.csproj", "{1062F784-D0E2-4235-BC39-9D1B37C50758}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1EF9F52B-DA1B-4DDB-B079-80542B7B0EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EF9F52B-DA1B-4DDB-B079-80542B7B0EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EF9F52B-DA1B-4DDB-B079-80542B7B0EF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -84,10 +84,10 @@ namespace JourneyThroughTheMountain
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.Draw(Game1.BoundingBox,new Rectangle(
-            //    (int)_triggerboxes[0].Position.X,(int)_triggerboxes[0].Position.Y, (int)_triggerboxes[0].Width, (int)_triggerboxes[0].Height), Color.White);
-/*            spriteBatch.DrawString(Game1.pericles8, $"{TriggerBoxes[0].Position.X}", TileEngine.Camera.WorldToScreen(new Vector2(_collisionRectangle.X, _collisionRectangle.Y - 10)), Color.White); *///Takes in a world (pixel position) then transforms it with a camera
-            //spriteBatch.Draw(Game1.BoundingBox,TileEngine.Camera.WorldToScreen(new Rectangle((int)_collisionRectangle.X, (int)_collisionRectangle.Y - 10, (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
+            //spriteBatch.Draw(Game1.BoundingBox, new Rectangle(
+                //(int)_triggerboxes[0].Position.X, (int)_triggerboxes[0].Position.Y, (int)_triggerboxes[0].Width, (int)_triggerboxes[0].Height), Color.White);
+            //spriteBatch.DrawString(Game1.pericles8, $"{TriggerBoxes[0].Position.X}", TileEngine.Camera.WorldToScreen(new Vector2(_collisionRectangle.X, _collisionRectangle.Y - 10)), Color.White); ///Takes in a world (pixel position) then transforms it with a camera
+            //spriteBatch.Draw(Game1.BoundingBox, TileEngine.Camera.WorldToScreen(new Rectangle((int)_collisionRectangle.X, (int)_collisionRectangle.Y - 10, (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
             //spriteBatch.Draw(Game1.BoundingBox, TileEngine.Camera.WorldToScreen(new Rectangle((int)TriggerBoxes[0].Position.X, (int)TriggerBoxes[0].Position.Y - 10, (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
             //spriteBatch.DrawLine(GroundCollisionSegment.P1, GroundCollisionSegment.P2, Color.Red, 5, 1.25f);
             //System.Diagnostics.Debug.WriteLine($"{_boundingboxes[0].Position.X},     {_boundingboxes[0].Position}");
