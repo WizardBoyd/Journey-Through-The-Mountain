@@ -9,14 +9,27 @@ namespace DialougeEditor
 {
     public class ExecutionPath : ISerializable
     {
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+
+        public bool IsSignaled { get; set; }
+
+        public void Signal()
         {
-            
+            IsSignaled = true;
         }
 
-        public bool signled()
+        public ExecutionPath()
         {
-            ///EXECUTIONPATH
+
+        }
+
+        private ExecutionPath(SerializationInfo info, StreamingContext ctx)
+        {
+
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+
         }
     }
 }
