@@ -14,8 +14,8 @@ using System.Xml;
 
 namespace DialougeEditor
 {
-    [ToolboxBitmap(typeof(DialougeEditor), "nodeed")]
-    public partial class DialougeEditor : UserControl
+    [ToolboxBitmap(typeof(NodeEditor), "nodeed")]
+    public partial class NodeEditor : UserControl
     {
         internal class NodeToken
         {
@@ -73,7 +73,7 @@ namespace DialougeEditor
 
         private bool breakExecution = false;
 
-        public DialougeEditor()
+        public NodeEditor()
         {
             InitializeComponent();
             timer.Interval = 30;
@@ -81,6 +81,7 @@ namespace DialougeEditor
             timer.Start();
             KeyDown += OnKeyDown;
             SetStyle(ControlStyles.Selectable, true);
+            DoubleBuffered = true;
         }
 
         private void ContextOnFeedbackInfo(string message, NodeVisual nodeVisual, FeedBackType type, object tag, bool breakExecution)
@@ -110,6 +111,7 @@ namespace DialougeEditor
                 //delete selected nodes
             }
         }
+
 
         private void TimerOnTick(object sender, EventArgs eventArgs)
         {

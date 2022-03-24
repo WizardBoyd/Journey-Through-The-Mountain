@@ -120,7 +120,7 @@ namespace DialougeEditor
             PointF result = new PointF();
 
             result.X = a.X * (1f - amount) + b.X * amount;
-            result.Y = a.Y * (1f - amount) + b.X * amount;
+            result.Y = a.Y * (1f - amount) + b.Y * amount;
 
             return result;
         }

@@ -80,6 +80,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlMover.cs" />
+    <Compile Include="ControlNodeEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlNodeEditor.Designer.cs">
+      <DependentUpon>ControlNodeEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DialougeContext.cs" />
+    <Compile Include="DialougeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DialougeForm.Designer.cs">
+      <DependentUpon>DialougeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialouge\DialogueNode.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -88,11 +101,11 @@
     <Compile Include="DynamicNodeContextConverter.cs" />
     <Compile Include="ExecutionPath.cs" />
     <Compile Include="FeedbackType.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="DialougeEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+      <DependentUpon>DialougeEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="INodesContext.cs" />
     <Compile Include="NodeAttribute.cs" />
@@ -107,8 +120,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SocketVisual.cs" />
+    <EmbeddedResource Include="ControlNodeEditor.resx">
+      <DependentUpon>ControlNodeEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DialougeForm.resx">
+      <DependentUpon>DialougeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+      <DependentUpon>DialougeEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

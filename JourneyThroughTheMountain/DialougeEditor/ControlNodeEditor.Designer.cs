@@ -1,14 +1,14 @@
 ﻿
 namespace DialougeEditor
 {
-    partial class NodeEditor
+    partial class ControlNodeEditor
     {
-        /// <summary>
+        /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
+        /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -21,32 +21,38 @@ namespace DialougeEditor
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Component Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
+            this.nodeEditor1 = new DialougeEditor.NodeEditor();
             this.SuspendLayout();
             // 
-            // DialougeEditor
+            // nodeEditor1
+            // 
+            this.nodeEditor1.Context = null;
+            this.nodeEditor1.Location = new System.Drawing.Point(0, 0);
+            this.nodeEditor1.Name = "nodeEditor1";
+            this.nodeEditor1.Size = new System.Drawing.Size(150, 150);
+            this.nodeEditor1.TabIndex = 0;
+            // 
+            // ControlNodeEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "DialougeEditor";
-            this.Size = new System.Drawing.Size(800, 450);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.NodesControl_Paint);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NodesControl_MouseClick);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NodesControl_MouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.NodesControl_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Nodes_control_MouseUp);
+            this.Controls.Add(this.nodeEditor1);
+            this.Name = "ControlNodeEditor";
             this.ResumeLayout(false);
 
         }
 
+
         #endregion
+
+        public NodeEditor nodeEditor1;
     }
 }
-
