@@ -1,5 +1,4 @@
-﻿using Microsoft.Practices.Unity.Configuration.ConfigurationHelpers;
-using Prism.Modularity;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,12 +43,12 @@ namespace DialougeEditor
             {
                 if (context != null)
                 {
-                    context.FeedbackInfo -= contexton
+                    context.FeedbackInfo -= ContextOnFeedbackInfo;
                 }
                 context = value;
                 if (context != null)
                 {
-                    context.FeedbackInfo += co
+                    context.FeedbackInfo += ContextOnFeedbackInfo;
                 }
             }
         }
@@ -439,7 +438,7 @@ namespace DialougeEditor
 
             if (e.Button == MouseButtons.Right)
             {
-                var methods = context.GetType().GetMethods();
+                var methods = Context.GetType().GetMethods();
                 var nodes =
                     methods.Select(
                         x => new NodeToken()
@@ -463,7 +462,7 @@ namespace DialougeEditor
                     context.Items.Add("Change colour ...", null, ((o, args) =>
                     {
 
-                        ChangeSelectedNodesColour();
+                        ChangeSelectedNodesColor();
 
                     }));
 
@@ -497,28 +496,28 @@ namespace DialougeEditor
                     }
                     context.Items.Add(new ToolStripSeparator());
                 }
-                foreach (var node in nodes.OrderBy(x => x.Attribute.Path))
+                foreach (var node in nodes.OrderBy(x => x.nodeAttribute.Path))
                 {
-                    AddToMenu(context.Items, node, node.Attribute.Path, (s, ev) => {
+                    AddToMenu(context.Items, node, node.nodeAttribute.Path, (s, ev) => {
 
                         var tag = (s as ToolStripMenuItem).Tag as NodeToken;
 
                         var nv = new NodeVisual();
                         nv.X = lastMouseLocation.X;
                         nv.Y = lastMouseLocation.Y;
-                        nv.Type = node.Method;
-                        nv.Callable = node.Attribute.IsCallable;
-                        nv.Name = node.Attribute.Name;
+                        nv.Type = node.method;
+                        nv.Callable = node.nodeAttribute.IsCallable;
+                        nv.Name = node.nodeAttribute.Name;
                         nv.Order = graph.Nodes.Count;
-                        nv.ExecInit = node.Attribute.IsExecutionInitiator;
-                        nv.XmlExportName = node.Attribute.XmlExportName;
-                        nv.CustomWidth = node.Attribute.Width;
-                        nv.CustomHeight = node.Attribute.Height;
+                        nv.ExecInit = node.nodeAttribute.IsExecutionInitiator;
+                        nv.XmlExportName = node.nodeAttribute.XmlExportName;
+                        nv.CustomWidth = node.nodeAttribute.Width;
+                        nv.CustomHeight = node.nodeAttribute.Height;
 
-                        if (node.Attribute.CustomEditor != null)
+                        if (node.nodeAttribute.CustomEditor != null)
                         {
                             Control ctrl = null;
-                            nv.CustomEditor = ctrl = Activator.CreateInstance(node.Attribute.CustomEditor) as Control;
+                            nv.CustomEditor = ctrl = Activator.CreateInstance(node.nodeAttribute.CustomEditor) as Control;
                             if (ctrl != null)
                             {
                                 ctrl.Tag = nv;
@@ -785,6 +784,164 @@ namespace DialougeEditor
                 xml.Save(writer);
             }
             return sb.ToString();
+        }
+
+        public byte[] Serialize()
+        {
+            using(var bw = new BinaryWriter(new MemoryStream()))
+            {
+                bw.Write("NodeSystemP"); //recognation string
+                bw.Write(1000); //version
+                bw.Write(graph.Nodes.Count);
+                foreach (var Node in graph.Nodes)
+                {
+                    SerializeNode(bw, Node);
+                }
+                bw.Write(graph.Connections.Count);
+                foreach (var connection in graph.Connections)
+                {
+                    bw.Write(connection.OutputNode.GUID);
+                    bw.Write(connection.OutputSocketName);
+
+                    bw.Write(connection.InputNode.GUID);
+                    bw.Write(connection.InputSocketName);
+                    bw.Write(0); //additional data size
+
+                }
+                bw.Write(0);// addtional size per graph
+                return (bw.BaseStream as MemoryStream).ToArray();
+            }
+        }
+
+        private static void SerializeNode(BinaryWriter bw, NodeVisual node)
+        {
+            bw.Write(node.GUID);
+            bw.Write(node.X);
+            bw.Write(node.Y);
+            bw.Write(node.Callable);
+            bw.Write(node.ExecInit);
+            bw.Write(node.Name);
+            bw.Write(node.Order);
+            if (node.CustomEditor == null)
+            {
+                bw.Write("");
+                bw.Write("");
+            }
+            else
+            {
+                bw.Write(node.CustomEditor.GetType().Assembly.GetName().Name);
+                bw.Write(node.CustomEditor.GetType().FullName);
+            }
+            bw.Write(node.Type.Name);
+            var context = (node.getNodeContext() as DynamicNodeContext).Serialize();
+            bw.Write(context.Length);
+            bw.Write(context);
+            bw.Write(8); //additonal data size for nodes
+            bw.Write(node.Tag);
+            bw.Write(node.NodeColor.ToArgb());
+        }
+
+        public void Deserialize(byte[] data)
+        {
+            using (var br = new BinaryReader(new MemoryStream(data)))
+            {
+                var ident = br.ReadString();
+                if (ident != "NodeSystemP")
+                {
+                    return;
+                }
+                rebuildConnectionDictionary = true;
+                graph.Connections.Clear();
+                graph.Nodes.Clear();
+                Controls.Clear();
+
+                var version = br.ReadInt32();
+                int nodeCount = br.ReadInt32();
+                for (int i = 0; i < nodeCount; i++)
+                {
+                    var nv = DeserializeNode(br);
+
+                    graph.Nodes.Add(nv);
+                }
+
+                var connectionsCount = br.ReadInt32();
+                for (int i = 0; i < connectionsCount; i++)
+                {
+                    var con = new NodeConnection();
+                    var og = br.ReadString();
+                    con.OutputNode = graph.Nodes.FirstOrDefault(x => x.GUID == og);
+                    con.OutputSocketName = br.ReadString();
+                    var ig = br.ReadString();
+                    con.InputNode = graph.Nodes.FirstOrDefault(x => x.GUID == ig);
+                    con.InputSocketName = br.ReadString();
+                    br.ReadBytes(br.ReadInt32()); // read additonal data
+
+                    graph.Connections.Add(con);
+                    rebuildConnectionDictionary = true;
+                }
+                br.ReadBytes(br.ReadInt32()); //read more data
+            }
+            Refresh();
+        }
+
+        private NodeVisual DeserializeNode(BinaryReader br)
+        {
+            var nv = new NodeVisual();
+            nv.GUID = br.ReadString();
+            nv.X = br.ReadSingle();
+            nv.Y = br.ReadSingle();
+            nv.Callable = br.ReadBoolean();
+            nv.ExecInit = br.ReadBoolean();
+            nv.Name = br.ReadString();
+            nv.Order = br.ReadInt32();
+
+            var customEditorAssembly = br.ReadString();
+            var customEditor = br.ReadString();
+            nv.Type = Context.GetType().GetMethod(br.ReadString());
+            var attribute = nv.Type.GetCustomAttributes(typeof(NodeAttribute), false).Cast<NodeAttribute>().FirstOrDefault();
+
+            if (attribute != null)
+            {
+                nv.CustomWidth = attribute.Width;
+                nv.CustomHeight = attribute.Height;
+            }
+            (nv.getNodeContext() as DynamicNodeContext).Deserialize(br.ReadBytes(br.ReadInt32()));
+            var additional = br.ReadInt32(); //read additional data
+            if (additional >= 4)
+            {
+                nv.Tag = br.ReadInt32();
+                if (additional >= 8)
+                {
+                    nv.NodeColor = Color.FromArgb(br.ReadInt32());
+                }
+            }
+            if (additional > 8)
+            {
+                br.ReadBytes(additional - 8);
+            }
+
+            if (customEditor != "")
+            {
+                nv.CustomEditor = Activator.CreateInstance(AppDomain.CurrentDomain, customEditorAssembly, customEditor).Unwrap() as Control;
+
+                Control ctrl = nv.CustomEditor;
+                if (ctrl != null)
+                {
+                    ctrl.Tag = nv;
+                    Controls.Add(ctrl);
+                }
+                nv.LayoutEditor();
+            }
+            return nv;
+        }
+
+        public void Clear()
+        {
+            graph.Nodes.Clear();
+            graph.Connections.Clear();
+            Controls.Clear();
+            Refresh();
+            rebuildConnectionDictionary = true;
         }
     }
 }
