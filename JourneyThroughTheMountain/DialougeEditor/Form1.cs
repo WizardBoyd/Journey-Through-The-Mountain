@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace DialougeEditor
 {
@@ -497,9 +499,292 @@ namespace DialougeEditor
                 }
                 foreach (var node in nodes.OrderBy(x => x.Attribute.Path))
                 {
+                    AddToMenu(context.Items, node, node.Attribute.Path, (s, ev) => {
 
+                        var tag = (s as ToolStripMenuItem).Tag as NodeToken;
+
+                        var nv = new NodeVisual();
+                        nv.X = lastMouseLocation.X;
+                        nv.Y = lastMouseLocation.Y;
+                        nv.Type = node.Method;
+                        nv.Callable = node.Attribute.IsCallable;
+                        nv.Name = node.Attribute.Name;
+                        nv.Order = graph.Nodes.Count;
+                        nv.ExecInit = node.Attribute.IsExecutionInitiator;
+                        nv.XmlExportName = node.Attribute.XmlExportName;
+                        nv.CustomWidth = node.Attribute.Width;
+                        nv.CustomHeight = node.Attribute.Height;
+
+                        if (node.Attribute.CustomEditor != null)
+                        {
+                            Control ctrl = null;
+                            nv.CustomEditor = ctrl = Activator.CreateInstance(node.Attribute.CustomEditor) as Control;
+                            if (ctrl != null)
+                            {
+                                ctrl.Tag = nv;
+                                Controls.Add(ctrl);
+                            }
+                            nv.LayoutEditor();
+                        }
+                        graph.Nodes.Add(nv);
+                        Refresh();
+                        needRepaint = true;
+                    
+                    });
+                }
+                context.Show(MousePosition);
+            }
+        }
+
+        private void ChangeSelectedNodesColor()
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.FullOpen = true;
+            if (cd.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var n in graph.Nodes.Where(x => x.IsSlected))
+                {
+                    n.NodeColor = cd.Color;
                 }
             }
+            Refresh();
+            needRepaint = true;
+        }
+
+        private void DuplicateSelectedNodes()
+        {
+            var cloned = new List<NodeVisual>();
+            foreach (var n in graph.Nodes.Where(x => x.IsSlected))
+            {
+                int count = graph.Nodes.Count(x => x.IsSlected);
+                var ms = new MemoryStream();
+                var bw = new BinaryWriter(ms);
+
+                SerializeNode(bw, n);
+
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var br = new BinaryReader(ms);
+                var clone = DeserializeNode(br);
+                clone.X += 40;
+                clone.Y += 40;
+                clone.GUID = Guid.NewGuid().ToString();
+                cloned.Add(clone);
+                br.Dispose();
+                bw.Dispose();
+                ms.Dispose();
+            }
+            graph.Nodes.ForEach(x => x.IsSlected = false);
+            cloned.ForEach(x => x.IsSlected = true);
+            cloned.Where(x => x.CustomEditor != null).ToList().ForEach(x => x.CustomEditor.BringToFront());
+            graph.Nodes.AddRange(cloned);
+            Invalidate();
+        }
+
+        private void DeleteSelectedNodes()
+        {
+            if (graph.Nodes.Exists(x => x.IsSlected))
+            {
+                foreach (var n in graph.Nodes.Where(x => x.IsSlected))
+                {
+                    Controls.Remove(n.CustomEditor);
+                    graph.Connections.RemoveAll(x => x.OutputNode == n || x.InputNode == n);
+                }
+                graph.Nodes.RemoveAll(x => graph.Nodes.Where(n => n.IsSlected).Contains(x));
+            }
+            Invalidate();
+        }
+
+        public void Execute(NodeVisual node = null)
+        {
+            var nodeQueue = new Queue<NodeVisual>();
+            nodeQueue.Enqueue(node);
+
+            while (nodeQueue.Count > 0)
+            {
+                if (breakExecution)
+                {
+                    breakExecution = false;
+                    ExecutionStack.Clear();
+                    return;
+                }
+
+                var init = nodeQueue.Dequeue() ?? graph.Nodes.FirstOrDefault(x => x.ExecInit);
+                if (init != null)
+                {
+                    init.Feedback = FeedBackType.Debug;
+
+                    Resolve(init);
+                    init.Execute(Context);
+
+                    var connection = graph.Connections.FirstOrDefault(x => x.OutputNode == init && x.IsExecution && x.OutputSocket.Value != null
+                    && (x.OutputSocket.Value as ExecutionPath).IsSignaled);
+                    if (connection == null)
+                    {
+                        connection = graph.Connections.FirstOrDefault(x => x.OutputNode == init && x.IsExecution && x.OutputSocket.IsMainExecution);
+
+                    }
+                    else
+                    {
+                        ExecutionStack.Push(init);
+                    }
+                    if (connection != null)
+                    {
+                        connection.InputNode.IsBackExecuted = false;
+                        nodeQueue.Enqueue(connection.InputNode);
+                    }
+                    else
+                    {
+                        if (ExecutionStack.Count > 0)
+                        {
+                            var back = ExecutionStack.Pop();
+                            back.IsBackExecuted = true;
+                            Execute(back);
+                        }
+                    }
+                }
+            }
+        }
+
+        public List<NodeVisual> Getnodes(params string[] nodeNames)
+        {
+            var nodes = graph.Nodes.Where(x => nodeNames.Contains(x.Name));
+            return nodes.ToList();
+        }
+
+        public bool HasImpact(NodeVisual startNode, NodeVisual endNode)
+        {
+            var connections = graph.Connections.Where(x => x.OutputNode == startNode && !x.IsExecution);
+            foreach (var connection in connections)
+            {
+                if (connection.InputNode == endNode)
+                {
+                    return true;
+                }
+                bool nextImpact = HasImpact(connection.InputNode, endNode);
+                if (nextImpact)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ExecuteResolving(params string[] nodeNames)
+        {
+            var nodes = graph.Nodes.Where(x => nodeNames.Contains(x.Name));
+
+            foreach (var node in nodes)
+            {
+                ExecuteResolvingInternal(node);
+            }
+        }
+
+        private void ExecuteResolvingInternal(NodeVisual node)
+        {
+            var icontext = (node.getNodeContext() as DynamicNodeContext);
+            foreach (var input in node.GetInputs())
+            {
+                var connection =
+                    graph.Connections.FirstOrDefault(x => x.InputNode == node && x.InputSocketName == input.Name);
+
+                if (connection != null)
+                {
+                    Resolve(connection.OutputNode);
+
+                    connection.OutputNode.Execute(Context);
+
+                    ExecuteResolvingInternal(connection.OutputNode);
+
+                    var ocontext = (connection.OutputNode.getNodeContext() as DynamicNodeContext);
+                    icontext[connection.InputSocketName] = ocontext[connection.OutputSocketName];
+                }
+            }
+        }
+
+        private void Resolve(NodeVisual node)
+        {
+            var icontext = (node.getNodeContext() as DynamicNodeContext);
+            foreach (var input in node.GetInputs())
+            {
+                var connection = GetConnection(node.GUID + input.Name);
+
+                if (connection != null)
+                {
+                    Resolve(connection.OutputNode);
+                    if (!connection.OutputNode.Callable)
+                    {
+                        connection.OutputNode.Execute(Context);
+                    }
+                    var ocontext = (connection.OutputNode.getNodeContext() as DynamicNodeContext);
+                    icontext[connection.InputSocketName] = ocontext[connection.OutputSocketName];
+                }
+            }
+        }
+
+        private NodeConnection GetConnection(string v)
+        {
+            if (rebuildConnectionDictionary)
+            {
+                rebuildConnectionDictionary = false;
+                connectionDictionary.Clear();
+                foreach (var conn in graph.Connections)
+                {
+                    connectionDictionary.Add(conn.InputNode.GUID + conn.InputSocketName, conn);
+                }
+            }
+            NodeConnection nc = null;
+            if (connectionDictionary.TryGetValue(v,out nc))
+            {
+                return nc;
+            }
+            return null;
+        }
+
+        public string ExportToXml()
+        {
+            var xml = new XmlDocument();
+
+            XmlElement el = (XmlElement)xml.AppendChild(xml.CreateElement("NodeGrap"));
+            el.SetAttribute("Created", DateTime.Now.ToString());
+            var nodes = el.AppendChild(xml.CreateElement("Nodes"));
+            foreach (var node in graph.Nodes)
+            {
+                var xmlNode = (XmlElement)nodes.AppendChild(xml.CreateElement("Node"));
+                xmlNode.SetAttribute("Name", node.XmlExportName);
+                xmlNode.SetAttribute("Id", node.GetGUID());
+                var xmlContext = (XmlElement)xmlNode.AppendChild(xml.CreateElement("Context"));
+                var context = node.getNodeContext() as DynamicNodeContext;
+                foreach (var kv in context)
+                {
+                    var ce = (XmlElement)xmlContext.AppendChild(xml.CreateElement("ContextMember"));
+                    ce.SetAttribute("Name", kv);
+                    ce.SetAttribute("Value", Convert.ToString(context[kv] ?? ""));
+                    ce.SetAttribute("Type", context[kv] == null ? "" : context[kv].GetType().FullName);
+                }
+            }
+            var connections = el.AppendChild(xml.CreateElement("Connections"));
+            foreach (var conn in graph.Connections)
+            {
+                var xmlconn = (XmlElement)nodes.AppendChild(xml.CreateElement("Connection"));
+                xmlconn.SetAttribute("OutputNodeID", conn.OutputNode.GetGUID());
+                xmlconn.SetAttribute("OutputNodeSocket", conn.OutputSocketName);
+                xmlconn.SetAttribute("InputNodeID", conn.InputNode.GetGUID());
+                xmlconn.SetAttribute("InputNodeSocket", conn.InputSocketName);
+            }
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "  ",
+                NewLineChars = "\r\n",
+                NewLineHandling = NewLineHandling.Replace
+            };
+            using(XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                xml.Save(writer);
+            }
+            return sb.ToString();
         }
     }
 }
