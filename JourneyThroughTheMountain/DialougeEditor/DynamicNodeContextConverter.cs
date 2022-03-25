@@ -27,7 +27,7 @@ namespace DialougeEditor
                 props.Add(prop);
             }
 
-            return base.GetProperties(context, value, attributes);
+            return new PropertyDescriptorCollection(props.ToArray());
         }
     }
 
