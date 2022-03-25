@@ -12,32 +12,20 @@ namespace DialougeEditor
     [TypeConverter(typeof(DynamicNodeContextConverter))]
     public class DialougeNode : TextBox
     {
-        private string _name;
 
-        public string Name
-        {
-            get
-            {
-                return Text;
-            }
-            set
-            {
-                 
-            }
-        }
 
         public DialougeNode()
         {
-            //Need some sort of event
+            TextChanged += UpdateNodeContext;
         }
 
-        private void UpdateNodeContext(object sender,MouseEventArgs e)
+        private void UpdateNodeContext(object sender,EventArgs e)
         {
             var node = (Tag as NodeVisual);
             if (node != null)
             {
                 dynamic context = node.getNodeContext();
-                context.Name = Name;
+                //ADD context.What I want to store
             }
         }
 
