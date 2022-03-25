@@ -29,6 +29,7 @@ namespace DialougeEditor
 
         private void NodesControlOnNodeContextSlected(object o)
         {
+
             PropertyGrid.SelectedObject = o;
         }
     }

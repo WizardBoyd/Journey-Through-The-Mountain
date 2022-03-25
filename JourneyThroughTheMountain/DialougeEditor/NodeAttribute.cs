@@ -46,7 +46,7 @@ namespace DialougeEditor
             Description = description;
             IsCallable = isCallable;
             IsExecutionInitiator = isExecutionInitiator;
-            CustomEditor = CustomEditor;
+            CustomEditor = customEditor;
             XmlExportName = xmlExportName;
             Width = width;
             Height = height;

@@ -219,6 +219,7 @@ namespace DialougeEditor
             {
                 csize = new SizeF(CustomEditor.ClientSize.Width + 2 + 80 + SocketVisual.SocketHeight * 2, CustomEditor.ClientSize.Height
                     + HeaderHeight + 8);
+                
             }
 
             var inputs = GetInputs().Length;

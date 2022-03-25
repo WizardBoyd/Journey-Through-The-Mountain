@@ -93,10 +93,13 @@
     <Compile Include="DialougeForm.Designer.cs">
       <DependentUpon>DialougeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialouge\DialogueNode.cs">
+    <Compile Include="Dialouge\CustomNode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dialouge\Dialouge.cs" />
+    <Compile Include="Dialouge\DialougeNode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dialouge\DialougeString.cs" />
     <Compile Include="DynamicNodeContext.cs" />
     <Compile Include="DynamicNodeContextConverter.cs" />
     <Compile Include="ExecutionPath.cs" />
@@ -125,6 +128,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DialougeForm.resx">
       <DependentUpon>DialougeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialouge\DialougeNode.resx">
+      <DependentUpon>DialougeNode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>DialougeEditor.cs</DependentUpon>
