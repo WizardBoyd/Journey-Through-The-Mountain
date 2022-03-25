@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace DialougeEditor
 {
@@ -70,6 +72,18 @@ namespace DialougeEditor
                             nodeEditor.Deserialize(br.ToArray());
                         }
                     }
+                }
+            }
+        }
+
+        private void exportToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(Path.GetFullPath(saveFileDialog.FileName)+".xml", nodeEditor.ExportToXml());
                 }
             }
         }

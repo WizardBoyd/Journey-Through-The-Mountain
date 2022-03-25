@@ -784,6 +784,7 @@ namespace DialougeEditor
             using(XmlWriter writer = XmlWriter.Create(sb, settings))
             {
                 xml.Save(writer);
+                
             }
             return sb.ToString();
         }
