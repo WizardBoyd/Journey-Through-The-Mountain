@@ -10,7 +10,7 @@ namespace DialougeEditor
     public class ExecutionPath : ISerializable
     {
 
-        public bool IsSignaled { get; set; }
+        public bool IsSignaled { get; internal set; }
 
         public void Signal()
         {

@@ -327,11 +327,11 @@ namespace DialougeEditor
             }
         }
 
-        internal void LayoutEditor()
+        internal void LayoutEditor(float zoom)
         {
             if (CustomEditor != null)
             {
-                CustomEditor.Location = new Point((int)(X + 1 + 40 + SocketVisual.SocketHeight), (int)(Y + HeaderHeight + 4));
+                CustomEditor.Location = new Point((int)(zoom * (X + 1 + 40 + SocketVisual.SocketHeight)), (int)(zoom * (Y + HeaderHeight + 4)));
             }
           
         }

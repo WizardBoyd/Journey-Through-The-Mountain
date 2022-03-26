@@ -23,8 +23,21 @@ namespace DialougeEditor
 
             foreach (var p in obj)
             {
-                var prop = new DynamicPropertyDescriptor(p, obj[p].GetType(), typeof(DynamicNodeContext));
-                props.Add(prop);
+                try
+                {
+                    var prop = new DynamicPropertyDescriptor(p, obj[p].GetType(), typeof(DynamicNodeContext));
+                    if (prop != null)
+                    {
+                        props.Add(prop);
+                    }
+                    
+                }
+                catch (Exception)
+                {
+
+                  
+                }
+                
             }
 
             return new PropertyDescriptorCollection(props.ToArray());

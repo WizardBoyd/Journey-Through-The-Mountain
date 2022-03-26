@@ -51,6 +51,7 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -86,6 +87,12 @@
     <Compile Include="ControlNodeEditor.Designer.cs">
       <DependentUpon>ControlNodeEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialouge\Dialouge2Response.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialouge\Dialouge2Response.Designer.cs">
+      <DependentUpon>Dialouge2Response.cs</DependentUpon>
+    </Compile>
     <Compile Include="DialougeContext.cs" />
     <Compile Include="DialougeForm.cs">
       <SubType>Form</SubType>
@@ -96,10 +103,39 @@
     <Compile Include="Dialouge\CustomNode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dialouge\DialougeNode.cs">
+    <Compile Include="Dialouge\DialogueChoiceObject.cs" />
+    <Compile Include="Dialouge\DialogueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialouge\DialogueControl.Designer.cs">
+      <DependentUpon>DialogueControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialouge\DialogueObject.cs" />
+    <Compile Include="Dialouge\Dialouge1Response.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialouge\Dialouge1Response.Designer.cs">
+      <DependentUpon>Dialouge1Response.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialouge\Dialouge3Response.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialouge\Dialouge3Response.Designer.cs">
+      <DependentUpon>Dialouge3Response.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialouge\DialougeChoiceNode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dialouge\DialougeString.cs" />
+    <Compile Include="Dialouge\DialougeNode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialouge\LinearStroyObject.cs" />
+    <Compile Include="Dialouge\SpeakControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialouge\SpeakControl.Designer.cs">
+      <DependentUpon>SpeakControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="DynamicNodeContext.cs" />
     <Compile Include="DynamicNodeContextConverter.cs" />
     <Compile Include="ExecutionPath.cs" />
@@ -111,6 +147,7 @@
       <DependentUpon>DialougeEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="INodesContext.cs" />
+    <Compile Include="IZoomable.cs" />
     <Compile Include="NodeAttribute.cs" />
     <Compile Include="NodeConnection.cs" />
     <Compile Include="NodesGraph.cs" />
@@ -126,11 +163,26 @@
     <EmbeddedResource Include="ControlNodeEditor.resx">
       <DependentUpon>ControlNodeEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialouge\Dialouge2Response.resx">
+      <DependentUpon>Dialouge2Response.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DialougeForm.resx">
       <DependentUpon>DialougeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialouge\DialogueControl.resx">
+      <DependentUpon>DialogueControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialouge\Dialouge1Response.resx">
+      <DependentUpon>Dialouge1Response.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialouge\Dialouge3Response.resx">
+      <DependentUpon>Dialouge3Response.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialouge\DialougeNode.resx">
       <DependentUpon>DialougeNode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialouge\SpeakControl.resx">
+      <DependentUpon>SpeakControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>DialougeEditor.cs</DependentUpon>

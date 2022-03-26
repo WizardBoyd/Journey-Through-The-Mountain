@@ -15,7 +15,7 @@ using System.Xml;
 namespace DialougeEditor
 {
     [ToolboxBitmap(typeof(NodeEditor), "nodeed")]
-    public partial class NodeEditor : UserControl
+    public partial class NodeEditor : UserControl, IZoomable
     {
         internal class NodeToken
         {
@@ -73,6 +73,17 @@ namespace DialougeEditor
 
         private bool breakExecution = false;
 
+        private float zoom = 1f;
+
+        public float Zoom
+        {
+            get { return zoom; }
+            set
+            {
+                zoom = value;
+            }
+        }
+
         public NodeEditor()
         {
             InitializeComponent();
@@ -82,6 +93,28 @@ namespace DialougeEditor
             KeyDown += OnKeyDown;
             SetStyle(ControlStyles.Selectable, true);
             DoubleBuffered = true;
+        }
+
+        private void PassZoomToNodes()
+        {
+            foreach (var node in graph.Nodes)
+            {
+                if (node.CustomEditor != null)
+                {
+                    PassZoomToNodeCustomEditor(node.CustomEditor);
+                    node.DiscardCache();
+                    node.LayoutEditor(zoom);
+                }
+            }
+        }
+
+        private void PassZoomToNodeCustomEditor(Control control)
+        {
+            var zoomable = control as IZoomable;
+            if (zoomable != null)
+            {
+                zoomable.Zoom = zoom * zoom;
+            }
         }
 
         private void ContextOnFeedbackInfo(string message, NodeVisual nodeVisual, FeedBackType type, object tag, bool breakExecution)
@@ -169,7 +202,7 @@ namespace DialougeEditor
                     node.X += em.X - lastmpos.X;
                     node.Y += em.Y - lastmpos.Y;
                     node.DiscardCache();
-                    node.LayoutEditor();
+                    node.LayoutEditor(zoom);
                 }
                 if (graph.Nodes.Exists(x=>x.IsSlected))
                 {
@@ -232,6 +265,7 @@ namespace DialougeEditor
                     if (node.CustomEditor != null)
                     {
                         node.CustomEditor.BringToFront();
+                        PassZoomToNodeCustomEditor(node.CustomEditor);
                     }
                     mdown = true;
                     lastmpos = PointToScreen(e.Location);
@@ -524,8 +558,9 @@ namespace DialougeEditor
                             {
                                 ctrl.Tag = nv;
                                 Controls.Add(ctrl);
+                                PassZoomToNodeCustomEditor(ctrl);
                             }
-                            nv.LayoutEditor();
+                            nv.LayoutEditor(zoom);
                         }
                         graph.Nodes.Add(nv);
                         Refresh();
@@ -577,7 +612,11 @@ namespace DialougeEditor
             }
             graph.Nodes.ForEach(x => x.IsSlected = false);
             cloned.ForEach(x => x.IsSlected = true);
-            cloned.Where(x => x.CustomEditor != null).ToList().ForEach(x => x.CustomEditor.BringToFront());
+            cloned.Where(x => x.CustomEditor != null).ToList().ForEach(x => {
+
+                x.CustomEditor.BringToFront();
+                PassZoomToNodeCustomEditor(x.CustomEditor);
+            });
             graph.Nodes.AddRange(cloned);
             Invalidate();
         }
@@ -933,7 +972,7 @@ namespace DialougeEditor
                     ctrl.Tag = nv;
                     Controls.Add(ctrl);
                 }
-                nv.LayoutEditor();
+                nv.LayoutEditor(zoom);
             }
             return nv;
         }

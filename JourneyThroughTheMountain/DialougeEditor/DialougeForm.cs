@@ -17,6 +17,9 @@ namespace DialougeEditor
     {
 
         DialougeContext context = new DialougeContext();
+        protected Point ClickPosition;
+        protected Point ScrollPosition;
+        protected Point LastPosition;
 
         public DialougeForm()
         {
@@ -27,6 +30,7 @@ namespace DialougeEditor
         {
             nodeEditor.Context = context;
             nodeEditor.OnNodeContextSelected += NodesControlOnNodeContextSlected;
+            
             
         }
 
@@ -85,6 +89,40 @@ namespace DialougeEditor
                 {
                     File.WriteAllText(Path.GetFullPath(saveFileDialog.FileName)+".xml", nodeEditor.ExportToXml());
                 }
+            }
+        }
+
+        private void ExecuteButton_Click(object sender, EventArgs e)
+        {
+            nodeEditor.Execute();
+        }
+
+        private void nodeEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                ClickPosition.X = e.X;
+                ClickPosition.Y = e.Y;
+            }
+       
+        }
+
+        private void nodeEditor_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                LastPosition.X = AutoScrollPosition.X;
+                LastPosition.Y = AutoScrollPosition.Y;
+            }
+        }
+
+        private void nodeEditor_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                ScrollPosition.X = ClickPosition.X - e.X - LastPosition.X;
+                ScrollPosition.Y = ClickPosition.Y - e.Y - LastPosition.Y;
+                AutoScrollPosition = ScrollPosition;
             }
         }
     }

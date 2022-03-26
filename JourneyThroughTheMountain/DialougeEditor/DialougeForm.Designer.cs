@@ -34,16 +34,16 @@ namespace DialougeEditor
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nodeEditor = new DialougeEditor.NodeEditor();
             this.exportToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExecuteButton = new System.Windows.Forms.Button();
+            this.nodeEditor = new DialougeEditor.NodeEditor();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PropertyGrid
             // 
-            this.PropertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.PropertyGrid.Location = new System.Drawing.Point(12, 27);
             this.PropertyGrid.Name = "PropertyGrid";
             this.PropertyGrid.Size = new System.Drawing.Size(130, 411);
@@ -72,40 +72,56 @@ namespace DialougeEditor
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // exportToXMLToolStripMenuItem
+            // 
+            this.exportToXMLToolStripMenuItem.Name = "exportToXMLToolStripMenuItem";
+            this.exportToXMLToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.exportToXMLToolStripMenuItem.Text = "Export To XML";
+            this.exportToXMLToolStripMenuItem.Click += new System.EventHandler(this.exportToXMLToolStripMenuItem_Click);
+            // 
+            // ExecuteButton
+            // 
+            this.ExecuteButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ExecuteButton.Location = new System.Drawing.Point(148, 222);
+            this.ExecuteButton.Name = "ExecuteButton";
+            this.ExecuteButton.Size = new System.Drawing.Size(75, 23);
+            this.ExecuteButton.TabIndex = 7;
+            this.ExecuteButton.Text = "Execute";
+            this.ExecuteButton.UseVisualStyleBackColor = true;
+            this.ExecuteButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
             // nodeEditor
             // 
             this.nodeEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.nodeEditor.AutoScroll = true;
+            this.nodeEditor.AutoSize = true;
             this.nodeEditor.Context = null;
-            this.nodeEditor.Location = new System.Drawing.Point(212, 27);
+            this.nodeEditor.Location = new System.Drawing.Point(229, 27);
             this.nodeEditor.Name = "nodeEditor";
-            this.nodeEditor.Size = new System.Drawing.Size(576, 411);
+            this.nodeEditor.Size = new System.Drawing.Size(559, 411);
             this.nodeEditor.TabIndex = 5;
-            // 
-            // exportToXMLToolStripMenuItem
-            // 
-            this.exportToXMLToolStripMenuItem.Name = "exportToXMLToolStripMenuItem";
-            this.exportToXMLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exportToXMLToolStripMenuItem.Text = "Export To XML";
-            this.exportToXMLToolStripMenuItem.Click += new System.EventHandler(this.exportToXMLToolStripMenuItem_Click);
+            this.nodeEditor.Zoom = 1F;
             // 
             // DialougeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ExecuteButton);
             this.Controls.Add(this.nodeEditor);
             this.Controls.Add(this.PropertyGrid);
             this.Controls.Add(this.menuStrip1);
@@ -129,5 +145,6 @@ namespace DialougeEditor
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToXMLToolStripMenuItem;
+        private System.Windows.Forms.Button ExecuteButton;
     }
 }
