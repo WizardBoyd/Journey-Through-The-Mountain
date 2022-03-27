@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common_Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+
 
 namespace DialougeEditor
 {
@@ -116,6 +118,7 @@ namespace DialougeEditor
                     
                     using(XmlTextWriter writer = new XmlTextWriter(sw))
                     {
+                        
                         writer.Formatting = Formatting.Indented;
                         serializer.WriteObject(writer, Log);
                         writer.Flush();

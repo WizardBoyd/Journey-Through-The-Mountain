@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DialougeEditor
+namespace Common_Classes
 {
     [DataContract]
     public class LinearStroyObject

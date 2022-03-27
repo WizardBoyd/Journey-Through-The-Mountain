@@ -1,0 +1,23 @@
+<ArrayOfKeyValueOfguidLinearStroyObjectP67IKpHG xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+  <KeyValueOfguidLinearStroyObjectP67IKpHG>
+    <Key>5dfa87b8-591b-4888-879f-655d5a4d8f6c</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/DialougeEditor">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>Hey There</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObjectP67IKpHG>
+  <KeyValueOfguidLinearStroyObjectP67IKpHG>
+    <Key>4fbd435e-18e1-41ef-bb68-20e0ac8d0e52</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/DialougeEditor">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Why hello there</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObjectP67IKpHG>
+  <KeyValueOfguidLinearStroyObjectP67IKpHG>
+    <Key>edbd6d95-60b3-410c-84d2-9a75213a99c8</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/DialougeEditor">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>ok Bye.</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObjectP67IKpHG>
+</ArrayOfKeyValueOfguidLinearStroyObjectP67IKpHG>

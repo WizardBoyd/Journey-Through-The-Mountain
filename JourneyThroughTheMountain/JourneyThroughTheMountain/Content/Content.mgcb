@@ -860,6 +860,11 @@
 /processorParam:TextureFormat=Color
 /build:Splash screen.png
 
+#begin Test Story.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Test Story.xml
+
 #begin Tiles/Ice/Tile_01.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -129,7 +129,6 @@
     <Compile Include="Dialouge\DialougeNode.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Dialouge\LinearStroyObject.cs" />
     <Compile Include="Dialouge\SpeakControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -223,6 +222,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Socket.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common Classes\Common Classes.csproj">
+      <Project>{0bc2250b-1d40-41ca-8e56-76241ff3f0b3}</Project>
+      <Name>Common Classes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
