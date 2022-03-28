@@ -1,4 +1,6 @@
-﻿using Common_Classes;
+﻿
+using CommonClasses;
+using DialougeEditor.Dialouge;
 using System;
 using System.Collections.Generic;
 using System.IO;

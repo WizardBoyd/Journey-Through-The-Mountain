@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using TileEngine;
+using JourneyThroughTheMountain.Entities;
+using JourneyThroughTheMountain.Dialogue;
+using CommonClasses;
+using System.Reflection;
 
 namespace JourneyThroughTheMountain
 {
@@ -21,6 +25,11 @@ namespace JourneyThroughTheMountain
         private static List<Enemy> enemies = new List<Enemy>();
         private static List<Tree> Trees = new List<Tree>();
         private static List<GameTile> Tiles = new List<GameTile>();
+        private static List<EventBox> Events = new List<EventBox>();
+        private static Dictionary<string, NPC> NPCs = new Dictionary<string, NPC>();
+
+        public static string Text;
+        public static GameObject Talker;
         #endregion
 
         #region Properties
@@ -57,6 +66,45 @@ namespace JourneyThroughTheMountain
                 player.Kill();
             }
         }
+
+        private static void AssociateNPCWithEvents()
+        {
+            foreach (EventBox Event in Events)
+            {
+                if (Event.NPCName != null)
+                {
+                    NPC nPC;
+                    if (NPCs.TryGetValue(Event.NPCName,out nPC))
+                    {
+                        Event.AssociatedNPC = nPC;
+                    }
+                }
+            }
+        }
+
+        //private void CheckForNPCPlacement(int x, int y)
+        //{
+        //    Vector2 Cell =  new Vector2(x, y);
+        //    if (TileMap.CellCodeValue(Cell).StartsWith("NPC_"))
+        //    {
+        //        string[] code = TileMap.CellCodeValue(Cell).Split("_");
+
+        //        if (code.Length != 5)
+        //        {
+        //            return;
+        //        }
+
+        //        StorySerializer ser = new StorySerializer();
+        //        string path = Content.RootDirectory + @"/Dialogue/" + code[2] + ".xml";
+        //        string XMLInputDatat = System.IO.File.ReadAllText(path);
+        //        Dictionary<Guid, LinearStroyObject> Dic = ser.Deserialize(XMLInputDatat);
+
+        //        NPCs.Add(new NPC(Content, code[1], Dic, new Rectangle(int.Parse(code[3]) * TileMap.TileWidth,
+        //            int.Parse(code[4]) * TileMap.TileHeight, TileMap.TileWidth, TileMap.TileHeight)));
+
+
+        //    }
+        //}
         #endregion
 
         #region Public Methods
@@ -98,6 +146,32 @@ namespace JourneyThroughTheMountain
                         Trees.Add(new Tree(Content, x, y));
                     }
 
+                    if (TileMap.CellCodeValue(x,y).StartsWith("NPC_"))
+                    {
+                        string[] code = TileMap.CellCodeValue(x, y).Split("_");
+                        NPCs.Add(code[1], new NPC(Content, code[2], x * TileMap.TileWidth, y * TileMap.TileHeight, code[3]));
+                    }
+
+                    if (TileMap.CellCodeValue(x,y).StartsWith("E_"))
+                    {
+                        string[] code = TileMap.CellCodeValue(x, y).Split("_");
+                        int ET;
+
+                        if (int.TryParse(code[1], out ET))
+                        {
+                            if (code.Length < 2)
+                            {
+                                Events.Add(new EventBox(new Rectangle(x * TileMap.TileWidth, y * TileMap.TileHeight, TileMap.TileWidth, TileMap.TileHeight), ET));
+                            }
+                            else
+                            {
+                                Events.Add(new EventBox(new Rectangle(x * TileMap.TileWidth, y * TileMap.TileHeight, TileMap.TileWidth, TileMap.TileHeight), ET, code[2]));
+                            }
+                        }
+
+                       
+                    }
+
                     if (!TileMap.CellIsPassable(x,y))
                     {
                         Tiles.Add(new GameTile(TileMap.CellWorldRectangle(x, y)));
@@ -109,7 +183,7 @@ namespace JourneyThroughTheMountain
 
                
             }
-
+            AssociateNPCWithEvents();
             currentLevel = levelNumber;
             respawnLocation = player.WorldLocation;
         }
@@ -125,6 +199,11 @@ namespace JourneyThroughTheMountain
 
         public static void Update(GameTime gameTime)
         {
+            foreach (KeyValuePair<string, NPC> npc in NPCs)
+            {
+                npc.Value.Update(gameTime);
+            }
+
             if (!player.Dead)
             {
                 checkCurrentCellCode();
@@ -201,6 +280,17 @@ namespace JourneyThroughTheMountain
                 tile.Draw(spriteBatch);
             }
 
+            foreach (KeyValuePair<string, NPC> npc in NPCs)
+            {
+                npc.Value.Draw(spriteBatch);
+            }
+
+            if (Text != "" && Talker != null)
+            {
+                Rectangle position = Camera.WorldToScreen(Talker.WorldRectangle);
+                spriteBatch.DrawString(Game1.pericles8, Text, new Vector2(position.X, position.Y) , Color.White);
+            }
+
         }
 
         private static void DetectCollisions(GameTime time)
@@ -208,7 +298,9 @@ namespace JourneyThroughTheMountain
             AABBCollisionDetector<GameTile, Player> Tile_Player_CollisionDetector = new AABBCollisionDetector<GameTile, Player>(Tiles);
             SegmentAABBCollisionDetector<Player> Player_Land_On_Tile_Collision = new SegmentAABBCollisionDetector<Player>(player);
 
-            if(!player.onGround)
+            AABBCollisionDetector<EventBox, Player> Event_Player_CollisionDetector = new AABBCollisionDetector<EventBox, Player>(Events);
+
+            if (!player.onGround)
             {
                 Tile_Player_CollisionDetector.DetectTriggers(player, (Tile, P) =>
                 {
@@ -228,6 +320,13 @@ namespace JourneyThroughTheMountain
                 //    P.OnNotify(LandEvent);
                 //});
             }
+
+            Event_Player_CollisionDetector.DetectTriggers(player, (Event, P) =>
+            {
+                Event.Triggerer = P;
+                Event.OnNotify(Event.EventType);
+
+            });
 
 
         }

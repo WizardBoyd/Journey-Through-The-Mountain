@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -29,7 +29,7 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common Classes\Common Classes.csproj" />
+    <ProjectReference Include="..\CommonClasses\CommonClasses.csproj" />
     <ProjectReference Include="..\TileEngine\TileEngine.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -39,9 +39,6 @@
     <None Update="Content\Tileset.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogue\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy  &quot;$(OutDir)\Content&quot; &quot;$(SolutionDir)\LevelEditro\bin\Debug\Content&quot; /y" />

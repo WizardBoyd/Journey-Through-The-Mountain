@@ -14,7 +14,6 @@ namespace TileEngine
         public int[] LayerTiles = new int[3];
         public string CodeValue = "";
         public bool Passable = true;
-        public Rectangle CollisionRectnagle;
         #endregion
 
         #region Constructor

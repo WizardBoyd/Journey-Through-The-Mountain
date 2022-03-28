@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -224,9 +226,9 @@
     <None Include="Resources\Socket.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common Classes\Common Classes.csproj">
-      <Project>{0bc2250b-1d40-41ca-8e56-76241ff3f0b3}</Project>
-      <Name>Common Classes</Name>
+    <ProjectReference Include="..\CommonClasses\CommonClasses.csproj">
+      <Project>{4c2e3bb1-28c2-47be-a606-ea1544de4f63}</Project>
+      <Name>CommonClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -20,5 +20,15 @@ namespace JourneyThroughTheMountain
         }
         public class PlayerDies: GameplayEvents { }
 
+        public class PlayerRunsIntoEvent : GameplayEvents
+        {
+            public CollidedEvents TypeOfEvent { get; set; }
+
+            public PlayerRunsIntoEvent(CollidedEvents Event)
+            {
+                TypeOfEvent = Event;
+            }
+        }
+
     }
 }

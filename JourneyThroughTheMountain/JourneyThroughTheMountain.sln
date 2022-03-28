@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DialougeEditor", "DialougeEditor\DialougeEditor.csproj", "{1062F784-D0E2-4235-BC39-9D1B37C50758}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common Classes", "Common Classes\Common Classes.csproj", "{0BC2250B-1D40-41CA-8E56-76241FF3F0B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonClasses", "CommonClasses\CommonClasses.csproj", "{4C2E3BB1-28C2-47BE-A606-EA1544DE4F63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1062F784-D0E2-4235-BC39-9D1B37C50758}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BC2250B-1D40-41CA-8E56-76241FF3F0B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BC2250B-1D40-41CA-8E56-76241FF3F0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BC2250B-1D40-41CA-8E56-76241FF3F0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BC2250B-1D40-41CA-8E56-76241FF3F0B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C2E3BB1-28C2-47BE-A606-EA1544DE4F63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2E3BB1-28C2-47BE-A606-EA1544DE4F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C2E3BB1-28C2-47BE-A606-EA1544DE4F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2E3BB1-28C2-47BE-A606-EA1544DE4F63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
