@@ -23,7 +23,7 @@ namespace JourneyThroughTheMountain
 
             public DialogueEvent()
             {
-                switchchattimer = new Timer(5000);
+                switchchattimer = new Timer(2000);
                 switchchattimer.Elapsed += switchDialouge;
                 
                 
@@ -57,7 +57,12 @@ namespace JourneyThroughTheMountain
                     }
                     LevelManager.Text = linearStroyObjects[current].Text;
                     current++;
-                    switchchattimer.Start();
+                    //switchchattimer.Start();
+                }
+                else
+                {
+                    LevelManager.Text = " ";
+                    switchchattimer.Stop();
                 }
                 
             }

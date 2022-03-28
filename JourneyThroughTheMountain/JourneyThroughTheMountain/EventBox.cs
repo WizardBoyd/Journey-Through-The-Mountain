@@ -9,6 +9,8 @@ namespace JourneyThroughTheMountain
     {
         public event EventHandler<BoundingBox> CollidedWith;
 
+        public bool Triggered = false;
+
         public override List<BoundingBox> TriggerBoxes
         {
             get
@@ -54,12 +56,17 @@ namespace JourneyThroughTheMountain
 
         public override void OnNotify(BaseGameStateEvent Event)
         {
-            switch (Event)
+            if (!Triggered)
             {
-                case CollidedEvents.DialogueEvent m:
-                    m.StartDialouge(AssociatedNPC, Triggerer);
-                    break;
+                switch (Event)
+                {
+                    case CollidedEvents.DialogueEvent m:
+                        m.StartDialouge(AssociatedNPC, Triggerer);
+                        Triggered = true;
+                        break;
+                }
             }
+        
         }
     }
 }
