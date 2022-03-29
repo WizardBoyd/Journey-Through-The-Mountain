@@ -41,6 +41,7 @@ namespace JourneyThroughTheMountain.Entities
             animations["idle"].LoopAnimation = true;
 
             _boundingboxes.Add(new BoundingBox(new Vector2(0, 0), 30, 46));
+            _boundingboxes.Add(new BoundingBox(new Vector2(0, 0), _boundingboxes[0].Width + 50, _boundingboxes[0].Height));
 
             drawDepth = 0.825f;
             enabled = true;

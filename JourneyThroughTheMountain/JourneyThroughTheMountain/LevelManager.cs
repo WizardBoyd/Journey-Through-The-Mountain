@@ -321,12 +321,18 @@ namespace JourneyThroughTheMountain
                 //});
             }
 
-            Event_Player_CollisionDetector.DetectTriggers(player, (Event, P) =>
+            if (!Event_Player_CollisionDetector.DetectTriggers(player, (Event, P) =>
             {
                 Event.Triggerer = P;
                 Event.OnNotify(Event.EventType);
 
-            });
+            }))
+            {
+                LevelManager.Talker = null;
+                LevelManager.Text = null;
+            }
+
+       
 
 
         }
