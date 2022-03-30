@@ -13,6 +13,7 @@ namespace JourneyThroughTheMountain
     public class Player : GameObject, IGameObjectWithHealth, IGameObjectWithDamage
     {
         public Vector2 fallSpeed = new Vector2(0, 20);
+        private Vector2 Climbspeed = new Vector2(0, 10);
         private float moveScale = 180.0f;
         public float FallTreshold = 10.5f;
         private float LastFallSpeed;
@@ -84,13 +85,19 @@ namespace JourneyThroughTheMountain
             animations.Add("Die", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_death"), 48, "Die"));
             animations["Die"].LoopAnimation = false;
 
+            animations.Add("Attack", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_attack1"), 48, "Attack"));
+            animations["Attack"].LoopAnimation = false;
+
+            animations.Add("Climbing", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_climb"), 48, "Climbing"));
+            
+
             frameWidth = 48;
             frameHeight = 48;
             //CollisionRectangle = new Rectangle(0, 0, 30, 46);
             _boundingboxes.Add(new BoundingBox(new Vector2(0,0), 30, 46));
             _triggerboxes.Add( new BoundingBox(new Vector2(0, 0), (int)_boundingboxes[0].Width + 1, (int)_boundingboxes[0].Height + 10));
 
-            drawDepth = 0.825f;
+            drawDepth = 0.7f;
             Health = 10;
             enabled = true;
             codeBasedBlocks = false;
@@ -134,6 +141,42 @@ namespace JourneyThroughTheMountain
                         newAnimation = "Jump";
                     }
                 }
+                if (keyState.IsKeyDown(Keys.E))
+                {
+                    newAnimation = "Attack";
+                    //Implement Attack Logic
+                }
+                if (keyState.IsKeyDown(Keys.S))
+                {
+                    Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
+                    //Impleemnt Climb logic
+                    if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y + 2) == "LADDER")
+                    {
+                        newAnimation = "Climbing";
+                        WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y + 1);
+                    }
+                    else
+                    {
+                        fallSpeed = new Vector2(0, 20);
+                    }
+                    
+
+                }
+                if (keyState.IsKeyDown(Keys.W))
+                {
+                    Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
+                    if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y -2) == "LADDER")
+                    {
+                        //newAnimation = "Climbing";
+                        WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y - 1);
+                        newAnimation = "Climbing";
+                        fallSpeed = Vector2.Zero;
+                    }
+                    else
+                    {
+                        fallSpeed = new Vector2(0, 20);
+                    }
+                }
 
                 if (!onGround)
                 {
@@ -161,6 +204,7 @@ namespace JourneyThroughTheMountain
             }
 
             velocity += fallSpeed;
+           
 
             repositionCamera();
             base.Update(gameTime);

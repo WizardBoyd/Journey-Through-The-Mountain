@@ -110,6 +110,7 @@ namespace LevelEditro
             cboCodeValues.Items.Add("Custom");
             cboCodeValues.Items.Add("Tree");
             cboCodeValues.Items.Add("Location");
+            cboCodeValues.Items.Add("Ladder");
 
             for (int x = 0; x < 100; x++)
             {
@@ -180,6 +181,9 @@ namespace LevelEditro
                     break;
                 case "Location":
                     txtNewCode.Text = "LOCATION";
+                    break;
+                case "Ladder":
+                    txtNewCode.Text = "LADDER";
                     break;
                 case "Clear":
                     txtNewCode.Text = "";

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -227,6 +228,7 @@ namespace JourneyThroughTheMountain
             if (!TileMap.CellIsPassable(mapCell1) ||
                 !TileMap.CellIsPassable(mapCell2))
             {
+
                 moveAmount.X = 0;
                 velocity.X = 0;
             }
@@ -278,6 +280,8 @@ namespace JourneyThroughTheMountain
                     onGround = true;
                 moveAmount.Y = 0;
                 velocity.Y = 0;
+
+
             }
 
             if (codeBasedBlocks)

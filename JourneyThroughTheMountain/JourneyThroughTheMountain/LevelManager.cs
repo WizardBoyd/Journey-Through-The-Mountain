@@ -136,6 +136,11 @@ namespace JourneyThroughTheMountain
                         coins.Add(new Coin(Content, x, y));
                     }
 
+                    if (TileMap.CellCodeValue(x, y) == "LADDER")
+                    {
+
+                    }
+
                     if (TileMap.CellCodeValue(x, y) == "ENEMY")
                     {
                         enemies.Add(new Enemy(Content, x, y));
