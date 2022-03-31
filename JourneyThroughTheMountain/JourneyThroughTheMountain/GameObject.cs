@@ -29,6 +29,7 @@ namespace JourneyThroughTheMountain
         protected int frameWidth;
         protected int frameHeight;
 
+        protected bool Knockback;
         protected bool enabled;
         protected bool flipped = false;
         public bool onGround;
@@ -47,6 +48,8 @@ namespace JourneyThroughTheMountain
         protected int health;
         protected List<BoundingBox> _boundingboxes = new List<BoundingBox>();
         protected List<BoundingBox> _triggerboxes = new List<BoundingBox>();
+        protected System.Timers.Timer KnockbackTimer = new System.Timers.Timer(1000);
+
         #endregion
 
         #region Events
@@ -170,6 +173,19 @@ namespace JourneyThroughTheMountain
         //}
 
 
+        public GameObject()
+        {
+            KnockbackTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
+            {
+                Knockback = false;
+            };
+        }
+
+        ~GameObject()
+        {
+            KnockbackTimer.Dispose();
+        }
+
         #endregion 
 
         #region Helper Methods
@@ -186,6 +202,11 @@ namespace JourneyThroughTheMountain
                     animations[currentAnimation].Update(gameTime);
                 }
             }
+        }
+
+        protected void KnockBack()
+        {
+            Knockback = true;
         }
 
         protected Vector2 CalculateDirection(float angleOffset = 0.0f)
@@ -336,6 +357,12 @@ namespace JourneyThroughTheMountain
             moveAmount = verticalCollisionTest(moveAmount); 
 
             Vector2 newPosition = worldLocation + moveAmount;
+            if (Knockback)
+            {
+                KnockbackTimer.Start();
+                newPosition.X += flipped ? 20f *elapsed : -20f * elapsed;
+                
+            }
 
             newPosition = new Vector2(
                 MathHelper.Clamp(newPosition.X, 0,

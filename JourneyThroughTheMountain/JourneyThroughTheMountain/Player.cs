@@ -22,6 +22,9 @@ namespace JourneyThroughTheMountain
         private int score = 0;
         private int livesRemaining = 3;
         private float Damage_Scale = 0.2f;
+        public bool Attacking;
+        static KeyboardState previousstate;
+       static KeyboardState CurrentState;
         //public Rectangle triggercollision;
 
         public class PlayerInventory
@@ -89,7 +92,7 @@ namespace JourneyThroughTheMountain
             animations["Attack"].LoopAnimation = false;
 
             animations.Add("Climbing", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_climb"), 48, "Climbing"));
-            
+
 
             frameWidth = 48;
             frameHeight = 48;
@@ -102,20 +105,29 @@ namespace JourneyThroughTheMountain
             enabled = true;
             codeBasedBlocks = false;
             PlayAnimation("idle");
+            Damage = 2;
         }
         #endregion
 
         #region Public Methods
+
+
+        public static bool IsKeyPressed(Keys key, bool Oneshot)
+        {
+            if (!Oneshot) return CurrentState.IsKeyDown(key);
+            return CurrentState.IsKeyDown(key) && !previousstate.IsKeyDown(key);
+        }
         public override void Update(GameTime gameTime)
         {
             if (!Dead)
             {
                 string newAnimation = "idle";
+                Attacking = false;
 
                 velocity = new Vector2(0, velocity.Y);
                 GamePadState gamePad = GamePad.GetState(PlayerIndex.One);
                 KeyboardState keyState = Keyboard.GetState();
-
+                CurrentState = keyState;
                 if (keyState.IsKeyDown(Keys.Left) ||
                     (gamePad.ThumbSticks.Left.X < -0.3f))
                 {
@@ -144,7 +156,11 @@ namespace JourneyThroughTheMountain
                 if (keyState.IsKeyDown(Keys.E))
                 {
                     newAnimation = "Attack";
-                    //Implement Attack Logic
+                    if (IsKeyPressed(Keys.E, true))
+                    {
+                        Attacking = true;
+                    }
+                    
                 }
                 if (keyState.IsKeyDown(Keys.S))
                 {
@@ -204,7 +220,8 @@ namespace JourneyThroughTheMountain
             }
 
             velocity += fallSpeed;
-           
+
+            previousstate = CurrentState;
 
             repositionCamera();
             base.Update(gameTime);
@@ -250,6 +267,16 @@ namespace JourneyThroughTheMountain
                         TakeDamage(m.Damage);
                     }
                     break;
+                case GameplayEvents.PlayerCoinPickupEvent m:
+                    score++;
+                    break;
+                case GameplayEvents.DamageDealt m:
+                    if (m.Damage > 0)
+                    {
+                        TakeDamage(m.Damage);
+                        KnockBack();
+                    }
+                    break;
             }
             
         }
@@ -258,6 +285,7 @@ namespace JourneyThroughTheMountain
         {
             Health -= o.Damage;
             animations[currentAnimation].Tint = Color.Red;
+            KnockBack();
             
         }
 
@@ -265,7 +293,9 @@ namespace JourneyThroughTheMountain
         {
             Health -= Amount;
             animations[currentAnimation].Tint = Color.Red;
+            
         }
+
 
         #endregion
 

@@ -10,6 +10,7 @@ using JourneyThroughTheMountain.Entities;
 using JourneyThroughTheMountain.Dialogue;
 using CommonClasses;
 using System.Reflection;
+using Microsoft.Xna.Framework.Input;
 
 namespace JourneyThroughTheMountain
 {
@@ -21,12 +22,14 @@ namespace JourneyThroughTheMountain
         private static int currentLevel;
         private static Vector2 respawnLocation;
 
-        private static List<Coin> coins = new List<Coin>();
-        private static List<Enemy> enemies = new List<Enemy>();
+        private static List<SnowFlakes> snowFlakes = new List<SnowFlakes>();
+        private static List<Entities.Enemy> enemies = new List<Entities.Enemy>();
         private static List<Tree> Trees = new List<Tree>();
         private static List<GameTile> Tiles = new List<GameTile>();
         private static List<EventBox> Events = new List<EventBox>();
         private static Dictionary<string, NPC> NPCs = new Dictionary<string, NPC>();
+
+     
 
         public static string Text;
         public static GameObject Talker;
@@ -112,8 +115,9 @@ namespace JourneyThroughTheMountain
         {
             TileMap.LoadMap((System.IO.FileStream)TitleContainer.OpenStream(@"Content/Maps/MAP" + levelNumber.ToString().PadLeft(3, '0') + ".MAP"));
 
-            coins.Clear();
+            snowFlakes.Clear();
             enemies.Clear();
+            NPCs.Clear();
 
           
 
@@ -131,9 +135,9 @@ namespace JourneyThroughTheMountain
 
                   
 
-                    if (TileMap.CellCodeValue(x, y) == "GEM")
+                    if (TileMap.CellCodeValue(x, y) == "SNOWFLAKE")
                     {
-                        coins.Add(new Coin(Content, x, y));
+                        snowFlakes.Add(new SnowFlakes(Content, x, y));
                     }
 
                     if (TileMap.CellCodeValue(x, y) == "LADDER")
@@ -143,7 +147,10 @@ namespace JourneyThroughTheMountain
 
                     if (TileMap.CellCodeValue(x, y) == "ENEMY")
                     {
-                        enemies.Add(new Enemy(Content, x, y));
+                        Entities.Enemy E = new Entities.Enemy(Content, x, y);
+                        enemies.Add(E);
+
+
                     }
 
                     if (TileMap.CellCodeValue(x,y) == "TREE")
@@ -209,6 +216,16 @@ namespace JourneyThroughTheMountain
                 npc.Value.Update(gameTime);
             }
 
+            foreach (SnowFlakes item in snowFlakes)
+            {
+                item.Update(gameTime);
+            }
+
+            foreach (Entities.Enemy enemy in enemies)
+            {
+                enemy.Update(gameTime);
+            }
+
             if (!player.Dead)
             {
                 checkCurrentCellCode();
@@ -269,10 +286,10 @@ namespace JourneyThroughTheMountain
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Coin coin in coins)
+            foreach (SnowFlakes coin in snowFlakes)
                 coin.Draw(spriteBatch);
 
-            foreach (Enemy enemy in enemies)
+            foreach (Entities.Enemy enemy in enemies)
                 enemy.Draw(spriteBatch);
 
             foreach (Tree tree in Trees)
@@ -296,7 +313,9 @@ namespace JourneyThroughTheMountain
                 spriteBatch.DrawString(Game1.pericles8, Text, new Vector2(position.X, position.Y) , Color.White);
             }
 
+
         }
+
 
         private static void DetectCollisions(GameTime time)
         {
@@ -304,6 +323,10 @@ namespace JourneyThroughTheMountain
             SegmentAABBCollisionDetector<Player> Player_Land_On_Tile_Collision = new SegmentAABBCollisionDetector<Player>(player);
 
             AABBCollisionDetector<EventBox, Player> Event_Player_CollisionDetector = new AABBCollisionDetector<EventBox, Player>(Events);
+
+            AABBCollisionDetector<SnowFlakes, Player> Coin_Collector = new AABBCollisionDetector<SnowFlakes, Player>(snowFlakes);
+            AABBCollisionDetector<Entities.Enemy, Player> PlayerRunsIntoEnemy = new AABBCollisionDetector<Entities.Enemy, Player>(enemies);
+            SegmentAABBCollisionDetector<Player> EnemyRaycast = new SegmentAABBCollisionDetector<Player>(player);
 
             if (!player.onGround)
             {
@@ -335,6 +358,36 @@ namespace JourneyThroughTheMountain
             {
                 LevelManager.Talker = null;
                 LevelManager.Text = null;
+            }
+
+            Coin_Collector.DetectCollisions(player, (Snowflake, P) =>
+            {
+                Snowflake.Enabled = false;
+                P.OnNotify(new GameplayEvents.PlayerCoinPickupEvent());
+
+            });
+
+            PlayerRunsIntoEnemy.DetectCollisions(player, (enemy, P) =>
+            {
+                if (P.Attacking == true)
+                {
+                    enemy.OnNotify(new GameplayEvents.DamageDealt(P.Damage));
+                }
+            });
+
+            foreach (Entities.Enemy enemy in enemies)
+            {
+                EnemyRaycast.DetectCollisions(enemy.Raycast, (player) =>
+                {
+                    if (enemy.CanAttack)
+                    {
+                        enemy.FireWeapon();
+                        enemy.CanAttack = false;
+                        enemy.AttackTimer.Start();
+                        player.OnNotify(new GameplayEvents.DamageDealt(enemy.Damage));
+                    }
+                    
+                });
             }
 
        

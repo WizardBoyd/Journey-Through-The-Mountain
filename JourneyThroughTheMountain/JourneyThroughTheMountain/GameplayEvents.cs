@@ -30,5 +30,19 @@ namespace JourneyThroughTheMountain
             }
         }
 
+        public class PlayerCoinPickupEvent : GameplayEvents
+        {
+
+        }
+
+        public class DamageDealt : GameplayEvents
+        {
+            public int Damage;
+            public DamageDealt(int damage)
+            {
+                Damage = damage;
+            }
+        }
+
     }
 }
