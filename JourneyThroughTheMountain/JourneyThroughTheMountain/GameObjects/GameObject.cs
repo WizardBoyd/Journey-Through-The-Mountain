@@ -377,7 +377,11 @@ namespace JourneyThroughTheMountain
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (!enabled)
-                return;
+            {
+                return;  
+            }
+
+               
 
             if (animations.ContainsKey(currentAnimation))
             {

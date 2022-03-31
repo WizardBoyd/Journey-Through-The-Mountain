@@ -93,7 +93,7 @@ namespace JourneyThroughTheMountain
             //System.Diagnostics.Debug.WriteLine($"{_boundingboxes[0].Position.X},     {_boundingboxes[0].Position}");
             //System.Diagnostics.Debug.WriteLine($"{GroundCollisionSegment.P1.X},{GroundCollisionSegment.P1.Y}, {GroundCollisionSegment.P2.X}, {GroundCollisionSegment.P2.Y}");
             //System.Diagnostics.Debug.WriteLine(_collisionRectangle.X);
-            base.Draw(spriteBatch);
+            
         }
 
     }

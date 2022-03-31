@@ -60,7 +60,7 @@ namespace JourneyThroughTheMountain.Entities
             WorldLocation = new Vector2(cellX * TileMap.TileWidth, cellY * TileMap.TileHeight);
 
             codeBasedBlocks = true;
-            Health = 15;
+            Health = 4;
             Damage = 2;
             enabled = true;
             KnockbackTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
@@ -74,6 +74,11 @@ namespace JourneyThroughTheMountain.Entities
 
         public override void Update(GameTime gameTime)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             Vector2 oldlocation = worldLocation;
 
             if (!Dead)
@@ -120,6 +125,10 @@ namespace JourneyThroughTheMountain.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (!enabled && animations[currentAnimation].FinishedPlaying)
+            {
+                return;
+            }
             spriteBatch.DrawLine(Raycast.P1, Raycast.P2, Color.Red, 5, 1.25f);
             base.Draw(spriteBatch);
         }
@@ -169,8 +178,10 @@ namespace JourneyThroughTheMountain.Entities
         {
             PlayAnimation("Die");
             velocity.X = 0;
-
+            _boundingboxes.Clear();
+            _triggerboxes.Clear();
             Dead = true;
+            
 
         }
     }

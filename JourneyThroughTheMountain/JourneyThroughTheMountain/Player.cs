@@ -23,14 +23,11 @@ namespace JourneyThroughTheMountain
         private int livesRemaining = 3;
         private float Damage_Scale = 0.2f;
         public bool Attacking;
+        private string newAnimation;
         static KeyboardState previousstate;
        static KeyboardState CurrentState;
         //public Rectangle triggercollision;
 
-        public class PlayerInventory
-        {
-
-        }
         
 
         public bool Dead
@@ -110,13 +107,21 @@ namespace JourneyThroughTheMountain
         #endregion
 
         #region Public Methods
-
-
         public static bool IsKeyPressed(Keys key, bool Oneshot)
         {
             if (!Oneshot) return CurrentState.IsKeyDown(key);
             return CurrentState.IsKeyDown(key) && !previousstate.IsKeyDown(key);
         }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!enabled && animations[currentAnimation].FinishedPlaying)
+            {
+                return;
+            }
+            base.Draw(spriteBatch);
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (!Dead)
@@ -125,6 +130,7 @@ namespace JourneyThroughTheMountain
                 Attacking = false;
 
                 velocity = new Vector2(0, velocity.Y);
+
                 GamePadState gamePad = GamePad.GetState(PlayerIndex.One);
                 KeyboardState keyState = Keyboard.GetState();
                 CurrentState = keyState;
@@ -137,7 +143,7 @@ namespace JourneyThroughTheMountain
                 }
 
                 if (keyState.IsKeyDown(Keys.Right) ||
-                    (gamePad.ThumbSticks.Left.X > 0.3f))
+                (gamePad.ThumbSticks.Left.X > 0.3f))
                 {
                     flipped = false;
                     newAnimation = "run";
@@ -145,7 +151,7 @@ namespace JourneyThroughTheMountain
                 }
 
                 if (keyState.IsKeyDown(Keys.Space) ||
-                    (gamePad.Buttons.A == ButtonState.Pressed))
+                  (gamePad.Buttons.A == ButtonState.Pressed))
                 {
                     if (onGround)
                     {
@@ -153,15 +159,17 @@ namespace JourneyThroughTheMountain
                         newAnimation = "Jump";
                     }
                 }
-                if (keyState.IsKeyDown(Keys.E))
+
+                if (CurrentState.IsKeyDown(Keys.E))
                 {
                     newAnimation = "Attack";
                     if (IsKeyPressed(Keys.E, true))
                     {
                         Attacking = true;
                     }
-                    
+
                 }
+
                 if (keyState.IsKeyDown(Keys.S))
                 {
                     Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
@@ -175,13 +183,14 @@ namespace JourneyThroughTheMountain
                     {
                         fallSpeed = new Vector2(0, 20);
                     }
-                    
+
 
                 }
+
                 if (keyState.IsKeyDown(Keys.W))
                 {
                     Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
-                    if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y -2) == "LADDER")
+                    if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y - 2) == "LADDER")
                     {
                         //newAnimation = "Climbing";
                         WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y - 1);
@@ -193,6 +202,8 @@ namespace JourneyThroughTheMountain
                         fallSpeed = new Vector2(0, 20);
                     }
                 }
+
+
 
                 if (!onGround)
                 {
@@ -222,15 +233,27 @@ namespace JourneyThroughTheMountain
             velocity += fallSpeed;
 
             previousstate = CurrentState;
-
             repositionCamera();
             base.Update(gameTime);
-            //System.Diagnostics.Debug.WriteLine($"{WorldLocation.X}, {WorldLocation.Y}");
-            //System.Diagnostics.Debug.WriteLine($"{BoundingBoxes[0].Position.X}");
+        }
+
+        public void MoveRight()
+        {
+            flipped = false;
+            newAnimation = "run";
+            velocity = new Vector2(moveScale, velocity.Y);
+        }
+
+        public void MoveLeft()
+        {
+            flipped = true;
+            newAnimation = "run";
+            velocity = new Vector2(-moveScale, velocity.Y);
         }
 
         public void Jump()
         {
+            newAnimation = "Jump";
             velocity.Y = -500;
         }
 
@@ -242,20 +265,51 @@ namespace JourneyThroughTheMountain
             dead = true;
         }
 
+        public void ClimbUp()
+        {
+            Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
+            if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y - 2) == "LADDER")
+            {
+                //newAnimation = "Climbing";
+                WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y - 1);
+                newAnimation = "Climbing";
+                fallSpeed = Vector2.Zero;
+            }
+            else
+            {
+                fallSpeed = new Vector2(0, 20);
+            }
+        }
+
+        public void ClimbDown()
+        {
+            Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
+            //Impleemnt Climb logic
+            if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y + 2) == "LADDER")
+            {
+                newAnimation = "Climbing";
+                WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y + 1);
+            }
+            else
+            {
+                fallSpeed = new Vector2(0, 20);
+            }
+        }
+
+        public void Attack()
+        {
+            newAnimation = "Attack";
+           
+            Attacking = true;
+            
+        }
+
         public void Revive()
         {
             PlayAnimation("idle");
             dead = false;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            //spriteBatch.Draw(Game1.BoundingBox, Camera.WorldToScreen(new Rectangle((int)TriggerBoxes[0].Position.X, (int)TriggerBoxes[0].Position.Y,
-            //    (int)TriggerBoxes[0].Width, (int)TriggerBoxes[0].Height)), Color.White);
-
-            //TileMap.DrawRectangle(spriteBatch, new Rectangle(1,1,32,32), 100);
-            base.Draw(spriteBatch);
-        }
 
         public override void OnNotify(BaseGameStateEvent Event)
         {
@@ -276,6 +330,9 @@ namespace JourneyThroughTheMountain
                         TakeDamage(m.Damage);
                         KnockBack();
                     }
+                    break;
+                case GameplayEvents.PlayerKilledEnemyEvent m:
+                    score++;
                     break;
             }
             

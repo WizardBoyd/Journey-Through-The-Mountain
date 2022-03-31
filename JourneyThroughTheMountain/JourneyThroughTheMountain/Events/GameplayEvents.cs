@@ -35,6 +35,8 @@ namespace JourneyThroughTheMountain
 
         }
 
+        public class PlayerKilledEnemyEvent : GameplayEvents { }
+
         public class DamageDealt : GameplayEvents
         {
             public int Damage;

@@ -30,5 +30,14 @@ namespace JourneyThroughTheMountain.Entities
 
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            if (!enabled)
+            {
+                return;
+            }
+            base.Update(gameTime);
+        }
+
     }
 }

@@ -310,7 +310,7 @@ namespace JourneyThroughTheMountain
             if (Text != "" && Talker != null)
             {
                 Rectangle position = Camera.WorldToScreen(Talker.WorldRectangle);
-                spriteBatch.DrawString(Game1.pericles8, Text, new Vector2(position.X, position.Y) , Color.White);
+                //spriteBatch.DrawString(Game1.pericles8, Text, new Vector2(position.X, position.Y) , Color.White);
             }
 
 
@@ -362,8 +362,12 @@ namespace JourneyThroughTheMountain
 
             Coin_Collector.DetectCollisions(player, (Snowflake, P) =>
             {
-                Snowflake.Enabled = false;
-                P.OnNotify(new GameplayEvents.PlayerCoinPickupEvent());
+                if (Snowflake.Enabled)
+                {
+                    P.OnNotify(new GameplayEvents.PlayerCoinPickupEvent());
+                    Snowflake.Enabled = false;
+                }
+              
 
             });
 
@@ -372,6 +376,11 @@ namespace JourneyThroughTheMountain
                 if (P.Attacking == true)
                 {
                     enemy.OnNotify(new GameplayEvents.DamageDealt(P.Damage));
+                    if (enemy.Dead)
+                    {
+                        P.OnNotify(new GameplayEvents.PlayerKilledEnemyEvent());
+                       
+                    }
                 }
             });
 
@@ -379,7 +388,7 @@ namespace JourneyThroughTheMountain
             {
                 EnemyRaycast.DetectCollisions(enemy.Raycast, (player) =>
                 {
-                    if (enemy.CanAttack)
+                    if (enemy.CanAttack && enemy.Enabled)
                     {
                         enemy.FireWeapon();
                         enemy.CanAttack = false;

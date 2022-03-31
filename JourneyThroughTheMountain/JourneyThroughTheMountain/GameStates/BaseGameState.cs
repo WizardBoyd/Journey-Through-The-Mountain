@@ -3,37 +3,107 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using JourneyThroughTheMountain.Input;
+using JourneyThroughTheMountain.GameObjects;
 
 namespace JourneyThroughTheMountain.GameStates
 {
     public abstract class BaseGameState
     {
+        private const string FallbackTexture = "Empty";
+        private const String FallBackSong = "EmptySong";
 
-        private readonly List<GameObject> _GameObjects = new List<GameObject>();
+        protected bool _degub = false;
+        protected ContentManager _contentManager;
+        protected int _viewportHeight;
+        protected int _viewportWidth;
+        protected SoundManager _soundManager = new SoundManager();
 
-        public abstract void LoadContent(ContentManager contentManager);
+        private readonly List<BaseGameObject> _GameObjects = new List<BaseGameObject>();
 
-        public abstract void UnloadContent(ContentManager contentManager);
+        protected InputManager InputManager { get; set; }
 
-        public abstract void HandleInput();
+        public void Initialize(ContentManager contentManager, int ViewportWidth, int ViewportHeight)
+        {
+            _contentManager = contentManager;
+            _viewportHeight = ViewportHeight;
+            _viewportWidth = ViewportWidth;
+
+            SetupInputManager();
+        }
+
+        public abstract void LoadContent();
+
+        public void UnloadContent()
+        {
+            _contentManager.Unload();
+        }
+
+        public abstract void UpdateGameState(GameTime time);
+
+        public void Update(GameTime Time)
+        {
+           
+            UpdateGameState(Time);
+            //soundmanger play
+        }
+
+        protected Texture2D LoadTexture(String textureName)
+        {
+            return _contentManager.Load<Texture2D>(textureName);
+        }
+
+        protected SoundEffect LoadSound(string soundname)
+        {
+            return _contentManager.Load<SoundEffect>(soundname);
+        }
+
+        public abstract void HandleInput(GameTime time);
 
         public event EventHandler<BaseGameState> OnStateSwitched;
+        public event EventHandler<BaseGameStateEvent> OnEventNotification;
+
+        protected abstract void SetupInputManager();
 
         protected void SwitchState(BaseGameState gameState)
         {
             OnStateSwitched?.Invoke(this, gameState);
         }
 
-        protected void AddGameObject(GameObject GObject)
+        protected void NotifyEvent(BaseGameStateEvent gameEvent)
+        {
+            OnEventNotification?.Invoke(this, gameEvent);
+            foreach (var item in _GameObjects)
+            {
+                //NotifyGameObjects This Way
+            }
+
+            //SoundManager Notfiy
+        }
+
+        protected void AddGameObject(BaseGameObject GObject)
         {
             _GameObjects.Add(GObject);
         }
 
-        public void Render(SpriteBatch spriteBatch)
+        protected void RemoveGameObject(BaseGameObject gameObject)
+        {
+            _GameObjects.Remove(gameObject);
+        }
+
+        public virtual void Render(SpriteBatch spriteBatch)
         {
             foreach (var GObject in _GameObjects)
             {
-                GObject.Draw(spriteBatch);
+                if (_degub)
+                {
+                    //RenderDebugStuff
+                }
+
+                GObject.Render(spriteBatch);
             }
         }
 
