@@ -19,6 +19,8 @@ namespace JourneyThroughTheMountain
         private float LastFallSpeed;
         public bool TakeDamageOnLand;
         private bool dead = false;
+        public bool Climbing = false;
+        public bool onLadder = false;
         private int score = 0;
         private int livesRemaining = 3;
         private float Damage_Scale = 0.2f;
@@ -176,34 +178,60 @@ namespace JourneyThroughTheMountain
                     //Impleemnt Climb logic
                     if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y + 2) == "LADDER")
                     {
+                        Climbing = true;
                         newAnimation = "Climbing";
-                        WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y + 1);
-                    }
-                    else
-                    {
-                        fallSpeed = new Vector2(0, 20);
+                        velocity = Vector2.Zero;
+                        worldLocation.Y += (float)(moveScale * gameTime.ElapsedGameTime.TotalSeconds);
+                        onLadder = false;
                     }
 
 
                 }
-
-                if (keyState.IsKeyDown(Keys.W))
+                else if (keyState.IsKeyDown(Keys.W))
                 {
                     Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));
-                    if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y - 2) == "LADDER")
+                    if (TileMap.CellCodeValue((int)Location.X + 1, (int)Location.Y) == "LADDER")
                     {
-                        //newAnimation = "Climbing";
-                        WorldLocation = new Vector2(WorldLocation.X, WorldLocation.Y - 1);
+                        Climbing = true;
+                        velocity = Vector2.Zero;
                         newAnimation = "Climbing";
-                        fallSpeed = Vector2.Zero;
+                        worldLocation.Y -= (float)(moveScale * gameTime.ElapsedGameTime.TotalSeconds);
+                        onLadder = false;
                     }
-                    else
+                }
+                else if (TileMap.CellCodeValue(TileMap.GetCellByPixelX((int)WorldLocation.X) + 1, TileMap.GetCellByPixelY((int)WorldLocation.Y)) == "LADDER" && !keyState.IsKeyDown(Keys.S))
+                {
+                    //newAnimation = "Climbing";
+                    if (!Climbing)
                     {
-                        fallSpeed = new Vector2(0, 20);
+                        onLadder = true;
+                        fallSpeed = new Vector2(0, 0);
+                    }
+                   
+                }else if (TileMap.CellCodeValue(TileMap.GetCellByPixelX((int)WorldLocation.X) + 1, TileMap.GetCellByPixelY((int)WorldLocation.Y)) == "LADDER" && !keyState.IsKeyDown(Keys.W))
+                {
+                    if (!Climbing)
+                    {
+                        onLadder = true;
+                        fallSpeed = new Vector2(0, 0);
                     }
                 }
 
+                else
+                {
+                    if (!onLadder)
+                    {
+                        Climbing = false;
+                        fallSpeed = new Vector2(0, 20);
+                    }
+                   
+                }
 
+                if (!Climbing)
+                {
+                    Climbing = false;
+                    fallSpeed = new Vector2(0, 20);
+                }
 
                 if (!onGround)
                 {

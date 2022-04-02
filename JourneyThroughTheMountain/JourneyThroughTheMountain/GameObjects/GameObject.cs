@@ -297,6 +297,7 @@ namespace JourneyThroughTheMountain
             if (!TileMap.CellIsPassable(mapCell1) ||
                 !TileMap.CellIsPassable(mapCell2))
             {
+
                 if (moveAmount.Y > 0)
                     onGround = true;
                 moveAmount.Y = 0;

@@ -53,7 +53,7 @@ namespace JourneyThroughTheMountain.GameStates
             pericles8 = _contentManager.Load<SpriteFont>(@"Pericles7");
             
             MainCharacter = new Player(_contentManager);
-            LevelManager.Initialize(_contentManager, MainCharacter);
+            LevelManager.Initialize(_contentManager, MainCharacter, pericles8);
             startNewGame();
 
         }

@@ -37,6 +37,8 @@ namespace TileEngine
         {
             Passable = !Passable;
         }
+
+        public void TimeToggle() { }
         #endregion
 
 

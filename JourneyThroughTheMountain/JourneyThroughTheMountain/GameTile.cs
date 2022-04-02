@@ -12,10 +12,15 @@ namespace JourneyThroughTheMountain
     {
         private Rectangle _collisionRectangle;
 
+        public string CodeValue;
+
+        public bool Passable;
+
         private Rectangle WorldCollsionRectnagle;
         public Rectangle CollisionRectangle
         {
-            get { return _collisionRectangle; }
+            get {
+                return _collisionRectangle; }
             private set { }
         }
 
@@ -47,12 +52,14 @@ namespace JourneyThroughTheMountain
             {
                 List<BoundingBox> result = new List<BoundingBox>();
 
-                foreach (BoundingBox bb in _boundingboxes)
-                {
+                    foreach (BoundingBox bb in _boundingboxes)
+                    {
 
-                    result.Add(new BoundingBox(new Vector2((int)worldLocation.X, (int)WorldRectangle.Y - 5),
-                        bb.Width, bb.Height));
-                }
+                        result.Add(new BoundingBox(new Vector2((int)worldLocation.X, (int)WorldRectangle.Y - 5),
+                            bb.Width, bb.Height));
+                    }
+
+              
 
                 return result;
             }
@@ -72,13 +79,14 @@ namespace JourneyThroughTheMountain
             }
         }
 
-        public GameTile(Rectangle collisionrectangle)
+        public GameTile(Rectangle collisionrectangle, string CodeValue)
         {
             _collisionRectangle = collisionrectangle;
             //Vector2 screenpos = TileEngine.Camera.WorldToScreen(new Vector2(collisionrectangle.X, collisionrectangle.Y));
             _boundingboxes.Add(new BoundingBox(new Vector2(collisionrectangle.X, collisionrectangle.Y) , collisionrectangle.Width, collisionrectangle.Height));
             _triggerboxes.Add(new BoundingBox(new Vector2(collisionrectangle.X, collisionrectangle.Y) , collisionrectangle.Width, collisionrectangle.Height-10));
             WorldLocation = new Vector2(collisionrectangle.X, collisionrectangle.Y);//Might need to change to center
+            this.CodeValue = CodeValue;
             
         }
 

@@ -11,6 +11,7 @@ using JourneyThroughTheMountain.Dialogue;
 using CommonClasses;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
 namespace JourneyThroughTheMountain
 {
@@ -21,6 +22,8 @@ namespace JourneyThroughTheMountain
         private static Player player;
         private static int currentLevel;
         private static Vector2 respawnLocation;
+
+        private static SpriteFont spriteFont { get; set; }
 
         private static List<SnowFlakes> snowFlakes = new List<SnowFlakes>();
         private static List<Entities.Enemy> enemies = new List<Entities.Enemy>();
@@ -51,10 +54,12 @@ namespace JourneyThroughTheMountain
         #region Initialization
         public static void Initialize(
             ContentManager content,
-            Player gamePlayer)
+            Player gamePlayer, SpriteFont Font)
         {
             Content = content;
             player = gamePlayer;
+            spriteFont = Font;
+            
         }
         #endregion
 
@@ -186,7 +191,7 @@ namespace JourneyThroughTheMountain
 
                     if (!TileMap.CellIsPassable(x,y))
                     {
-                        Tiles.Add(new GameTile(TileMap.CellWorldRectangle(x, y)));
+                        Tiles.Add(new GameTile(TileMap.CellWorldRectangle(x, y),TileMap.CellCodeValue(x,y)));
                         
                     }
 
@@ -310,7 +315,7 @@ namespace JourneyThroughTheMountain
             if (Text != "" && Talker != null)
             {
                 Rectangle position = Camera.WorldToScreen(Talker.WorldRectangle);
-                //spriteBatch.DrawString(Game1.pericles8, Text, new Vector2(position.X, position.Y) , Color.White);
+                spriteBatch.DrawString(spriteFont, Text, new Vector2(position.X, position.Y) , Color.White);
             }
 
 
@@ -320,6 +325,7 @@ namespace JourneyThroughTheMountain
         private static void DetectCollisions(GameTime time)
         {
             AABBCollisionDetector<GameTile, Player> Tile_Player_CollisionDetector = new AABBCollisionDetector<GameTile, Player>(Tiles);
+            AABBCollisionDetector<GameTile, Player> Tile_Player_Ladder_collison_Detector = new AABBCollisionDetector<GameTile, Player>(Tiles.Where(x => x.CodeValue == "LADDER"));
             SegmentAABBCollisionDetector<Player> Player_Land_On_Tile_Collision = new SegmentAABBCollisionDetector<Player>(player);
 
             AABBCollisionDetector<EventBox, Player> Event_Player_CollisionDetector = new AABBCollisionDetector<EventBox, Player>(Events);
@@ -327,6 +333,7 @@ namespace JourneyThroughTheMountain
             AABBCollisionDetector<SnowFlakes, Player> Coin_Collector = new AABBCollisionDetector<SnowFlakes, Player>(snowFlakes);
             AABBCollisionDetector<Entities.Enemy, Player> PlayerRunsIntoEnemy = new AABBCollisionDetector<Entities.Enemy, Player>(enemies);
             SegmentAABBCollisionDetector<Player> EnemyRaycast = new SegmentAABBCollisionDetector<Player>(player);
+            
 
             if (!player.onGround)
             {
@@ -348,6 +355,23 @@ namespace JourneyThroughTheMountain
                 //    P.OnNotify(LandEvent);
                 //});
             }
+
+            Tile_Player_Ladder_collison_Detector.DetectCollisions(player, (Tile, P) =>
+            {
+                if (P.Climbing)
+                {
+                    Vector2 Location = TileMap.GetCellByPixel(Tile.WorldLocation);
+                    TileMap.GetMapSquareAtCell((int)Location.X, (int)Location.Y).Passable = true;
+                    TileMap.GetMapSquareAtCell((int)Location.X - 1, (int)Location.Y).Passable = true;
+
+                }
+                else
+                {
+                    Vector2 Location = TileMap.GetCellByPixel(Tile.WorldLocation);
+                    TileMap.GetMapSquareAtCell((int)Location.X, (int)Location.Y).Passable = false;
+                    TileMap.GetMapSquareAtCell((int)Location.X - 1, (int)Location.Y).Passable = false;
+                }
+            });
 
             if (!Event_Player_CollisionDetector.DetectTriggers(player, (Event, P) =>
             {
