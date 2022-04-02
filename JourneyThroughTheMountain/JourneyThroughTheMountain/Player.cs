@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using TileEngine;
+using JourneyThroughTheMountain.GameStates;
 
 namespace JourneyThroughTheMountain
 {
@@ -25,9 +26,11 @@ namespace JourneyThroughTheMountain
         private int livesRemaining = 3;
         private float Damage_Scale = 0.2f;
         public bool Attacking;
+        public bool CanRevive;
         private string newAnimation;
         static KeyboardState previousstate;
        static KeyboardState CurrentState;
+        public BaseGameState StateOfGame;
         //public Rectangle triggercollision;
 
         
@@ -70,8 +73,9 @@ namespace JourneyThroughTheMountain
 
 
         #region Constructor
-        public Player(ContentManager content)
+        public Player(ContentManager content, BaseGameState State)
         {
+            StateOfGame = State;
             animations.Add("idle", new AnimationStrip(content.Load<Texture2D>(@"Animations/Player/Woodcutter_idle"), 48, "idle"));
 
             animations["idle"].LoopAnimation = true;
@@ -142,6 +146,7 @@ namespace JourneyThroughTheMountain
                     flipped = true;
                     newAnimation = "run";
                     velocity = new Vector2(-moveScale, velocity.Y);
+                    StateOfGame.NotifyEvent(new GameplayEvents.PlayerMoves());
                 }
 
                 if (keyState.IsKeyDown(Keys.Right) ||
@@ -150,6 +155,7 @@ namespace JourneyThroughTheMountain
                     flipped = false;
                     newAnimation = "run";
                     velocity = new Vector2(moveScale, velocity.Y);
+                    StateOfGame.NotifyEvent(new GameplayEvents.PlayerMoves());
                 }
 
                 if (keyState.IsKeyDown(Keys.Space) ||
@@ -159,6 +165,7 @@ namespace JourneyThroughTheMountain
                     {
                         Jump();
                         newAnimation = "Jump";
+                        StateOfGame.NotifyEvent(new GameplayEvents.PlayerJumps());
                     }
                 }
 
@@ -168,6 +175,7 @@ namespace JourneyThroughTheMountain
                     if (IsKeyPressed(Keys.E, true))
                     {
                         Attacking = true;
+                        StateOfGame.NotifyEvent(new GameplayEvents.PlayerAttacks());
                     }
 
                 }
@@ -183,6 +191,7 @@ namespace JourneyThroughTheMountain
                         velocity = Vector2.Zero;
                         worldLocation.Y += (float)(moveScale * gameTime.ElapsedGameTime.TotalSeconds);
                         onLadder = false;
+                        StateOfGame.NotifyEvent(new GameplayEvents.PlayerClimbs());
                     }
 
 
@@ -197,6 +206,7 @@ namespace JourneyThroughTheMountain
                         newAnimation = "Climbing";
                         worldLocation.Y -= (float)(moveScale * gameTime.ElapsedGameTime.TotalSeconds);
                         onLadder = false;
+                        StateOfGame.NotifyEvent(new GameplayEvents.PlayerClimbs());
                     }
                 }
                 else if (TileMap.CellCodeValue(TileMap.GetCellByPixelX((int)WorldLocation.X) + 1, TileMap.GetCellByPixelY((int)WorldLocation.Y)) == "LADDER" && !keyState.IsKeyDown(Keys.S))
@@ -256,6 +266,16 @@ namespace JourneyThroughTheMountain
                 {
                     PlayAnimation(newAnimation);
                 }
+            }else if (dead)
+            {
+                if (animations[currentAnimation].FinishedPlaying)
+                {
+                    CanRevive = true;
+                }
+                else
+                {
+                    CanRevive = false;
+                }
             }
 
             velocity += fallSpeed;
@@ -287,6 +307,7 @@ namespace JourneyThroughTheMountain
 
         public void Kill()
         {
+            StateOfGame.NotifyEvent(new GameplayEvents.PlayerDies());
             PlayAnimation("Die");
             LivesRemaining--;
             velocity.X = 0;
@@ -334,6 +355,7 @@ namespace JourneyThroughTheMountain
 
         public void Revive()
         {
+            Health = 10;
             PlayAnimation("idle");
             dead = false;
         }
@@ -346,15 +368,18 @@ namespace JourneyThroughTheMountain
                 case GameplayEvents.PlayerFallDamage m:
                     if (m.Damage > 0)
                     {
+                        StateOfGame.NotifyEvent(new GameplayEvents.PlayerFallDamage(0));
                         TakeDamage(m.Damage);
                     }
                     break;
                 case GameplayEvents.PlayerCoinPickupEvent m:
+                    StateOfGame.NotifyEvent(new GameplayEvents.PlayerCoinPickupEvent());
                     score++;
                     break;
                 case GameplayEvents.DamageDealt m:
                     if (m.Damage > 0)
                     {
+                        StateOfGame.NotifyEvent(new GameplayEvents.PlayerDealtDamage());
                         TakeDamage(m.Damage);
                         KnockBack();
                     }
@@ -369,15 +394,30 @@ namespace JourneyThroughTheMountain
         public void TakeDamage(IGameObjectWithDamage o)
         {
             Health -= o.Damage;
-            animations[currentAnimation].Tint = Color.Red;
-            KnockBack();
+            if (Health <= 0)
+            {
+                Kill();
+            }
+            else
+            {
+                animations[currentAnimation].Tint = Color.Red;
+                KnockBack();
+            }
             
         }
 
         public void TakeDamage(int Amount)
         {
             Health -= Amount;
-            animations[currentAnimation].Tint = Color.Red;
+            if (Health <= 0)
+            {
+                Kill();
+            }
+            else
+            {
+                animations[currentAnimation].Tint = Color.Red;
+            }
+           
             
         }
 

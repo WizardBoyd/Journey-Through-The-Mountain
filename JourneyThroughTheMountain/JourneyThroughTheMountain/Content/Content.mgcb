@@ -1760,6 +1760,54 @@
 /processorParam:TextureFormat=Color
 /build:PlatformTiles.png
 
+#begin Sounds/BackgroundMusic/RelaxingMusic.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/BackgroundMusic/RelaxingMusic.wav
+
+#begin Sounds/SoundEffects/AxeSwing.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/AxeSwing.wav
+
+#begin Sounds/SoundEffects/FallDamge.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/FallDamge.wav
+
+#begin Sounds/SoundEffects/HitByEnemy.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/HitByEnemy.wav
+
+#begin Sounds/SoundEffects/Pickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/Pickup.wav
+
+#begin Sounds/SoundEffects/PlayerDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/PlayerDeath.wav
+
+#begin Sounds/SoundEffects/Talking.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/Talking.wav
+
+#begin Sounds/SoundEffects/TalkingBetter.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SoundEffects/TalkingBetter.wav
+
 #begin Splash screen.png
 /importer:TextureImporter
 /processor:TextureProcessor

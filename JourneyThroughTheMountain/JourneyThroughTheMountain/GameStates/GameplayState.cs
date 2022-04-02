@@ -15,6 +15,15 @@ namespace JourneyThroughTheMountain.GameStates
         private const string BackGroundTexture = @"Backgrounds/Cavern";
         private const string TileSet = @"Tiles/Tileset";
 
+        private const string RelaxingLevelMusic = @"Sounds/BackgroundMusic/RelaxingMusic";
+        private const string TalkingSFX = @"Sounds/SoundEffects/TalkingBetter";
+        private const string PickupSnowflake = @"Sounds/SoundEffects/Pickup";
+
+        private const string AxeSwing = @"Sounds/SoundEffects/AxeSwing";
+        private const string PlayerDeath = @"Sounds/SoundEffects/PlayerDeath";
+        private const string PlayerHitByEnemy = @"Sounds/SoundEffects/HitByEnemy";
+        private const string FallDamge = @"Sounds/SoundEffects/FallDamge";
+
         private Vector2 ScorePosition = new Vector2(20, 580);
         Vector2 livesPosition = new Vector2(600, 580);
 
@@ -44,6 +53,26 @@ namespace JourneyThroughTheMountain.GameStates
 
             Background = LoadTexture(BackGroundTexture);
 
+            var Track1 = LoadSound(RelaxingLevelMusic).CreateInstance();
+
+            var Talking = LoadSound(TalkingSFX);
+            var PlayerAttack = LoadSound(AxeSwing);
+            var FallD = LoadSound(FallDamge);
+            var PlayerDeathSFX = LoadSound(PlayerDeath);
+            var PlayerTakeDamageSFX = LoadSound(PlayerHitByEnemy);
+            var PlayerPicksUpCoin = LoadSound(PickupSnowflake);
+
+            _soundManager.RegisterSound(new GameplayEvents.PlayerCoinPickupEvent(), PlayerPicksUpCoin, 0.4f, 0.5f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerDealtDamage(), PlayerTakeDamageSFX, 0.4f, 0.1f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerDies(), PlayerDeathSFX, 0.4f, 0.1f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerFallDamage(0), FallD, 0.4f, 0.1f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerAttacks(), PlayerAttack, 0.4f, 0.1f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.NPCTalk(), Talking, 0.4f, 0.1f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerTalk(), Talking, 0.4f, -0.2f, 0.0f);
+            
+
+            _soundManager.SetSoundTrack(new List<Microsoft.Xna.Framework.Audio.SoundEffectInstance>() { Track1 });
+
             Camera.WorldRectangle = new Rectangle(0, 0, 160 * 48, 12 * 48);
             Camera.Position = Vector2.Zero;
             Camera.ViewPortWidth = 800;
@@ -52,7 +81,7 @@ namespace JourneyThroughTheMountain.GameStates
 
             pericles8 = _contentManager.Load<SpriteFont>(@"Pericles7");
             
-            MainCharacter = new Player(_contentManager);
+            MainCharacter = new Player(_contentManager, this);
             LevelManager.Initialize(_contentManager, MainCharacter, pericles8);
             startNewGame();
 
@@ -74,11 +103,28 @@ namespace JourneyThroughTheMountain.GameStates
             {
                 if (MainCharacter.LivesRemaining > 0)
                 {
-                    LevelManager.ReloadLevel();
+                    if (MainCharacter.CanRevive)
+                    {
+                        MainCharacter.Revive();
+                        LevelManager.ReloadLevel();
+                    }
+                    
                 }
                 else
                 {
                     //SwitchState
+                }
+            }
+            if (LevelManager.Talker != null && LevelManager.Text != "")
+            {
+                if (LevelManager.TalkSFXPlay)
+                {
+                    NotifyEvent(new GameplayEvents.PlayerTalk());
+                    LevelManager.TalkSFXPlay = false;
+                }else if (LevelManager.TalkSFXPlayNPC)
+                {
+                    NotifyEvent(new GameplayEvents.NPCTalk());
+                    LevelManager.TalkSFXPlayNPC = false;
                 }
             }
         }

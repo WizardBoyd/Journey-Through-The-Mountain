@@ -36,6 +36,8 @@ namespace JourneyThroughTheMountain
 
         public static string Text;
         public static GameObject Talker;
+        public static bool TalkSFXPlayNPC;
+        public static bool TalkSFXPlay;
         #endregion
 
         #region Properties
@@ -315,6 +317,7 @@ namespace JourneyThroughTheMountain
             if (Text != "" && Talker != null)
             {
                 Rectangle position = Camera.WorldToScreen(Talker.WorldRectangle);
+                
                 spriteBatch.DrawString(spriteFont, Text, new Vector2(position.X, position.Y) , Color.White);
             }
 

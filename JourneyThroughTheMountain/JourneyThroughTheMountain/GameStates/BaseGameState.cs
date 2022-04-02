@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using JourneyThroughTheMountain.Input;
 using JourneyThroughTheMountain.GameObjects;
+using JourneyThroughTheMountain.Sound;
 
 namespace JourneyThroughTheMountain.GameStates
 {
@@ -48,7 +49,7 @@ namespace JourneyThroughTheMountain.GameStates
         {
            
             UpdateGameState(Time);
-            //soundmanger play
+            _soundManager.PlaySoundTrack();
         }
 
         protected Texture2D LoadTexture(String textureName)
@@ -73,7 +74,7 @@ namespace JourneyThroughTheMountain.GameStates
             OnStateSwitched?.Invoke(this, gameState);
         }
 
-        protected void NotifyEvent(BaseGameStateEvent gameEvent)
+        public void NotifyEvent(BaseGameStateEvent gameEvent)
         {
             OnEventNotification?.Invoke(this, gameEvent);
             foreach (var item in _GameObjects)
@@ -81,7 +82,7 @@ namespace JourneyThroughTheMountain.GameStates
                 //NotifyGameObjects This Way
             }
 
-            //SoundManager Notfiy
+            _soundManager.OnNotify(gameEvent);
         }
 
         protected void AddGameObject(BaseGameObject GObject)

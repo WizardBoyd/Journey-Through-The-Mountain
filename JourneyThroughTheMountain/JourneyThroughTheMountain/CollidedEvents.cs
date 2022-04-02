@@ -49,11 +49,14 @@ namespace JourneyThroughTheMountain
                 {
                     if (linearStroyObjects[current].AIspeaking)
                     {
+                        LevelManager.TalkSFXPlayNPC = true;
                         LevelManager.Talker = person1;
                     }
                     else
                     {
+                        LevelManager.TalkSFXPlay = true;
                         LevelManager.Talker = person2;
+                        
                     }
                     LevelManager.Text = linearStroyObjects[current].Text;
                     current++;
