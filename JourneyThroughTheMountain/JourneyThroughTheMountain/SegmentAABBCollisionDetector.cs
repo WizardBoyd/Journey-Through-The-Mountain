@@ -16,12 +16,14 @@ namespace JourneyThroughTheMountain
             _passiveObject = passiveObject;
         }
 
-        public void DetectCollisions(Segment segment, Action<A> collisionHandler)
+        public bool DetectCollisions(Segment segment, Action<A> collisionHandler)
         {
             if (DetectCollision(_passiveObject, segment))
             {
                 collisionHandler(_passiveObject);
+                return true;
             }
+            return false;
         }
 
 

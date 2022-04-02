@@ -19,6 +19,7 @@ namespace JourneyThroughTheMountain.Entities
        public System.Timers.Timer AttackTimer = new System.Timers.Timer(5000);
         public bool CanAttack = true;
         private bool Attacking = false;
+        public bool Move = true;
 
 
         public Segment Raycast
@@ -81,7 +82,7 @@ namespace JourneyThroughTheMountain.Entities
 
             Vector2 oldlocation = worldLocation;
 
-            if (!Dead)
+            if (!Dead && Move)
             {
                 velocity = new Vector2(0, velocity.Y);
 
@@ -101,15 +102,20 @@ namespace JourneyThroughTheMountain.Entities
             else
             {
                 //Enabled = false;
+                velocity = Vector2.Zero;
             }
 
             base.Update(gameTime);
             if (!Dead)
             {
-                if (oldlocation == WorldLocation)
+                if (Move)
                 {
-                    FacingLeft = !FacingLeft;
+                    if (oldlocation == WorldLocation)
+                    {
+                        FacingLeft = !FacingLeft;
+                    }
                 }
+           
           
             }
             else

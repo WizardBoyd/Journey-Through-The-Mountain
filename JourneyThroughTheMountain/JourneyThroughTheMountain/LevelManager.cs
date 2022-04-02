@@ -410,17 +410,25 @@ namespace JourneyThroughTheMountain
 
             foreach (Entities.Enemy enemy in enemies)
             {
-                EnemyRaycast.DetectCollisions(enemy.Raycast, (player) =>
+                if (EnemyRaycast.DetectCollisions(enemy.Raycast, (player) =>
                 {
                     if (enemy.CanAttack && enemy.Enabled)
                     {
                         enemy.FireWeapon();
                         enemy.CanAttack = false;
                         enemy.AttackTimer.Start();
+
                         player.OnNotify(new GameplayEvents.DamageDealt(enemy.Damage));
                     }
-                    
-                });
+
+                }))
+                {
+                    enemy.Move = false;
+                }
+                else
+                {
+                    enemy.Move = true;
+                }
             }
 
        
