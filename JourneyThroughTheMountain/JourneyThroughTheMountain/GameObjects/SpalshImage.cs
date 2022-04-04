@@ -10,6 +10,7 @@ namespace JourneyThroughTheMountain.GameObjects
         public SplashImage(Texture2D texture)
         {
             _texture = texture;
+            
         }
     }
 }

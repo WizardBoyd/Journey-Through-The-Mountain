@@ -289,6 +289,18 @@
 /processorParam:TextureFormat=Color
 /build:Backgrounds/Cavern.png
 
+#begin Backgrounds/MenuScreenBackGround.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Backgrounds/MenuScreenBackGround.png
+
 #begin CastleTilemap.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1766,6 +1778,12 @@
 /processorParam:Quality=Best
 /build:Sounds/BackgroundMusic/RelaxingMusic.wav
 
+#begin Sounds/BackgroundMusic/WindBlowing.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/BackgroundMusic/WindBlowing.wav
+
 #begin Sounds/SoundEffects/AxeSwing.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -2551,4 +2569,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tiles/Tileset.png
+
+#begin UI/Button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Button.png
+
+#begin UI/ButtonSelected.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ButtonSelected.png
 

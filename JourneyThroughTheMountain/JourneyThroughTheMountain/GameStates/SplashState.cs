@@ -11,13 +11,21 @@ namespace JourneyThroughTheMountain.GameStates
 {
     public class SplashState : BaseGameState
     {
+
+        public SplashState()
+        {
+            _desktop = new Myra.Graphics2D.UI.Desktop();
+        }
+
         public override void HandleInput(GameTime time)
         {
             InputManager.GetCommands(cmd =>
             {
                 if (cmd is SplashInputCommands.GameSelect)
                 {
-                    SwitchState(new GameplayState(800,720));
+                    //SwitchState(new GameplayState(800,720));
+                    NotifyEvent(new BaseGameStateEvent.MenuUI());
+                    SwitchState(new MenuGameState());
                 }
             });
         }

@@ -9,7 +9,7 @@ namespace JourneyThroughTheMountain.Input.Maps
 {
     class GamePlayInputMapper: BaseInputMapper
     {
-
+      
         KeyboardState keyboardCurrent;
         KeyboardState keyboardPrevious;
 
@@ -24,9 +24,9 @@ namespace JourneyThroughTheMountain.Input.Maps
             var commands = new List<GamePlayInputCommands>();
             keyboardCurrent = state;
 
-            if (keyboardCurrent.IsKeyDown(Keys.Escape))
+            if (IsKeyPressed(Keys.Escape,true))
             {
-                //PauseGame
+                commands.Add(new GamePlayInputCommands.GamePause());
             }
 
             if (keyboardCurrent.IsKeyDown(Keys.Left))
@@ -59,6 +59,8 @@ namespace JourneyThroughTheMountain.Input.Maps
             {
                 commands.Add(new GamePlayInputCommands.PlayerClimbsUp());
             }
+
+            keyboardPrevious = keyboardCurrent;
 
             return commands;
 

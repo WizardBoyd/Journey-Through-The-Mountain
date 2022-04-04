@@ -108,6 +108,7 @@ namespace JourneyThroughTheMountain
             enabled = true;
             codeBasedBlocks = false;
             PlayAnimation("idle");
+            
             Damage = 2;
         }
         #endregion

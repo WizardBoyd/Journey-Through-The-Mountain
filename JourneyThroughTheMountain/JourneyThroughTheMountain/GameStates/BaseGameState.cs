@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Audio;
 using JourneyThroughTheMountain.Input;
 using JourneyThroughTheMountain.GameObjects;
 using JourneyThroughTheMountain.Sound;
+using Myra.Graphics2D.UI;
 
 namespace JourneyThroughTheMountain.GameStates
 {
@@ -24,6 +25,8 @@ namespace JourneyThroughTheMountain.GameStates
         protected SoundManager _soundManager = new SoundManager();
 
         private readonly List<BaseGameObject> _GameObjects = new List<BaseGameObject>();
+
+        public Desktop _desktop;
 
         protected InputManager InputManager { get; set; }
 

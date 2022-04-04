@@ -3,6 +3,8 @@ using JourneyThroughTheMountain.Input.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
+using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,6 +26,13 @@ namespace JourneyThroughTheMountain.GameStates
         private const string PlayerHitByEnemy = @"Sounds/SoundEffects/HitByEnemy";
         private const string FallDamge = @"Sounds/SoundEffects/FallDamge";
 
+        private const string Button = @"UI/Button";
+        private const string ButtonSelected = @"UI/ButtonSelected";
+
+        
+
+        private bool Paused;
+
         private Vector2 ScorePosition = new Vector2(20, 580);
         Vector2 livesPosition = new Vector2(600, 580);
 
@@ -33,17 +42,39 @@ namespace JourneyThroughTheMountain.GameStates
 
         private Player MainCharacter;
 
-        public GameplayState(int Height, int width)
+        private float MasterVolume;
+        private float PitchVolume;
+        private float PanVolume;
+
+        public GameplayState(int Height, int width, float _MasterVolume, float _PitchVolume, float _PanVolume)
         {
             _viewportHeight = Height;
             _viewportWidth = width;
+            MasterVolume = _MasterVolume / 100f;
+            PitchVolume = _PitchVolume / 100f;
+            PanVolume = _PanVolume/ 100f;
+            _desktop = new Desktop();
         }
 
         public override void HandleInput(GameTime time)
         {
             InputManager.GetCommands(cmd =>
             {
-               
+                if (cmd is GamePlayInputCommands.GamePause)
+                {
+                    _desktop.Root.Enabled = !_desktop.Root.Enabled;
+                    Paused = !Paused;
+                    if (Paused)
+                    {
+                        _desktop.Root.Opacity = 1;
+                        NotifyEvent(new BaseGameStateEvent.MenuUI());
+                    }
+                    else
+                    {
+                        _desktop.Root.Opacity = 0;
+                        NotifyEvent(new BaseGameStateEvent.GamePlay());
+                    }
+        }
             });
         }
 
@@ -51,9 +82,87 @@ namespace JourneyThroughTheMountain.GameStates
         {
             TileMap.Initialize(LoadTexture(TileSet));
 
+            _desktop = new Desktop();
+
+            var PauseScreen = new VerticalStackPanel()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = _viewportWidth,
+                Height = _viewportHeight,
+                ZIndex = 3
+            };
+
+            var SaveTextButton = new TextButton()
+            {
+                Background = new TextureRegion(LoadTexture(Button)),
+                Height = 180,
+                Width = 320,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                OverBackground = new TextureRegion(LoadTexture(ButtonSelected)),
+                Text = "Save Game",
+                ZIndex = 3
+            };
+
+            SaveTextButton.TouchDown += (s, a) =>
+            {
+                //Implement save logic
+            };
+
+            var MainMenuTextButton = new TextButton()
+            {
+                Background = new TextureRegion(LoadTexture(Button)),
+                Height = 180,
+                Width = 320,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                OverBackground = new TextureRegion(LoadTexture(ButtonSelected)),
+                Text = "To Main Menu",
+                ZIndex = 3
+            };
+
+            MainMenuTextButton.TouchDown += (s, e) =>
+            {
+                SwitchState(new MenuGameState());
+            };
+
+            var ResumeTextButton = new TextButton()
+            {
+                Background = new TextureRegion(LoadTexture(Button)),
+                Height = 180,
+                Width = 320,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                OverBackground = new TextureRegion(LoadTexture(ButtonSelected)),
+                Text = "Resume Game",
+                ZIndex = 3
+            };
+
+            ResumeTextButton.TouchDown += (s, a) =>
+            {
+                _desktop.Root.Enabled = false;
+                Paused = false;
+                _desktop.Root.Opacity = 0;
+                NotifyEvent(new BaseGameStateEvent.GamePlay());
+
+            };
+
+            PauseScreen.Widgets.Add(ResumeTextButton);
+            PauseScreen.Widgets.Add(SaveTextButton);
+            PauseScreen.Widgets.Add(MainMenuTextButton);
+
+          
+
+            _desktop.Root = PauseScreen;
+            _desktop.Root.Opacity = 0;
+            _desktop.Root.ZIndex = 3;
+            _desktop.Root.Enabled = false;
+
+           
+
             Background = LoadTexture(BackGroundTexture);
 
             var Track1 = LoadSound(RelaxingLevelMusic).CreateInstance();
+
+            Track1.Volume = MasterVolume;
 
             var Talking = LoadSound(TalkingSFX);
             var PlayerAttack = LoadSound(AxeSwing);
@@ -62,13 +171,13 @@ namespace JourneyThroughTheMountain.GameStates
             var PlayerTakeDamageSFX = LoadSound(PlayerHitByEnemy);
             var PlayerPicksUpCoin = LoadSound(PickupSnowflake);
 
-            _soundManager.RegisterSound(new GameplayEvents.PlayerCoinPickupEvent(), PlayerPicksUpCoin, 0.4f, 0.5f, 0.0f);
-            _soundManager.RegisterSound(new GameplayEvents.PlayerDealtDamage(), PlayerTakeDamageSFX, 0.4f, 0.1f, 0.0f);
-            _soundManager.RegisterSound(new GameplayEvents.PlayerDies(), PlayerDeathSFX, 0.4f, 0.1f, 0.0f);
-            _soundManager.RegisterSound(new GameplayEvents.PlayerFallDamage(0), FallD, 0.4f, 0.1f, 0.0f);
-            _soundManager.RegisterSound(new GameplayEvents.PlayerAttacks(), PlayerAttack, 0.4f, 0.1f, 0.0f);
-            _soundManager.RegisterSound(new GameplayEvents.NPCTalk(), Talking, 0.4f, 0.1f, 0.0f);
-            _soundManager.RegisterSound(new GameplayEvents.PlayerTalk(), Talking, 0.4f, -0.2f, 0.0f);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerCoinPickupEvent(), PlayerPicksUpCoin, 0.4f * MasterVolume, 0.5f * PitchVolume, PanVolume);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerDealtDamage(), PlayerTakeDamageSFX, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerDies(), PlayerDeathSFX, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerFallDamage(0), FallD, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerAttacks(), PlayerAttack, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
+            _soundManager.RegisterSound(new GameplayEvents.NPCTalk(), Talking, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
+            _soundManager.RegisterSound(new GameplayEvents.PlayerTalk(), Talking, 0.4f * MasterVolume, -0.2f * PitchVolume, PanVolume);
             
 
             _soundManager.SetSoundTrack(new List<Microsoft.Xna.Framework.Audio.SoundEffectInstance>() { Track1 });
@@ -97,36 +206,41 @@ namespace JourneyThroughTheMountain.GameStates
 
         public override void UpdateGameState(GameTime time)
         {
-            MainCharacter.Update(time);
-            LevelManager.Update(time);
-            if (MainCharacter.Dead)
+            if (!Paused)
             {
-                if (MainCharacter.LivesRemaining > 0)
+                MainCharacter.Update(time);
+                LevelManager.Update(time);
+                if (MainCharacter.Dead)
                 {
-                    if (MainCharacter.CanRevive)
+                    if (MainCharacter.LivesRemaining > 0)
                     {
-                        MainCharacter.Revive();
-                        LevelManager.ReloadLevel();
+                        if (MainCharacter.CanRevive)
+                        {
+                            MainCharacter.Revive();
+                            LevelManager.ReloadLevel();
+                        }
+
                     }
-                    
+                    else
+                    {
+                        //SwitchState
+                    }
                 }
-                else
+                if (LevelManager.Talker != null && LevelManager.Text != "")
                 {
-                    //SwitchState
+                    if (LevelManager.TalkSFXPlay)
+                    {
+                        NotifyEvent(new GameplayEvents.PlayerTalk());
+                        LevelManager.TalkSFXPlay = false;
+                    }
+                    else if (LevelManager.TalkSFXPlayNPC)
+                    {
+                        NotifyEvent(new GameplayEvents.NPCTalk());
+                        LevelManager.TalkSFXPlayNPC = false;
+                    }
                 }
             }
-            if (LevelManager.Talker != null && LevelManager.Text != "")
-            {
-                if (LevelManager.TalkSFXPlay)
-                {
-                    NotifyEvent(new GameplayEvents.PlayerTalk());
-                    LevelManager.TalkSFXPlay = false;
-                }else if (LevelManager.TalkSFXPlayNPC)
-                {
-                    NotifyEvent(new GameplayEvents.NPCTalk());
-                    LevelManager.TalkSFXPlayNPC = false;
-                }
-            }
+           
         }
 
         protected override void SetupInputManager()
@@ -136,6 +250,8 @@ namespace JourneyThroughTheMountain.GameStates
 
         public override void Render(SpriteBatch spriteBatch)
         {
+        
+            
             TileMap.Draw(spriteBatch);
             MainCharacter.Draw(spriteBatch);
             LevelManager.Draw(spriteBatch);
@@ -148,6 +264,8 @@ namespace JourneyThroughTheMountain.GameStates
                 livesPosition,
                 Color.White);
             spriteBatch.Draw(Background, Camera.WorldToScreen(Camera.ViewPort), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
+            
+            
         }
     }
 }

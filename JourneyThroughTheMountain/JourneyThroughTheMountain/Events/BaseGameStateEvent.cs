@@ -10,6 +10,10 @@ namespace JourneyThroughTheMountain
         public class Nothing: BaseGameStateEvent { }
         public class GameQuit : BaseGameStateEvent { }
 
+        public class GamePlay: BaseGameStateEvent { }
+
+        public class MenuUI : BaseGameStateEvent { }
+
         public class GameTick: BaseGameStateEvent { }
 
     }

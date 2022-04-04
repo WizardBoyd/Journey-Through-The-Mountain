@@ -8,6 +8,8 @@ using System.IO;
 using System;
 using CommonClasses;
 using JourneyThroughTheMountain.GameStates;
+using Myra;
+using Myra.Graphics2D.UI;
 
 namespace JourneyThroughTheMountain
 {
@@ -18,6 +20,7 @@ namespace JourneyThroughTheMountain
         private BaseGameState _CurrentGameState;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+       
 
         private RenderTarget2D _RenderTarget;
         private Rectangle _renderScaleRectangle;
@@ -27,6 +30,14 @@ namespace JourneyThroughTheMountain
         private float _DesignedResolutionAspectRatio;
 
         private BaseGameState _FirstGameState;
+
+        #region Globals
+
+        public static float MasterVolume;
+        public static float PitchVolume;
+        public static float PanVolume;
+
+        #endregion
         //
 
 
@@ -112,8 +123,11 @@ namespace JourneyThroughTheMountain
         /// </summary>
         protected override void LoadContent()
         {
+            MyraEnvironment.Game = this;
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
+            spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
 
             SwitchGameState(_FirstGameState);
 
@@ -177,6 +191,12 @@ namespace JourneyThroughTheMountain
             {
                 case BaseGameStateEvent.GameQuit _:
                     Exit();
+                    break;
+                case BaseGameStateEvent.MenuUI _:
+                    IsMouseVisible = true;
+                    break;
+                case BaseGameStateEvent.GamePlay _:
+                    IsMouseVisible = false;
                     break;
                 default:
                     break;
@@ -332,7 +352,7 @@ namespace JourneyThroughTheMountain
 
             GraphicsDevice.SetRenderTarget(_RenderTarget);
             GraphicsDevice.Clear(Color.Black);
-
+            
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             _CurrentGameState.Render(spriteBatch);
@@ -348,6 +368,7 @@ namespace JourneyThroughTheMountain
             spriteBatch.Draw(_RenderTarget, _renderScaleRectangle, Color.White);
 
             spriteBatch.End();
+            _CurrentGameState._desktop.Render();
 
             base.Draw(gameTime);
         }
