@@ -369,6 +369,7 @@ namespace JourneyThroughTheMountain
 
             spriteBatch.End();
             _CurrentGameState._desktop.Render();
+            _CurrentGameState.GameGUI.Render();
 
             base.Draw(gameTime);
         }

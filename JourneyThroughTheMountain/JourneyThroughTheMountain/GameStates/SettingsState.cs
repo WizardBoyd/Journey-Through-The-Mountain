@@ -17,6 +17,7 @@ namespace JourneyThroughTheMountain.GameStates
        public SettingsState()
         {
             _desktop = new Desktop();
+            GameGUI = new Desktop();
         }
 
         private const string Background = @"Backgrounds/MenuScreenBackGround";

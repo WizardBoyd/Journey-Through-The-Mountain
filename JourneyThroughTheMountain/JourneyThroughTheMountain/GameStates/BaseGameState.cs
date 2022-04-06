@@ -27,7 +27,7 @@ namespace JourneyThroughTheMountain.GameStates
         private readonly List<BaseGameObject> _GameObjects = new List<BaseGameObject>();
 
         public Desktop _desktop;
-
+        public Desktop GameGUI;
         protected InputManager InputManager { get; set; }
 
         public void Initialize(ContentManager contentManager, int ViewportWidth, int ViewportHeight)

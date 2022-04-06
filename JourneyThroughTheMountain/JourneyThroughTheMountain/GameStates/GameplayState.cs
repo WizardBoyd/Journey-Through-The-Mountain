@@ -45,6 +45,7 @@ namespace JourneyThroughTheMountain.GameStates
         private float MasterVolume;
         private float PitchVolume;
         private float PanVolume;
+        
 
 
 
@@ -56,6 +57,7 @@ namespace JourneyThroughTheMountain.GameStates
             PitchVolume = _PitchVolume / 100f;
             PanVolume = _PanVolume/ 100f;
             _desktop = new Desktop();
+            GameGUI = new Desktop();
         }
 
         public override void HandleInput(GameTime time)
@@ -91,8 +93,31 @@ namespace JourneyThroughTheMountain.GameStates
         public override void LoadContent()
         {
             TileMap.Initialize(LoadTexture(TileSet));
-
+            GameGUI = new Desktop();
             _desktop = new Desktop();
+
+            var Grid = new Grid
+            {
+                ShowGridLines = true
+            };
+
+            for (int i = 0; i < 5; i++)
+                Grid.ColumnsProportions.Add(new Proportion());
+
+            for (int i = 0; i < 5; i++)
+                Grid.RowsProportions.Add(new Proportion());
+
+            var HealthBar = new HorizontalProgressBar
+            {
+                Width = 160,
+                Height = 50,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                GridRow = 2,
+                GridColumn = 1
+
+                
+            };
 
             var PauseScreen = new VerticalStackPanel()
             {
@@ -100,7 +125,7 @@ namespace JourneyThroughTheMountain.GameStates
                 VerticalAlignment = VerticalAlignment.Center,
                 Width = _viewportWidth,
                 Height = _viewportHeight,
-                ZIndex = 3
+                ZIndex = 3,
             };
 
             var SaveTextButton = new TextButton()
@@ -154,14 +179,17 @@ namespace JourneyThroughTheMountain.GameStates
                 NotifyEvent(new BaseGameStateEvent.GamePlay());
 
             };
-
+            
             PauseScreen.Widgets.Add(ResumeTextButton);
             PauseScreen.Widgets.Add(SaveTextButton);
             PauseScreen.Widgets.Add(MainMenuTextButton);
+            Grid.Widgets.Add(HealthBar);
+            
 
-          
 
+            GameGUI.Root = Grid;
             _desktop.Root = PauseScreen;
+
             _desktop.Root.Opacity = 0;
             _desktop.Root.ZIndex = 3;
             _desktop.Root.Enabled = false;

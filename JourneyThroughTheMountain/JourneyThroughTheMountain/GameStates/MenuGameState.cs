@@ -27,6 +27,7 @@ namespace JourneyThroughTheMountain.GameStates
         public MenuGameState()
         {
             _desktop = new Desktop();
+            GameGUI = new Desktop();
         }
 
         public override void HandleInput(GameTime time)
@@ -37,6 +38,7 @@ namespace JourneyThroughTheMountain.GameStates
         public override void LoadContent()
         {
             _desktop = new Desktop();
+            GameGUI = new Desktop();
             var Windblowing = LoadSound(HowlingWind).CreateInstance();
 
             //AddGameObject(new SplashImage(LoadTexture(Background)));

@@ -77,6 +77,7 @@ namespace TileEngine
         #region Public Methods
         public static void Move(Vector2 offset)
         {
+         
             Position += offset;
         }
 

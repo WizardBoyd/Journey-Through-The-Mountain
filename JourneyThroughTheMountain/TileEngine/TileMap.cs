@@ -21,7 +21,7 @@ namespace TileEngine
         public const int TileWidth = 32;
         public const int TileHeight = 32;
         public const int MapWidth = 50;
-        public const int MapHeight = 25;
+        public const int MapHeight = 50;
         public const int MapLayers = 3;
         private const int skyTile = 0;
 
@@ -265,6 +265,17 @@ namespace TileEngine
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 mapCells = (MapSquare[,])formatter.Deserialize(fileStream);
+                mapCells = ResizeArray<MapSquare>(mapCells, MapWidth, MapHeight);
+                for (int x = 0; x < mapCells.GetLength(0); x++)
+                {
+                    for (int y = 0; y < mapCells.GetLength(1); y++)
+                    {
+                        if (mapCells[x,y] == null)
+                        {
+                            mapCells[x, y] = new MapSquare(skyTile, 0, 0, "", true);
+                        }
+                    }
+                }
                 fileStream.Close();
             }
             catch
@@ -303,15 +314,17 @@ namespace TileEngine
                         if ((x >= 0) && (y >= 0) &&
                             (x < MapWidth) && (y < MapHeight))
                         {
-                            spriteBatch.Draw(
-                              tileSheet,
-                              CellScreenRectangle(x, y),
-                              TileSourceRectangle(mapCells[x, y].LayerTiles[z]),
-                              Color.White,
-                              0.0f,
-                              Vector2.Zero,
-                              SpriteEffects.None,
-                              1f - ((float)z * 0.1f));
+
+                                spriteBatch.Draw(
+                             tileSheet,
+                             CellScreenRectangle(x, y),
+                             TileSourceRectangle(mapCells[x, y].LayerTiles[z]),
+                             Color.White,
+                             0.0f,
+                             Vector2.Zero,
+                             SpriteEffects.None,
+                             1f - ((float)z * 0.1f));
+                            
                         }
                     }
 
@@ -363,6 +376,23 @@ namespace TileEngine
         }
         #endregion
 
+        #region Helper
+       static T[,] ResizeArray<T>(T[,] original, int rows, int columns)
+        {
+            var newArray = new T[rows, columns];
+            int minrows = Math.Min(rows, original.GetLength(0));
+            int mincols = Math.Min(columns, original.GetLength(1));
+
+            for (int i = 0; i < minrows; i++)
+            {
+                for (int j = 0; j < mincols; j++)
+                {
+                    newArray[i, j] = original[i, j];
+                }
+            }
+            return newArray;
+        }
+        #endregion
 
 
 

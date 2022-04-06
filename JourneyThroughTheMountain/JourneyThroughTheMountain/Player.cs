@@ -16,7 +16,7 @@ namespace JourneyThroughTheMountain
         public Vector2 fallSpeed = new Vector2(0, 20);
         private Vector2 Climbspeed = new Vector2(0, 10);
         private float moveScale = 180.0f;
-        public float FallTreshold = 10.5f;
+        public float FallTreshold = 12.5f;
         private float LastFallSpeed;
         public bool TakeDamageOnLand;
         private bool dead = false;
@@ -247,7 +247,7 @@ namespace JourneyThroughTheMountain
 
                 if (!onGround)
                 {
-                    checkLevelTransition();
+                    
                     if ((LastFallSpeed - velocity.Y)/gameTime.ElapsedGameTime.TotalSeconds > FallTreshold)
                     {
                         TakeDamageOnLand = true;
@@ -260,6 +260,7 @@ namespace JourneyThroughTheMountain
                     TakeDamageOnLand = false;
                 }
 
+                checkLevelTransition();
 
                 if (currentAnimation == "Jump")
                     newAnimation = "Jump";

@@ -15,6 +15,7 @@ namespace JourneyThroughTheMountain.GameStates
         public SplashState()
         {
             _desktop = new Myra.Graphics2D.UI.Desktop();
+            GameGUI = new Myra.Graphics2D.UI.Desktop();
         }
 
         public override void HandleInput(GameTime time)
