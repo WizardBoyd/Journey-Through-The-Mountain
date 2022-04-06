@@ -27,17 +27,21 @@ namespace JourneyThroughTheMountain
 
         private static List<SnowFlakes> snowFlakes = new List<SnowFlakes>();
         private static List<Entities.Enemy> enemies = new List<Entities.Enemy>();
+        private static List<Entities.MeleeEnemy> MeleeEnemies = new List<MeleeEnemy>();
         private static List<Tree> Trees = new List<Tree>();
         private static List<GameTile> Tiles = new List<GameTile>();
         private static List<EventBox> Events = new List<EventBox>();
         private static Dictionary<string, NPC> NPCs = new Dictionary<string, NPC>();
 
+        private const string E_Button = @"UI/F_button";
      
 
         public static string Text;
         public static GameObject Talker;
         public static bool TalkSFXPlayNPC;
         public static bool TalkSFXPlay;
+        public static bool Display_EButton;
+        private static Texture2D E_button_Texture;
         #endregion
 
         #region Properties
@@ -61,6 +65,7 @@ namespace JourneyThroughTheMountain
             Content = content;
             player = gamePlayer;
             spriteFont = Font;
+            E_button_Texture = content.Load<Texture2D>(E_Button);
             
         }
         #endregion
@@ -124,9 +129,14 @@ namespace JourneyThroughTheMountain
 
             snowFlakes.Clear();
             enemies.Clear();
+            MeleeEnemies.Clear();
             NPCs.Clear();
+            Events.Clear();
+            Trees.Clear();
+            Tiles.Clear();
 
-          
+
+
 
             for (int x = 0; x < TileMap.MapWidth; x++)//THESE ARE IN CELLS NOT PIXELS
             {
@@ -160,6 +170,12 @@ namespace JourneyThroughTheMountain
 
                     }
 
+                    if (TileMap.CellCodeValue(x,y) == "MELEEENEMY")
+                    {
+                        MeleeEnemy E = new MeleeEnemy(Content, x, y);
+                        MeleeEnemies.Add(E);
+                    }
+
                     if (TileMap.CellCodeValue(x,y) == "TREE")
                     {
                         Trees.Add(new Tree(Content, x, y));
@@ -178,7 +194,7 @@ namespace JourneyThroughTheMountain
 
                         if (int.TryParse(code[1], out ET))
                         {
-                            if (code.Length < 2)
+                            if (code.Length <= 2)
                             {
                                 Events.Add(new EventBox(new Rectangle(x * TileMap.TileWidth, y * TileMap.TileHeight, TileMap.TileWidth, TileMap.TileHeight), ET));
                             }
@@ -229,6 +245,10 @@ namespace JourneyThroughTheMountain
             }
 
             foreach (Entities.Enemy enemy in enemies)
+            {
+                enemy.Update(gameTime);
+            }
+            foreach (MeleeEnemy enemy in MeleeEnemies)
             {
                 enemy.Update(gameTime);
             }
@@ -299,6 +319,11 @@ namespace JourneyThroughTheMountain
             foreach (Entities.Enemy enemy in enemies)
                 enemy.Draw(spriteBatch);
 
+            foreach (MeleeEnemy enemy in MeleeEnemies)
+            {
+                enemy.Draw(spriteBatch);
+            }
+
             foreach (Tree tree in Trees)
             {
                 tree.Draw(spriteBatch);
@@ -318,7 +343,14 @@ namespace JourneyThroughTheMountain
             {
                 Rectangle position = Camera.WorldToScreen(Talker.WorldRectangle);
                 
-                spriteBatch.DrawString(spriteFont, Text, new Vector2(position.X, position.Y) , Color.White);
+                spriteBatch.DrawString(spriteFont, Text, new Vector2(position.X, position.Y - 50) , Color.OrangeRed);
+            }
+
+            if (Display_EButton)
+            {
+                Rectangle position = Camera.WorldToScreen(player.WorldRectangle);
+                position.Y = position.Y - 48;
+                spriteBatch.Draw(E_button_Texture, position, Color.White);
             }
 
 
@@ -335,8 +367,11 @@ namespace JourneyThroughTheMountain
 
             AABBCollisionDetector<SnowFlakes, Player> Coin_Collector = new AABBCollisionDetector<SnowFlakes, Player>(snowFlakes);
             AABBCollisionDetector<Entities.Enemy, Player> PlayerRunsIntoEnemy = new AABBCollisionDetector<Entities.Enemy, Player>(enemies);
+            AABBCollisionDetector<MeleeEnemy, Player> PlayerRunsIntoMeleeEnemy = new AABBCollisionDetector<MeleeEnemy, Player>(MeleeEnemies);
             SegmentAABBCollisionDetector<Player> EnemyRaycast = new SegmentAABBCollisionDetector<Player>(player);
-            
+            SegmentAABBCollisionDetector<Player> EnemyMeleeRaycast = new SegmentAABBCollisionDetector<Player>(player);
+
+
 
             if (!player.onGround)
             {
@@ -385,6 +420,7 @@ namespace JourneyThroughTheMountain
             {
                 LevelManager.Talker = null;
                 LevelManager.Text = null;
+                LevelManager.Display_EButton = false;
             }
 
             Coin_Collector.DetectCollisions(player, (Snowflake, P) =>
@@ -411,6 +447,19 @@ namespace JourneyThroughTheMountain
                 }
             });
 
+            PlayerRunsIntoMeleeEnemy.DetectCollisions(player, (enemy, P) =>
+            {
+                if (P.Attacking == true)
+                {
+                    enemy.OnNotify(new GameplayEvents.DamageDealt(P.Damage));
+                    if (enemy.Dead)
+                    {
+                        P.OnNotify(new GameplayEvents.PlayerKilledEnemyEvent());
+
+                    }
+                }
+            });
+
             foreach (Entities.Enemy enemy in enemies)
             {
                 if (EnemyRaycast.DetectCollisions(enemy.Raycast, (player) =>
@@ -426,17 +475,60 @@ namespace JourneyThroughTheMountain
 
                 }))
                 {
+                    enemy.Attacking = true;
                     enemy.Move = false;
                 }
                 else
                 {
+                    enemy.Attacking = false;
                     enemy.Move = true;
                 }
             }
 
-       
+            foreach (MeleeEnemy enemy in MeleeEnemies)
+            {
+                if (EnemyRaycast.DetectCollisions(enemy.Raycast, (player) =>
+                {
+                    if (enemy.CanAttack && enemy.Enabled)
+                    {
+                        enemy.FireWeapon();
+                        enemy.CanAttack = false;
+                        enemy.AttackTimer.Start();
+
+                        player.OnNotify(new GameplayEvents.DamageDealt(enemy.Damage));
+                    }
+
+                }))
+                {
+                    enemy.Attacking = true;
+                    enemy.Move = false;
+                }
+                else
+                {
+                    enemy.Attacking = false;
+                    enemy.Move = true;
+                }
+            }
 
 
+
+
+
+        }
+
+        public static void ReloadEnemies()
+        {
+            foreach (Entities.Enemy item in enemies)
+            {
+                item.Kill();
+                item.Revive();
+            }
+
+            foreach (MeleeEnemy item in MeleeEnemies)
+            {
+                item.Kill();
+                item.Revive();
+            }
         }
 
         #endregion

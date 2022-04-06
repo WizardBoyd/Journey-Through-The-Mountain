@@ -220,6 +220,7 @@
     <None Include="bin\Debug\Content\Tiles\Ice\Tileset.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="bin\Debug\Content\Tiles\Ice\Tileset2.xnb" />
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_01.xnb" />
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_02.xnb" />
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_03.xnb" />
@@ -281,6 +282,9 @@
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_59.xnb" />
     <None Include="bin\Debug\Content\Tiles\Ice\Tile_60.xnb" />
     <None Include="bin\Debug\Content\Tiles\Tileset.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="bin\Debug\Content\Tiles\Tileset2.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="mgfxc.deps.json" />
@@ -365,6 +369,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="RawContent\Tileset.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="RawContent\Tileset2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SharpDX.D3DCompiler.dll" />

@@ -51,6 +51,9 @@ namespace JourneyThroughTheMountain
                 case 0:
                     EventType = new CollidedEvents.DialogueEvent();
                     break;
+                case 1:
+                    EventType = new CollidedEvents.PrayEvent();
+                    break;
             }
         }
 
@@ -63,6 +66,10 @@ namespace JourneyThroughTheMountain
                     case CollidedEvents.DialogueEvent m:
                         m.StartDialouge(AssociatedNPC, Triggerer);
                         Triggered = true;
+                        break;
+
+                    case CollidedEvents.PrayEvent m:
+                        LevelManager.Display_EButton = true;
                         break;
                 }
             }

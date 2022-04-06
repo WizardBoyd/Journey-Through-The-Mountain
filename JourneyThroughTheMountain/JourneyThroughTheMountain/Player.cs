@@ -31,6 +31,7 @@ namespace JourneyThroughTheMountain
         static KeyboardState previousstate;
        static KeyboardState CurrentState;
         public BaseGameState StateOfGame;
+        public int MaxHealth = 10;
         //public Rectangle triggercollision;
 
         
@@ -454,7 +455,7 @@ namespace JourneyThroughTheMountain
 
         private void checkLevelTransition()
         {
-            Vector2 centerCell = TileMap.GetCellByPixel(WorldCenter);
+            Vector2 centerCell = TileMap.GetCellByPixel(WorldLocation);
             if (TileMap.CellCodeValue(centerCell).StartsWith("T_"))
             {
                 string[] code = TileMap.CellCodeValue(centerCell).Split('_');
@@ -484,6 +485,11 @@ namespace JourneyThroughTheMountain
             }
 
             return 0;
+        }
+
+        public void Heal()
+        {
+            Health = MaxHealth;
         }
 
         #endregion

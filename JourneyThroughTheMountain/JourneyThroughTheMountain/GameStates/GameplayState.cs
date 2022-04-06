@@ -15,7 +15,7 @@ namespace JourneyThroughTheMountain.GameStates
     class GameplayState : BaseGameState
     {
         private const string BackGroundTexture = @"Backgrounds/Cavern";
-        private const string TileSet = @"Tiles/Tileset";
+        private const string TileSet = @"Tiles/Tileset2";
 
         private const string RelaxingLevelMusic = @"Sounds/BackgroundMusic/RelaxingMusic";
         private const string TalkingSFX = @"Sounds/SoundEffects/TalkingBetter";
@@ -46,6 +46,8 @@ namespace JourneyThroughTheMountain.GameStates
         private float PitchVolume;
         private float PanVolume;
 
+
+
         public GameplayState(int Height, int width, float _MasterVolume, float _PitchVolume, float _PanVolume)
         {
             _viewportHeight = Height;
@@ -75,6 +77,14 @@ namespace JourneyThroughTheMountain.GameStates
                         NotifyEvent(new BaseGameStateEvent.GamePlay());
                     }
         }
+                if (cmd is GamePlayInputCommands.PlayerInteractsWithNPC)
+                {
+                    if (LevelManager.Display_EButton)
+                    {
+                        MainCharacter.Heal();
+                        LevelManager.ReloadEnemies();
+                    }
+                }
             });
         }
 

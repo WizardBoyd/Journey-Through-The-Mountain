@@ -1,0 +1,23 @@
+<ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>1d596c71-bf43-4d95-bbb6-9524abcb5e9d</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>Hey There</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>d16837fa-a38d-4c9f-995b-4bbc7d648f6c</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>why hello</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>27839513-cbf6-4104-84ce-e2f6cf221c35</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>ok bye</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+</ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS>

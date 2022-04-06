@@ -9,17 +9,18 @@ using TileEngine;
 
 namespace JourneyThroughTheMountain.Entities
 {
-    class Enemy : GameObject, IGameObjectWithHealth, IGameObjectWithDamage
+    public class Enemy : GameObject, IGameObjectWithHealth, IGameObjectWithDamage
     {
-
+        public int MaxHealth = 5;
         private Vector2 Fallspeed = new Vector2(0, 20);
         private float WalkSpeed = 60.0f;
         private bool FacingLeft = true;
         public bool Dead = false;
        public System.Timers.Timer AttackTimer = new System.Timers.Timer(5000);
         public bool CanAttack = true;
-        private bool Attacking = false;
+        public bool Attacking = false;
         public bool Move = true;
+        public string newAnimation;
 
 
         public Segment Raycast
@@ -98,6 +99,15 @@ namespace JourneyThroughTheMountain.Entities
                 direction *= WalkSpeed;
                 velocity += direction;
                 velocity += Fallspeed;
+
+                if (animations[currentAnimation].FinishedPlaying)
+                {
+                    newAnimation = "Walking";
+                }
+                if (Attacking)
+                {
+                    newAnimation = "Attack";
+                }
             }
             else
             {
@@ -153,8 +163,9 @@ namespace JourneyThroughTheMountain.Entities
                     if (health < 0)
                     {
                         Kill();
-                        KnockBack();
+                        
                     }
+                    KnockBack();
                     break;
                 default:
                     break;
@@ -178,6 +189,16 @@ namespace JourneyThroughTheMountain.Entities
             Health -= Amount;
             PlayAnimation("Hurt");
             KnockBack();
+        }
+
+        public void Revive()
+        {
+            health = MaxHealth;
+            _boundingboxes.Add(new BoundingBox(new Vector2(0, 0), 52, 48));
+            Move = true;
+            Dead = false;
+            Enabled = true;
+            PlayAnimation("Walking");
         }
 
         public void Kill()

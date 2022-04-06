@@ -39,7 +39,7 @@ namespace LevelEditro
 
         private void LoadImageList()
         {
-            string filepath = Application.StartupPath + @"\RawContent\Tileset.png";
+            string filepath = Application.StartupPath + @"\RawContent\Tileset2.png";
 
             Bitmap tileSheet = new Bitmap(filepath);
 
@@ -103,6 +103,7 @@ namespace LevelEditro
             cboCodeValues.Items.Clear();
             cboCodeValues.Items.Add("Mountain");
             cboCodeValues.Items.Add("Enemy");
+            cboCodeValues.Items.Add("Melee Enemy");
             cboCodeValues.Items.Add("Lethal");
             cboCodeValues.Items.Add("EnemyBlocking");
             cboCodeValues.Items.Add("Start");
@@ -167,6 +168,9 @@ namespace LevelEditro
                     break;
                 case "Enemy":
                     txtNewCode.Text = "ENEMY";
+                    break;
+                case "Melee Enemy":
+                    txtNewCode.Text = "MELEEENEMY";
                     break;
                 case "Lethal":
                     txtNewCode.Text = "DEAD";

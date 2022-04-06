@@ -82,7 +82,7 @@ namespace LevelEditro
             Camera.ViewPortHeight = this.Height;
             Camera.WorldRectangle = new Rectangle(0, 0, TileMap.TileWidth * TileMap.MapWidth, TileMap.TileHeight * TileMap.MapHeight);
 
-            TileMap.Initialize(Editor.Content.Load<Texture2D>(@"Tiles/Tileset"));
+            TileMap.Initialize(Editor.Content.Load<Texture2D>(@"Tiles/Tileset2"));
             TileMap.spriteFont = Editor.Font;
 
 

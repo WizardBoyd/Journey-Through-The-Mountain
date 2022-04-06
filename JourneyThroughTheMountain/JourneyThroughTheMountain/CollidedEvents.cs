@@ -73,5 +73,13 @@ namespace JourneyThroughTheMountain
            
         }
 
+        public class PrayEvent : CollidedEvents
+        {
+
+            public void Pray(Player player)
+            {
+
+            }
+        }
     }
 }

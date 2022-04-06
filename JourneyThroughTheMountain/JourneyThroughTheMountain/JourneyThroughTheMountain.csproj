@@ -34,6 +34,9 @@
     <ProjectReference Include="..\TileEngine\TileEngine.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\bin\DesktopGL\Content\Tiles\Tileset2.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Maps\MAP000.MAP">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
