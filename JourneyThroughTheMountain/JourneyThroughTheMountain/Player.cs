@@ -34,7 +34,7 @@ namespace JourneyThroughTheMountain
         public int MaxHealth = 10;
         //public Rectangle triggercollision;
 
-        
+        public event EventHandler<float> PlayerHealthChanged;
 
         public bool Dead
         {
@@ -358,7 +358,8 @@ namespace JourneyThroughTheMountain
 
         public void Revive()
         {
-            Health = 10;
+            Health = MaxHealth;
+            PlayerHealthChanged?.Invoke(this, (float)Health);
             PlayAnimation("idle");
             dead = false;
         }
@@ -397,12 +398,14 @@ namespace JourneyThroughTheMountain
         public void TakeDamage(IGameObjectWithDamage o)
         {
             Health -= o.Damage;
+            PlayerHealthChanged?.Invoke(this,(float)-o.Damage);
             if (Health <= 0)
             {
                 Kill();
             }
             else
             {
+                
                 animations[currentAnimation].Tint = Color.Red;
                 KnockBack();
             }
@@ -412,6 +415,7 @@ namespace JourneyThroughTheMountain
         public void TakeDamage(int Amount)
         {
             Health -= Amount;
+            PlayerHealthChanged?.Invoke(this, (float)-Amount);
             if (Health <= 0)
             {
                 Kill();
@@ -490,7 +494,11 @@ namespace JourneyThroughTheMountain
 
         public void Heal()
         {
+            
             Health = MaxHealth;
+            PlayerHealthChanged?.Invoke(this, (float)Health);
+
+
         }
 
         #endregion

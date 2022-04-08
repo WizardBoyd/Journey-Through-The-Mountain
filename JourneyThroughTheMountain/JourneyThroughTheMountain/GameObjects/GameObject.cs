@@ -13,14 +13,6 @@ namespace JourneyThroughTheMountain
     {
 
         #region Sub-classes
-        public class GameObjectEventArgs : EventArgs
-        {
-            public int HealthValue;
-            public GameObjectEventArgs(int health)
-            {
-                HealthValue = health;
-            }
-        }
         #endregion
 
         #region Declarations
@@ -54,7 +46,7 @@ namespace JourneyThroughTheMountain
 
         #region Events
 
-        public event EventHandler<GameObjectEventArgs> HealthChanged;
+        public event EventHandler<float> HealthChanged;
 
         public event EventHandler CollidedWithSomething;
 

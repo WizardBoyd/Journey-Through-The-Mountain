@@ -3,6 +3,7 @@ using JourneyThroughTheMountain.Input.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using System;
@@ -28,8 +29,12 @@ namespace JourneyThroughTheMountain.GameStates
 
         private const string Button = @"UI/Button";
         private const string ButtonSelected = @"UI/ButtonSelected";
+        private const string HeartImage = @"UI/HeartLives";
 
-        
+        //UI
+        public HorizontalProgressBar HealthBar;
+        public Label Livesremaining;
+        //END
 
         private bool Paused;
 
@@ -95,6 +100,8 @@ namespace JourneyThroughTheMountain.GameStates
             TileMap.Initialize(LoadTexture(TileSet));
             GameGUI = new Desktop();
             _desktop = new Desktop();
+            #region UIStuff
+
 
             var Grid = new Grid
             {
@@ -107,16 +114,45 @@ namespace JourneyThroughTheMountain.GameStates
             for (int i = 0; i < 5; i++)
                 Grid.RowsProportions.Add(new Proportion());
 
-            var HealthBar = new HorizontalProgressBar
+
+
+            HealthBar = new HorizontalProgressBar
             {
                 Width = 160,
                 Height = 50,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
+                FocusedBackground = new TextureRegion(LoadTexture(Button)),
+                Border = new TextureRegion(LoadTexture(Button)),
+                BorderThickness = new Myra.Graphics2D.Thickness(10, 10),
+                Filler = new SolidBrush(Color.Green),
+                ZIndex = 2
+            };
+
+            var LivesPannel = new VerticalStackPanel
+            {
+                GridRow = 2,
+                GridColumn = 4,
+
+            };
+
+            var HealthPannel = new VerticalStackPanel
+            {
                 GridRow = 2,
                 GridColumn = 1
+            };
 
-                
+            var HealthLabel = new Label
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Text = "Health"
+            };
+
+            Livesremaining = new Label
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
             var PauseScreen = new VerticalStackPanel()
@@ -127,6 +163,15 @@ namespace JourneyThroughTheMountain.GameStates
                 Height = _viewportHeight,
                 ZIndex = 3,
             };
+
+            var LivesImage = new Image
+            {
+               Background = new TextureRegion(LoadTexture(HeartImage)),
+               Width = 80,
+               Height = 80
+            };
+
+
 
             var SaveTextButton = new TextButton()
             {
@@ -179,11 +224,15 @@ namespace JourneyThroughTheMountain.GameStates
                 NotifyEvent(new BaseGameStateEvent.GamePlay());
 
             };
-            
+            LivesPannel.Widgets.Add(LivesImage);
+            LivesPannel.Widgets.Add(Livesremaining);
+            HealthPannel.Widgets.Add(HealthLabel);
+            HealthPannel.Widgets.Add(HealthBar);
             PauseScreen.Widgets.Add(ResumeTextButton);
             PauseScreen.Widgets.Add(SaveTextButton);
             PauseScreen.Widgets.Add(MainMenuTextButton);
-            Grid.Widgets.Add(HealthBar);
+            Grid.Widgets.Add(HealthPannel);
+            Grid.Widgets.Add(LivesPannel);
             
 
 
@@ -193,8 +242,8 @@ namespace JourneyThroughTheMountain.GameStates
             _desktop.Root.Opacity = 0;
             _desktop.Root.ZIndex = 3;
             _desktop.Root.Enabled = false;
+            #endregion
 
-           
 
             Background = LoadTexture(BackGroundTexture);
 
@@ -229,6 +278,7 @@ namespace JourneyThroughTheMountain.GameStates
             pericles8 = _contentManager.Load<SpriteFont>(@"Pericles7");
             
             MainCharacter = new Player(_contentManager, this);
+            HealthBar.Value = MainCharacter.Health * 10;
             LevelManager.Initialize(_contentManager, MainCharacter, pericles8);
             startNewGame();
 
@@ -246,6 +296,7 @@ namespace JourneyThroughTheMountain.GameStates
         {
             if (!Paused)
             {
+                
                 MainCharacter.Update(time);
                 LevelManager.Update(time);
                 if (MainCharacter.Dead)
@@ -293,6 +344,8 @@ namespace JourneyThroughTheMountain.GameStates
             TileMap.Draw(spriteBatch);
             MainCharacter.Draw(spriteBatch);
             LevelManager.Draw(spriteBatch);
+            HealthBar.Value = MainCharacter.Health * 10;
+            Livesremaining.Text = MainCharacter.LivesRemaining.ToString();
             spriteBatch.DrawString(pericles8,
                 "Score" + MainCharacter.Score.ToString(),
                 ScorePosition,
