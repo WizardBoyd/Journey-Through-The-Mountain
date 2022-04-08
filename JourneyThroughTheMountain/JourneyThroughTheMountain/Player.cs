@@ -34,6 +34,11 @@ namespace JourneyThroughTheMountain
         public int MaxHealth = 10;
         //public Rectangle triggercollision;
 
+        public int LevelCameraRightX;
+        public int LevelCameraLeftX;
+        public int LevelCameraTopY;
+        public int LevelCameraBottomY;
+
         public event EventHandler<float> PlayerHealthChanged;
 
         public bool Dead
@@ -379,6 +384,7 @@ namespace JourneyThroughTheMountain
                 case GameplayEvents.PlayerCoinPickupEvent m:
                     StateOfGame.NotifyEvent(new GameplayEvents.PlayerCoinPickupEvent());
                     score++;
+                    
                     break;
                 case GameplayEvents.DamageDealt m:
                     if (m.Damage > 0)
@@ -436,7 +442,7 @@ namespace JourneyThroughTheMountain
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
             int screenLocY = (int)Camera.WorldToScreen(worldLocation).Y;
-
+            //If Camera is intersecting Code value no camera pass
             if (screenLocX > 500)
             {
                 Camera.Move(new Vector2(screenLocX - 500, 0));

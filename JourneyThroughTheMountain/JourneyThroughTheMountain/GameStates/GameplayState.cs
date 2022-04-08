@@ -31,10 +31,14 @@ namespace JourneyThroughTheMountain.GameStates
         private const string ButtonSelected = @"UI/ButtonSelected";
         private const string HeartImage = @"UI/HeartLives";
 
+        private const string SnowflakeImage = @"UI/Pixel_Snowflake";
+
         //UI
         public HorizontalProgressBar HealthBar;
         public Label Livesremaining;
+        public Label Snowflakelabel;
         //END
+
 
         private bool Paused;
 
@@ -136,6 +140,12 @@ namespace JourneyThroughTheMountain.GameStates
 
             };
 
+            var ScorePannel = new VerticalStackPanel
+            {
+                GridRow = 2,
+                GridColumn = 5
+            };
+
             var HealthPannel = new VerticalStackPanel
             {
                 GridRow = 2,
@@ -147,6 +157,13 @@ namespace JourneyThroughTheMountain.GameStates
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 Text = "Health"
+            };
+
+            Snowflakelabel = new Label
+            {
+                Text = "0",
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
             Livesremaining = new Label
@@ -169,6 +186,15 @@ namespace JourneyThroughTheMountain.GameStates
                Background = new TextureRegion(LoadTexture(HeartImage)),
                Width = 80,
                Height = 80
+            };
+
+            var SnowFlakeImage = new Image
+            {
+                Background = new TextureRegion(LoadTexture(SnowflakeImage)),
+                Width = 80,
+                Height = 80,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
 
@@ -224,6 +250,9 @@ namespace JourneyThroughTheMountain.GameStates
                 NotifyEvent(new BaseGameStateEvent.GamePlay());
 
             };
+            ScorePannel.Widgets.Add(SnowFlakeImage);
+            ScorePannel.Widgets.Add(Snowflakelabel);
+
             LivesPannel.Widgets.Add(LivesImage);
             LivesPannel.Widgets.Add(Livesremaining);
             HealthPannel.Widgets.Add(HealthLabel);
@@ -233,6 +262,7 @@ namespace JourneyThroughTheMountain.GameStates
             PauseScreen.Widgets.Add(MainMenuTextButton);
             Grid.Widgets.Add(HealthPannel);
             Grid.Widgets.Add(LivesPannel);
+            Grid.Widgets.Add(ScorePannel);
             
 
 
@@ -299,6 +329,9 @@ namespace JourneyThroughTheMountain.GameStates
                 
                 MainCharacter.Update(time);
                 LevelManager.Update(time);
+                HealthBar.Value = MainCharacter.Health * 10;
+                Snowflakelabel.Text = MainCharacter.Score.ToString();
+                Livesremaining.Text = MainCharacter.LivesRemaining.ToString();
                 if (MainCharacter.Dead)
                 {
                     if (MainCharacter.LivesRemaining > 0)
@@ -344,16 +377,6 @@ namespace JourneyThroughTheMountain.GameStates
             TileMap.Draw(spriteBatch);
             MainCharacter.Draw(spriteBatch);
             LevelManager.Draw(spriteBatch);
-            HealthBar.Value = MainCharacter.Health * 10;
-            Livesremaining.Text = MainCharacter.LivesRemaining.ToString();
-            spriteBatch.DrawString(pericles8,
-                "Score" + MainCharacter.Score.ToString(),
-                ScorePosition,
-                Color.White);
-            spriteBatch.DrawString(pericles8,
-                "Health Remaining" + MainCharacter.Health.ToString(),
-                livesPosition,
-                Color.White);
             spriteBatch.Draw(Background, Camera.WorldToScreen(Camera.ViewPort), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
             
             
