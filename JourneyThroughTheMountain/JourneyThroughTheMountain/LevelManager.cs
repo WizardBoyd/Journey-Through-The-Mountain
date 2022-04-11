@@ -123,6 +123,13 @@ namespace JourneyThroughTheMountain
         #endregion
 
         #region Public Methods
+
+
+        private static void Transition()
+        {
+
+        }
+
         public static void LoadLevel(int levelNumber)
         {
             TileMap.LoadMap((System.IO.FileStream)TitleContainer.OpenStream(@"Content/Maps/MAP" + levelNumber.ToString().PadLeft(3, '0') + ".MAP"));
