@@ -1333,6 +1333,18 @@
 /processorParam:TextureFormat=Color
 /build:EnemyBoss/3 Magic_bear/Magic_bear_walk.png
 
+#begin Fade_Heal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fade_Heal.png
+
 #begin Idle_Run_Jump_SpriteSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

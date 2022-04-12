@@ -75,7 +75,7 @@ namespace JourneyThroughTheMountain.GameStates
             PlayGameTextButton.Text = "Start New Game";
             PlayGameTextButton.TouchDown += (s, e) =>
             {
-                SwitchState(new GameplayState(_viewportHeight, _viewportWidth, Game1.MasterVolume, Game1.PitchVolume, Game1.PanVolume));
+                SwitchState(new TransitionState(new GameplayState(_viewportHeight, _viewportWidth, Game1.MasterVolume, Game1.PitchVolume, Game1.PanVolume)));
             };
 
             VerticalStackPannel.Widgets.Add(PlayGameTextButton);

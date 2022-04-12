@@ -57,7 +57,11 @@ namespace JourneyThroughTheMountain.Sound
 
         internal void RegisterSound(BaseGameStateEvent gameEvent, SoundEffect sound, float Volume, float Pitch, float Pan)
         {
-            _soundBank.Add(gameEvent.GetType(), new SoundBankItem(sound, new SoundAttributes(Volume, Pitch, Pan)));
+            if (!_soundBank.ContainsKey(gameEvent.GetType()))
+            {
+                _soundBank.Add(gameEvent.GetType(), new SoundBankItem(sound, new SoundAttributes(Volume, Pitch, Pan)));
+            }
+          
         }
       
 

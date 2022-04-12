@@ -23,12 +23,13 @@ namespace JourneyThroughTheMountain.GameStates
         protected int _viewportHeight;
         protected int _viewportWidth;
         protected SoundManager _soundManager = new SoundManager();
-
         private readonly List<BaseGameObject> _GameObjects = new List<BaseGameObject>();
 
         public Desktop _desktop;
         public Desktop GameGUI;
         protected InputManager InputManager { get; set; }
+
+        protected event EventHandler<SpriteBatch> DrawEvent;
 
         public void Initialize(ContentManager contentManager, int ViewportWidth, int ViewportHeight)
         {
@@ -83,6 +84,7 @@ namespace JourneyThroughTheMountain.GameStates
             foreach (var item in _GameObjects)
             {
                 //NotifyGameObjects This Way
+                item.OnNotify(gameEvent);
             }
 
             _soundManager.OnNotify(gameEvent);
@@ -108,6 +110,19 @@ namespace JourneyThroughTheMountain.GameStates
                 }
 
                 GObject.Render(spriteBatch);
+            }
+        }
+
+        public virtual void UpdateGameObjects(GameTime time)
+        {
+            foreach (var GObject in _GameObjects)
+            {
+                if (_degub)
+                {
+                  //Debug stuff
+                }
+
+                GObject.Update(time);
             }
         }
 

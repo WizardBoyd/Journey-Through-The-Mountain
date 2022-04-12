@@ -26,7 +26,7 @@ namespace JourneyThroughTheMountain.GameStates
                 {
                     //SwitchState(new GameplayState(800,720));
                     NotifyEvent(new BaseGameStateEvent.MenuUI());
-                    SwitchState(new MenuGameState());
+                    SwitchState(new TransitionState(new MenuGameState()));
                 }
             });
         }

@@ -30,7 +30,7 @@ namespace JourneyThroughTheMountain.GameStates
         private const string Button = @"UI/Button";
         private const string ButtonSelected = @"UI/ButtonSelected";
         private const string HeartImage = @"UI/HeartLives";
-
+        private const string Fade_Image = @"Fade_Heal";
         private const string SnowflakeImage = @"UI/Pixel_Snowflake";
 
         //UI
@@ -48,6 +48,7 @@ namespace JourneyThroughTheMountain.GameStates
         private SpriteFont pericles8;
 
         private Texture2D Background;
+        private Texture2D WhiteSpace;
 
         private Player MainCharacter;
 
@@ -55,7 +56,7 @@ namespace JourneyThroughTheMountain.GameStates
         private float PitchVolume;
         private float PanVolume;
         
-
+        
 
 
         public GameplayState(int Height, int width, float _MasterVolume, float _PitchVolume, float _PanVolume)
@@ -67,6 +68,7 @@ namespace JourneyThroughTheMountain.GameStates
             PanVolume = _PanVolume/ 100f;
             _desktop = new Desktop();
             GameGUI = new Desktop();
+            
         }
 
         public override void HandleInput(GameTime time)
@@ -93,7 +95,9 @@ namespace JourneyThroughTheMountain.GameStates
                     if (LevelManager.Display_EButton)
                     {
                         MainCharacter.Heal();
+                        Flash();
                         LevelManager.ReloadEnemies();
+                        
                     }
                 }
             });
@@ -276,6 +280,8 @@ namespace JourneyThroughTheMountain.GameStates
 
 
             Background = LoadTexture(BackGroundTexture);
+            WhiteSpace = LoadTexture(Fade_Image);
+            
 
             var Track1 = LoadSound(RelaxingLevelMusic).CreateInstance();
 
@@ -328,6 +334,7 @@ namespace JourneyThroughTheMountain.GameStates
             {
                 
                 MainCharacter.Update(time);
+                UpdateGameObjects(time);
                 LevelManager.Update(time);
                 HealthBar.Value = MainCharacter.Health * 10;
                 Snowflakelabel.Text = MainCharacter.Score.ToString();
@@ -339,6 +346,7 @@ namespace JourneyThroughTheMountain.GameStates
                         if (MainCharacter.CanRevive)
                         {
                             MainCharacter.Revive();
+                            Flash();
                             LevelManager.ReloadLevel();
                         }
 
@@ -378,8 +386,14 @@ namespace JourneyThroughTheMountain.GameStates
             MainCharacter.Draw(spriteBatch);
             LevelManager.Draw(spriteBatch);
             spriteBatch.Draw(Background, Camera.WorldToScreen(Camera.ViewPort), null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
+            base.Render(spriteBatch);
             
             
+        }
+
+        private void Flash()
+        {
+            AddGameObject(new GameObjects.SplashImage(WhiteSpace, 0.0f, true, true));
         }
     }
 }

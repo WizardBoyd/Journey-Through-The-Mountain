@@ -10,7 +10,7 @@ namespace JourneyThroughTheMountain.GameObjects
     {
         protected Texture2D _texture;
         protected Texture2D _boundingBoxTexture;
-
+        protected float Transperancy = 1.0f;
         protected Vector2 _position = Vector2.One;
         protected float _angle;
         protected Vector2 _direction;
@@ -53,9 +53,11 @@ namespace JourneyThroughTheMountain.GameObjects
         {
             if (!Destroyed)
             {
-                spriteBatch.Draw(_texture, _position, Color.White);
+                spriteBatch.Draw(_texture, _position, Color.White * Transperancy);
             }
         }
+
+        public virtual void Update(GameTime time) { }
 
         public void RenderBoundingBoxes(SpriteBatch spriteBatch)
         {
@@ -97,6 +99,8 @@ namespace JourneyThroughTheMountain.GameObjects
 
             return _direction;
         }
+
+
 
 
         private void CreateBoundingBoxTexture(GraphicsDevice graphicsDevice)
