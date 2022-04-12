@@ -23,7 +23,7 @@ namespace JourneyThroughTheMountain
         public bool Climbing = false;
         public bool onLadder = false;
         private int score = 0;
-        private int livesRemaining = 3;
+        private int livesRemaining = 1;
         private float Damage_Scale = 0.2f;
         public bool Attacking;
         public bool CanRevive;
@@ -32,6 +32,8 @@ namespace JourneyThroughTheMountain
        static KeyboardState CurrentState;
         public BaseGameState StateOfGame;
         public int MaxHealth = 10;
+        public Entities.NPC CurrentCloseNPC;
+        public bool Talking = false;
         //public Rectangle triggercollision;
 
         public int LevelCameraRightX;
@@ -179,11 +181,20 @@ namespace JourneyThroughTheMountain
                 if (CurrentState.IsKeyDown(Keys.E))
                 {
                     newAnimation = "Attack";
-                    if (IsKeyPressed(Keys.E, true))
+                    if (IsKeyPressed(Keys.E, true) && CurrentCloseNPC == null)
                     {
                         Attacking = true;
                         StateOfGame.NotifyEvent(new GameplayEvents.PlayerAttacks());
                     }
+                    else if (CurrentCloseNPC != null && !Talking)
+                    {
+                        newAnimation = "idle";
+                        Talking = true;
+                        Dialogue.Dialouge PlayerNPC = new Dialogue.Dialouge();
+                        PlayerNPC.StartDialouge(CurrentCloseNPC, this);
+                        
+                    }
+
 
                 }
 

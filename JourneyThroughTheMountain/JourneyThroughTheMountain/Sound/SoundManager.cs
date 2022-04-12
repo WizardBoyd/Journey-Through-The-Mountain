@@ -38,10 +38,12 @@ namespace JourneyThroughTheMountain.Sound
             var CurrentTrack = _SoundTracks[_soundtrackindex];
             var nextTrack = _SoundTracks[(_soundtrackindex + 1) % nbTracks];
 
-            if (CurrentTrack.State == SoundState.Stopped)
+            if (CurrentTrack.State == SoundState.Stopped && !nextTrack.IsDisposed)
             {
-                nextTrack.Play();
-                _soundtrackindex++;
+
+                    nextTrack.Play();
+                    _soundtrackindex++;
+
 
                 if (_soundtrackindex >= _SoundTracks.Count)
                 {
@@ -63,7 +65,23 @@ namespace JourneyThroughTheMountain.Sound
             }
           
         }
-      
+
+        public void StopSounds()
+        {
+            foreach (SoundEffectInstance SFX in _SoundTracks)
+            {
+                SFX.Stop();
+            }
+        }
+
+        public void DisposeOfSounds()
+        {
+            foreach (SoundEffectInstance SFX in _SoundTracks)
+            {
+                SFX.Dispose();
+            }
+        }
+
 
     }
 }

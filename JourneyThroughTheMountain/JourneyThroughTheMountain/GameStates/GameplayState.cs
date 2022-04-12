@@ -353,7 +353,9 @@ namespace JourneyThroughTheMountain.GameStates
                     }
                     else
                     {
-                        //SwitchState
+                        _soundManager.StopSounds();
+                        _soundManager.DisposeOfSounds();
+                        SwitchState(new GameOverState());
                     }
                 }
                 if (LevelManager.Talker != null && LevelManager.Text != "")

@@ -63,10 +63,6 @@ namespace JourneyThroughTheMountain
             {
                 switch (Event)
                 {
-                    case CollidedEvents.DialogueEvent m:
-                        m.StartDialouge(AssociatedNPC, Triggerer);
-                        Triggered = true;
-                        break;
 
                     case CollidedEvents.PrayEvent m:
                         LevelManager.Display_EButton = true;

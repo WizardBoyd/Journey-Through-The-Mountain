@@ -31,9 +31,10 @@ namespace JourneyThroughTheMountain
         private static List<Tree> Trees = new List<Tree>();
         private static List<GameTile> Tiles = new List<GameTile>();
         private static List<EventBox> Events = new List<EventBox>();
-        private static Dictionary<string, NPC> NPCs = new Dictionary<string, NPC>();
+        private static List<NPC> Npcs = new List<NPC>();
 
         private const string E_Button = @"UI/F_button";
+        private const string ActualE_Button = @"UI/E_button";
      
 
         public static string Text;
@@ -41,7 +42,9 @@ namespace JourneyThroughTheMountain
         public static bool TalkSFXPlayNPC;
         public static bool TalkSFXPlay;
         public static bool Display_EButton;
+        public static bool Display_ActualEButton;
         private static Texture2D E_button_Texture;
+        private static Texture2D E_Button_Actual_Texture;
         #endregion
 
         #region Properties
@@ -66,6 +69,7 @@ namespace JourneyThroughTheMountain
             player = gamePlayer;
             spriteFont = Font;
             E_button_Texture = content.Load<Texture2D>(E_Button);
+            E_Button_Actual_Texture = content.Load<Texture2D>(ActualE_Button);
             
         }
         #endregion
@@ -84,17 +88,6 @@ namespace JourneyThroughTheMountain
 
         private static void AssociateNPCWithEvents()
         {
-            foreach (EventBox Event in Events)
-            {
-                if (Event.NPCName != null)
-                {
-                    NPC nPC;
-                    if (NPCs.TryGetValue(Event.NPCName,out nPC))
-                    {
-                        Event.AssociatedNPC = nPC;
-                    }
-                }
-            }
         }
 
         //private void CheckForNPCPlacement(int x, int y)
@@ -137,7 +130,7 @@ namespace JourneyThroughTheMountain
             snowFlakes.Clear();
             enemies.Clear();
             MeleeEnemies.Clear();
-            NPCs.Clear();
+            Npcs.Clear();
             Events.Clear();
             Trees.Clear();
             Tiles.Clear();
@@ -191,7 +184,7 @@ namespace JourneyThroughTheMountain
                     if (TileMap.CellCodeValue(x,y).StartsWith("NPC_"))
                     {
                         string[] code = TileMap.CellCodeValue(x, y).Split("_");
-                        NPCs.Add(code[1], new NPC(Content, code[2], x * TileMap.TileWidth, y * TileMap.TileHeight, code[3]));
+                        Npcs.Add(new NPC(Content, code[2], x * TileMap.TileWidth, y * TileMap.TileHeight, code[3]));
                     }
 
                     if (TileMap.CellCodeValue(x,y).StartsWith("E_"))
@@ -241,9 +234,9 @@ namespace JourneyThroughTheMountain
 
         public static void Update(GameTime gameTime)
         {
-            foreach (KeyValuePair<string, NPC> npc in NPCs)
+            foreach (NPC nPC in Npcs)
             {
-                npc.Value.Update(gameTime);
+                nPC.Update(gameTime);
             }
 
             foreach (SnowFlakes item in snowFlakes)
@@ -341,9 +334,9 @@ namespace JourneyThroughTheMountain
                 tile.Draw(spriteBatch);
             }
 
-            foreach (KeyValuePair<string, NPC> npc in NPCs)
+            foreach (NPC npc in Npcs)
             {
-                npc.Value.Draw(spriteBatch);
+                npc.Draw(spriteBatch);
             }
 
             if (Text != "" && Talker != null)
@@ -360,6 +353,13 @@ namespace JourneyThroughTheMountain
                 spriteBatch.Draw(E_button_Texture, position, Color.White);
             }
 
+            if (Display_ActualEButton && !player.Talking)
+            {
+                Rectangle position = Camera.WorldToScreen(player.WorldRectangle);
+                position.Y = position.Y - 48;
+                spriteBatch.Draw(E_Button_Actual_Texture, position, Color.White);
+            }
+
 
         }
 
@@ -371,6 +371,7 @@ namespace JourneyThroughTheMountain
             SegmentAABBCollisionDetector<Player> Player_Land_On_Tile_Collision = new SegmentAABBCollisionDetector<Player>(player);
 
             AABBCollisionDetector<EventBox, Player> Event_Player_CollisionDetector = new AABBCollisionDetector<EventBox, Player>(Events);
+            AABBCollisionDetector<NPC, Player> PlayerNPCInteraction = new AABBCollisionDetector<NPC, Player>(Npcs);
 
             AABBCollisionDetector<SnowFlakes, Player> Coin_Collector = new AABBCollisionDetector<SnowFlakes, Player>(snowFlakes);
             AABBCollisionDetector<Entities.Enemy, Player> PlayerRunsIntoEnemy = new AABBCollisionDetector<Entities.Enemy, Player>(enemies);
@@ -401,6 +402,8 @@ namespace JourneyThroughTheMountain
                 //});
             }
 
+
+
             Tile_Player_Ladder_collison_Detector.DetectCollisions(player, (Tile, P) =>
             {
                 if (P.Climbing)
@@ -425,9 +428,21 @@ namespace JourneyThroughTheMountain
 
             }))
             {
+
+                LevelManager.Display_EButton = false;
+            }
+
+            if (!PlayerNPCInteraction.DetectTriggers(player, (NPC, P) =>{
+
+                P.CurrentCloseNPC = NPC;
+                LevelManager.Display_ActualEButton = true;
+
+            }))
+            {
+                player.CurrentCloseNPC = null;
                 LevelManager.Talker = null;
                 LevelManager.Text = null;
-                LevelManager.Display_EButton = false;
+                LevelManager.Display_ActualEButton = false;
             }
 
             Coin_Collector.DetectCollisions(player, (Snowflake, P) =>
