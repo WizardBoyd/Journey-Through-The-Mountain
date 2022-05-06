@@ -1,0 +1,23 @@
+<ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>5d863c9a-383a-4f0c-87d4-801b4ed1f39c</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Signs usually help us navigate</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>a0ae6d20-2170-4583-bfa2-7c9fa4ddc03c</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>Thanks but how do i leave</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>cc585607-9baa-4100-96c2-e980f907d755</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>...</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+</ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS>

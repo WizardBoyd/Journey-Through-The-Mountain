@@ -71,6 +71,8 @@ namespace JourneyThroughTheMountain.GameStates
             
         }
 
+
+
         public override void HandleInput(GameTime time)
         {
             InputManager.GetCommands(cmd =>
@@ -105,7 +107,9 @@ namespace JourneyThroughTheMountain.GameStates
 
         public override void LoadContent()
         {
+            System.Diagnostics.Debug.WriteLine("1");
             TileMap.Initialize(LoadTexture(TileSet));
+            System.Diagnostics.Debug.WriteLine("2");
             GameGUI = new Desktop();
             _desktop = new Desktop();
             #region UIStuff
@@ -113,7 +117,7 @@ namespace JourneyThroughTheMountain.GameStates
 
             var Grid = new Grid
             {
-                ShowGridLines = true
+               
             };
 
             for (int i = 0; i < 5; i++)
@@ -201,7 +205,7 @@ namespace JourneyThroughTheMountain.GameStates
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-
+            System.Diagnostics.Debug.WriteLine("8");
 
             var SaveTextButton = new TextButton()
             {
@@ -267,7 +271,7 @@ namespace JourneyThroughTheMountain.GameStates
             Grid.Widgets.Add(HealthPannel);
             Grid.Widgets.Add(LivesPannel);
             Grid.Widgets.Add(ScorePannel);
-            
+            System.Diagnostics.Debug.WriteLine("9");
 
 
             GameGUI.Root = Grid;
@@ -277,23 +281,24 @@ namespace JourneyThroughTheMountain.GameStates
             _desktop.Root.ZIndex = 3;
             _desktop.Root.Enabled = false;
             #endregion
-
+            System.Diagnostics.Debug.WriteLine("10");
 
             Background = LoadTexture(BackGroundTexture);
             WhiteSpace = LoadTexture(Fade_Image);
-            
+
+           
 
             var Track1 = LoadSound(RelaxingLevelMusic).CreateInstance();
 
             Track1.Volume = MasterVolume;
-
+            System.Diagnostics.Debug.WriteLine("11");
             var Talking = LoadSound(TalkingSFX);
             var PlayerAttack = LoadSound(AxeSwing);
             var FallD = LoadSound(FallDamge);
             var PlayerDeathSFX = LoadSound(PlayerDeath);
             var PlayerTakeDamageSFX = LoadSound(PlayerHitByEnemy);
             var PlayerPicksUpCoin = LoadSound(PickupSnowflake);
-
+            System.Diagnostics.Debug.WriteLine("w");
             _soundManager.RegisterSound(new GameplayEvents.PlayerCoinPickupEvent(), PlayerPicksUpCoin, 0.4f * MasterVolume, 0.5f * PitchVolume, PanVolume);
             _soundManager.RegisterSound(new GameplayEvents.PlayerDealtDamage(), PlayerTakeDamageSFX, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
             _soundManager.RegisterSound(new GameplayEvents.PlayerDies(), PlayerDeathSFX, 0.4f * MasterVolume, 0.1f * PitchVolume, PanVolume);
@@ -310,12 +315,14 @@ namespace JourneyThroughTheMountain.GameStates
             Camera.ViewPortWidth = 800;
             Camera.ViewPortHeight = 720;
             Camera.Gameplay = true;
-
+            System.Diagnostics.Debug.WriteLine("x");
             pericles8 = _contentManager.Load<SpriteFont>(@"Pericles7");
             
             MainCharacter = new Player(_contentManager, this);
             HealthBar.Value = MainCharacter.Health * 10;
+            System.Diagnostics.Debug.WriteLine("Y");
             LevelManager.Initialize(_contentManager, MainCharacter, pericles8);
+            System.Diagnostics.Debug.WriteLine("Z");
             startNewGame();
 
         }
@@ -325,7 +332,18 @@ namespace JourneyThroughTheMountain.GameStates
             MainCharacter.Revive();
             MainCharacter.LivesRemaining = 3;
             MainCharacter.WorldLocation = Vector2.Zero;
-            LevelManager.LoadLevel(0);
+            System.Diagnostics.Debug.WriteLine("before");
+            try
+            {
+                LevelManager.LoadLevel(0);
+            }
+            catch (Exception e)
+            {
+
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            
+            System.Diagnostics.Debug.WriteLine("after");
         }
 
         public override void UpdateGameState(GameTime time)

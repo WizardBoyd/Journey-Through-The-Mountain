@@ -333,6 +333,11 @@ namespace JourneyThroughTheMountain
             dead = true;
         }
 
+        public void PlayerEndGame()
+        {
+            StateOfGame.EndGame();
+        }
+
         public void ClimbUp()
         {
             Vector2 Location = TileMap.GetCellByPixel(new Vector2(WorldLocation.X, WorldLocation.Y));

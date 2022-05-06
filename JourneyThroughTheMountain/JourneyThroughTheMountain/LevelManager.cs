@@ -84,6 +84,11 @@ namespace JourneyThroughTheMountain
             {
                 player.Kill();
             }
+
+            if (code == "END")
+            {
+                player.PlayerEndGame();
+            }
         }
 
         private static void AssociateNPCWithEvents()

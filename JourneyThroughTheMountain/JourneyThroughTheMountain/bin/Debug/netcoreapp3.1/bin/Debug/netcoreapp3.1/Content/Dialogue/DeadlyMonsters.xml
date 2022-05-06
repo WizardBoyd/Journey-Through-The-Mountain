@@ -1,0 +1,30 @@
+<ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>e8cd1c73-b25f-4a59-8516-8ce90a7b24f1</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>That monster there destroyed my house!!</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>1ac73286-d101-45f9-87cb-ff5aab3e5e84</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>Oh sorry to hear that</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>435b1f18-030d-4a4d-8cf9-9f3f0376c468</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Yea for real!</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>42e6ebfa-1b53-479a-90f1-ca5e809c54a8</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>The more you go down the deadlier they get</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+</ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS>

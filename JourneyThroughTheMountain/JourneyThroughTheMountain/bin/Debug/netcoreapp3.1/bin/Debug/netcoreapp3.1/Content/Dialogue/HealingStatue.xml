@@ -1,0 +1,30 @@
+<ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>2034f9d8-de79-44d4-aff6-a96d5f4deed5</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>The protector of the mountain</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>e749848b-7f8d-4b87-88c5-de5abbc8c75d</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>by praying to them it's almost as we rewind</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>f0b06a30-e6a3-4e16-905d-141ed22b46ff</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>What??</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>4a72ac80-4881-4aaa-a6f0-e2de3cbd5c94</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Just try Praying</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+</ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS>

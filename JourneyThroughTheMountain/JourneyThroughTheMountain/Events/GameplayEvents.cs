@@ -7,6 +7,7 @@ namespace JourneyThroughTheMountain
     public class GameplayEvents: BaseGameStateEvent
     {
 
+        public class PlayerEndGame: GameplayEvents { }
         public class PlayerJumps : GameplayEvents { }
         public class PlayerFallDamage: GameplayEvents
         {

@@ -1,0 +1,44 @@
+<ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>dc58a3a8-3d26-4b7f-bce6-e03a0b164d38</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Welcome weary one to the mountain</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>d6356d0f-700a-475f-b74e-9ea15a07ea7b</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>ugh, what happend?</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>0b26fccd-45ee-4ce9-8c20-ad43e8d78a54</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>Last thing I remember was a bright light.</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>02241ad6-ff1f-4ab8-8ce0-9b4d2019bc92</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Yes that is how we all remember it</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>10393b97-2f71-43d9-b4e1-6d6b6f2e0e4b</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>false</d3p1:AIspeaking>
+      <d3p1:Text>Wait We!!</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+  <KeyValueOfguidLinearStroyObject61c1WNSS>
+    <Key>060e5618-5bc8-49df-bf3b-267e825b00fc</Key>
+    <Value xmlns:d3p1="http://schemas.datacontract.org/2004/07/CommonClasses">
+      <d3p1:AIspeaking>true</d3p1:AIspeaking>
+      <d3p1:Text>Yes you will find them in time. now just don't fall...</d3p1:Text>
+    </Value>
+  </KeyValueOfguidLinearStroyObject61c1WNSS>
+</ArrayOfKeyValueOfguidLinearStroyObject61c1WNSS>

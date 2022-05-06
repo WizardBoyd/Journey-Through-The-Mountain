@@ -47,6 +47,13 @@ namespace JourneyThroughTheMountain.GameStates
             _contentManager.Unload();
         }
 
+        public void EndGame()
+        {
+            _soundManager.StopSounds();
+            _soundManager.DisposeOfSounds();
+            SwitchState(new GameFinishedState());
+        }
+
         public abstract void UpdateGameState(GameTime time);
 
         public void Update(GameTime Time)
